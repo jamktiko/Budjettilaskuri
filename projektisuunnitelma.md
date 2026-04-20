@@ -18,15 +18,22 @@
 
 ## Projektin tiedot
 
-\<Projektin nimi>
+Budjettilaskuri
 
 Tekijät:
+Aapo Hampaala
+Sade Haarala
+Teemu Jalava
+Teemu Sairi
 
 ## Projektin sisältö
 
 ### Kuvaus
 
-_Lyhyt kuvaus projektista. Minkälaista ohjelmistoa ollaan tekemässä?_
+Sopiva kaikille, jotka ovat kiinnostuneita rahoistaan ja
+haluavat helposti nähdä omaa kulutustaan. Hyvä
+esimerkiksi opiskelijoille tai muuten pienellä budjetilla
+eläville.
 
 ### Projektiryhmä
 
@@ -34,7 +41,7 @@ _Ketä projektiin kuuluu ja mitkä ovat henkilöiden päävastuut._
 
 | Nimi           | Vastuurooli          |
 | -------------- | -------------------- |
-| Teppo Virtanen | Git-päällikkö        |
+| Teemu Sairi    | Git-päällikkö        |
 | Satu Jokinen   | Dokumentti-päällikkö |
 
 ### Tavoite
@@ -47,7 +54,7 @@ _Kirjaa tähän lukuun aikataulu. Millä tavoin projekti viedään läpi. Voitte
 
 | Tapahtuma        | Päivämäärä | Muut tiedot/osanottajat                  |
 | ---------------- | ---------- | ---------------------------------------- |
-| Projekti alkaa   | 22.04.2025 | Ohjelmistoprojekti 1 alkaa               |
+| Projekti alkaa   | 20.04.2026 | Ohjelmistoprojekti 2 alkaa               |
 | Idean valinta    | 24.04.2025 | Valitaan tuotantoon menevä projekti-idea |
 | ............     | pvm        | Kaikki muut tapahtumat listattuna        |
 | Projekti päättyy | 16.05.2025 | Ohjelmistoprojekti 1 päättyy             |
