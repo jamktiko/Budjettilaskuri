@@ -47,10 +47,10 @@
 
 ### 1. Miksi kestävä kehitys on tärkeää minulle tai tiimillemme?
 
-<!-- Haluamme ryhmänä edistää kehtävää kehitystä ja pyrimme parhaamme mukaan tekemään päätöksiä, jotka edistää sitä. -->
-<!-- Yritämme ryhmänä käyttää vain niitä resursseja mitä pidämme tärkeänä tämän työn kannalta. -->
-<!-- Pidämme tärkeänä sitä, että käyttäjät voivat tehdä vastuullisia kulutuspäätöksiä. -->
-<!-- Haluamme oppia huomioimaan tässä ohjelmisto projektissa kestävän kehityksen periaatteet, jotta tulevaisuuden projekteissa se on helpompaa. -->
+Haluamme ryhmänä edistää kehtävää kehitystä ja pyrimme parhaamme mukaan tekemään päätöksiä, jotka edistää sitä.
+Yritämme ryhmänä käyttää vain niitä resursseja mitä pidämme tärkeänä tämän työn kannalta.
+Pidämme tärkeänä sitä, että käyttäjät voivat tehdä vastuullisia kulutuspäätöksiä.
+Haluamme oppia huomioimaan tässä ohjelmisto projektissa kestävän kehityksen periaatteet, jotta tulevaisuuden projekteissa se on helpompaa.
 
 ## Aihe
 
@@ -62,9 +62,9 @@
 <!-- Vieraslajien torjunta (SDG15: Maanpäällinen elämä) -->
 <!-- Kulttuuriperinnön suojeleminen (SDG11: Kestävät kaupungit ja yhteisöt) -->
 
-<!-- Sovellus edistää erityisesti SDG12: Vastuullista kuluttamista-tavoitetta, koska se ohjaa käyttäjiä kestävämpiin taloudellisiin valintoihin. -->
-<!-- Budjettilaskuri auttaa käyttäjiä hallitsemaan omaa talouttaan ja tekemään harkitumpia kulutuspäätöksiä. Tämä tukee vastuullista kuluttamista. -->
-<!-- Sovellus voi myös lisätä tietoisuutta siitä, mihin rahaa kuluu, ja kannustaa säästämiseen. -->
+Sovellus edistää erityisesti SDG12: Vastuullista kuluttamista-tavoitetta, koska se ohjaa käyttäjiä kestävämpiin taloudellisiin valintoihin.
+Budjettilaskuri auttaa käyttäjiä hallitsemaan omaa talouttaan ja tekemään harkitumpia kulutuspäätöksiä. Tämä tukee vastuullista kuluttamista. 
+Sovellus voi myös lisätä tietoisuutta siitä, mihin rahaa kuluu, ja kannustaa säästämiseen.
 
 ## Toteutus
 
@@ -78,8 +78,8 @@
 <!-- Miten sovelluksen vaatima palvelinkapasiteetti on mitoitettu? -->
 <!-- Käytetäänkö sovelluksessa tai sen kehitysprosessissa tekoälyä? -->
 
-<!-- Sovellus on suunniteltu kevyeksi ja pyrimme käyttämään ja tuomaan vain tärkeäksi katsottuja ominaisuuksia projektissamme. -->
-<!-- Pyrimme käyttämään tekoälyä vain tarpeelliseksi katsotuiden asioiden kohdalla, ja muuten etsiä tietoa esimerkiksi netistä tai kurssimateriaaleista. -->
+Sovellus on suunniteltu kevyeksi ja pyrimme käyttämään ja tuomaan vain tärkeäksi katsottuja ominaisuuksia projektissamme. 
+Pyrimme käyttämään tekoälyä vain tarpeelliseksi katsotuiden asioiden kohdalla, ja muuten etsiä tietoa esimerkiksi netistä tai kurssimateriaaleista. 
 
 ### 4. Millä tavoin sovellus saattaa välillisesti lisätä tai vähentää luonnonvarojen kulutusta?
 
@@ -90,9 +90,9 @@
 <!-- Kannustaako sovellus muuhun kulutukseen? (esim. sovellus on verkkokauppa) -->
 <!-- Millä tavoin sovellus saattaa muuttaa käyttäjän toimintaa? (esim. lisätä tai vähentää yksityisautoilua) -->
 
-<!-- Sovelluksen käyttö ei vaadi uusien käyttäjälaitteiden tai lisätarvikkeiden hankintaa. -->
-<!-- Sovellus ei kannusta turhaan kuluttamiseen ja se jopa tukee käyttäjää vähentämään kulutustaan tarpeettomiin asioihin. -->
-<!-- Sovellus saattaa muuttaa käyttäjän kuluttamista niin, että asiaa ostaessaan käyttäjä näkee paljonko hänellä olisi varaa kuluttaa, jos haluaa pysy budjetissaan. -->
+Sovelluksen käyttö ei vaadi uusien käyttäjälaitteiden tai lisätarvikkeiden hankintaa. 
+Sovellus ei kannusta turhaan kuluttamiseen ja se jopa tukee käyttäjää vähentämään kulutustaan tarpeettomiin asioihin. 
+Sovellus saattaa muuttaa käyttäjän kuluttamista niin, että asiaa ostaessaan käyttäjä näkee paljonko hänellä olisi varaa kuluttaa, jos haluaa pysy budjetissaan. 
 
 
 ### 5. Kuinka sovelluksen pitkäikäisyys on varmistettu?
@@ -104,9 +104,9 @@
 <!-- Onko sovellus mukautettavissa muuttuviin tarpeisiin ja vaatimuksiin? -->
 <!-- Onko sovelluksen lähdekoodi ja kehitysprosessi dokumentoitu? -->
 
-<!-- Sovellus on rakennettu modulaarisesti, jolloin sitä voidaan helposti päivittää ja laajentaa. -->
-<!-- Riippuvuudet ulkoisista kirjastoista on pidetty minimissä. -->
-<!-- Pyrimme ryhmänä dokumentoimaan sovelluksen lähdekoodia ja kehitysprosessia, jolloin jälkikäteen näiden muokkaaminen tai jatkokehitys helpottuu -->
+Sovellus on rakennettu modulaarisesti, jolloin sitä voidaan helposti päivittää ja laajentaa.
+Riippuvuudet ulkoisista kirjastoista on pidetty minimissä. 
+Pyrimme ryhmänä dokumentoimaan sovelluksen lähdekoodia ja kehitysprosessia, jolloin jälkikäteen näiden muokkaaminen tai jatkokehitys helpottuu 
 
 ### 6. Kuinka sovelluksessa on huomioitu saavutettavuus ja yhdenvertaisuus?
 
@@ -118,10 +118,10 @@
 <!-- Millaista osaamista ja varallisuutta sovelluksen käyttö vaatii? -->
 <!-- Millä kielillä sovellus on saatavilla? -->
 
-<!-- Pyrimme huomioimaan sovelluksesta saavutettavan mahdollisimman monille eri ihmisille, eikä se tee oletuksia käyttäjän ominaisuuksista. -->
-<!-- Käyttäjäliittymä rakennetaan mahdollisimman helppokäytettäväksi ja selkeäksi. Sen käyttö ei vaadi erityistä teknistä osaamista tai omaa laitteistoa. -->
-<!-- Olemme huomioineet sovelluksessamme punaviher-värisokeat sekä värisokeat. -->
-<!-- Sovellus on aluksi saatavilla vain Suomeksi, mutta sovellusta voisi jatkokehittää eri kielille saataviksi. -->
+Pyrimme huomioimaan sovelluksesta saavutettavan mahdollisimman monille eri ihmisille, eikä se tee oletuksia käyttäjän ominaisuuksista. 
+Käyttäjäliittymä rakennetaan mahdollisimman helppokäytettäväksi ja selkeäksi. Sen käyttö ei vaadi erityistä teknistä osaamista tai omaa laitteistoa. 
+Olemme huomioineet sovelluksessamme punaviher-värisokeat sekä värisokeat. 
+Sovellus on aluksi saatavilla vain Suomeksi, mutta sovellusta voisi jatkokehittää eri kielille saataviksi. 
 
 ### 7. Millaisia vaikutuksia sovelluksella voi olla käyttäjälle tai hänen lähipiirilleen?
 
@@ -132,10 +132,10 @@
 <!-- Millaisia vaikutuksia sovelluksella voi olla sosiaalisiin suhteisiin, terveyteen tai mielialaan? -->
 <!-- Millaisia vaikutuksia sovelluksella voi olla elämänhallintaan tai taloudelliseen tilanteeseen? -->
 
-<!-- Sovelluksen käyttö vähentää holtitonta rahakäyttäytymistä ja edistää käyttäjän taloudellista tietoisuutta. -->
-<!-- Sovelluksella voi olla positiivisia vaikutuksia esimerkiksi mielialaan kun käyttäjä onnistuu pysymään omassa budjetissaan. -->
-<!-- Sovellus voi vaikuttaa positiivisesti käyttäjän elämänhallintaan vähentämällä rahasta syntyvää stressiä ja tukemalla käyttäjää taloudellisesti. -->
-<!-- Sovellus lisää taloudellista turvaa käyttäjälleen. Tämä tukee SDG3: Terveyttä ja hyvinvointia-tavoitetta. -->
+Sovelluksen käyttö vähentää holtitonta rahakäyttäytymistä ja edistää käyttäjän taloudellista tietoisuutta. -->
+Sovelluksella voi olla positiivisia vaikutuksia esimerkiksi mielialaan kun käyttäjä onnistuu pysymään omassa budjetissaan. -->
+Sovellus voi vaikuttaa positiivisesti käyttäjän elämänhallintaan vähentämällä rahasta syntyvää stressiä ja tukemalla käyttäjää taloudellisesti. -->
+Sovellus lisää taloudellista turvaa käyttäjälleen. Tämä tukee SDG3: Terveyttä ja hyvinvointia-tavoitetta. 
 
 ### 8. Millaisia vaikutuksia sovelluksella voi olla yhteiskunnallisella tasolla?
 
@@ -148,10 +148,10 @@
 <!-- Kuinka sovellusta moderoidaan? (esim. disinformaation ja vihapuheen torjunta) -->
 <!-- Kuinka sovelluksessa on huomioitu tietoturvallisuus ja tietosuoja?  -->
 
-<!-- Laajemmassa mittakaavassa sovellus voi lisätä taloudellista vastuullisuutta ja vähentää ylivelkaantumista. -->
-<!-- Sovelluksessa huomioidaan tietoturva ja tietosuoja, jotta käyttäjien tiedot pysyvät turvassa. -->
-<!-- Sovellusta ei tarvitse moderoida, koska se ei sisällä kommentointiominaisuutta. -->
-<!-- Nämä liittyy SDG16: Rauha, oikeudenmukaisuus ja hyvä hallinto-tavoitteeseen. -->
+Laajemmassa mittakaavassa sovellus voi lisätä taloudellista vastuullisuutta ja vähentää ylivelkaantumista. 
+Sovelluksessa huomioidaan tietoturva ja tietosuoja, jotta käyttäjien tiedot pysyvät turvassa. 
+Sovellusta ei tarvitse moderoida, koska se ei sisällä kommentointiominaisuutta. 
+Nämä liittyy SDG16: Rauha, oikeudenmukaisuus ja hyvä hallinto-tavoitteeseen. 
 
 ### 9. Kuinka sovellusprojektissa on huomioitu inhimilliset ja aineelliset resurssit?
 
@@ -164,5 +164,5 @@
 <!-- Pystytäänkö työntekijöille ja alihankkijoille maksamaan asianmukaisesti? -->
 <!-- Mahdollistaako rahoitus turvallisen ylläpidon sekä pitkäjänteisen jatkokehittelyn? -->
 
-<!-- Projektissa on asetettu realistiset tavoitteet ja työ on jaettu tiimin kesken tasaisesti. -->
-<!-- Kehityksessä hyödynnetään ketterää menetelmää, Scrumia, mikä auttaa hallitsemaan työmäärää ja parantamaan tiimin hyvinvointia. -->
+Projektissa on asetettu realistiset tavoitteet ja työ on jaettu tiimin kesken tasaisesti. 
+Kehityksessä hyödynnetään ketterää menetelmää, Scrumia, mikä auttaa hallitsemaan työmäärää ja parantamaan tiimin hyvinvointia.
