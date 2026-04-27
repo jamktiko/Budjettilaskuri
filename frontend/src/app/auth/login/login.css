@@ -1,0 +1,13 @@
+.login-container {
+  width: 320px;
+  margin: 100px auto;
+}
+
+mat-card {
+  padding: 20px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 12px;
+}
