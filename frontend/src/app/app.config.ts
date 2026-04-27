@@ -8,6 +8,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { Amplify } from 'aws-amplify';
 import { environment } from '../environments/environment';
+import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
 
 Amplify.configure({
   Auth: {
