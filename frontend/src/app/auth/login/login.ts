@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,8 +18,12 @@ export class Login {
   email = '';
   password = '';
 
+  constructor(private router: Router) {}
+
   login() {
     console.log(this.email, this.password);
-    alert('Login clicked');
+
+    // siirtyy home-sivulle
+    this.router.navigate(['/home']);
   }
 }
