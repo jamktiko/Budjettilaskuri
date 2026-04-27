@@ -7,7 +7,6 @@ import { environment } from '../environments/environment'; // Varmista polku
 })
 export class AuthService {
   // 1. Määritetään apiUrl (tämä puuttui koodistasi)
-  private apiUrl = environment.apiUrl || 'http://localhost:3000/api';
 
   // 2. Injektoidaan HttpClient constructorissa tai inject-funktiolla
   constructor(private http: HttpClient) {}
