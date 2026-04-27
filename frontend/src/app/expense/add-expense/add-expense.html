@@ -1,0 +1,15 @@
+<mat-card class="form">
+  <h2>Add Expense</h2>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Kategoria</mat-label>
+    <input matInput [(ngModel)]="category" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Summa</mat-label>
+    <input matInput type="number" [(ngModel)]="amount" />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="addExpense()">Lisää kulu</button>
+</mat-card>
