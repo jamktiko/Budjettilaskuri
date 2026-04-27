@@ -10,11 +10,18 @@ export interface Expense {
   providedIn: 'root',
 })
 export class BudgetService {
-  // 🧾 lista kuluista
-  private expenses = new BehaviorSubject<Expense[]>([]);
+  // 💰 tulot
+  private income = new BehaviorSubject<number>(0);
+  income$ = this.income.asObservable();
 
-  // 🔓 ulos komponentteihin
+  // 🧾 kulut
+  private expenses = new BehaviorSubject<Expense[]>([]);
   expenses$ = this.expenses.asObservable();
+
+  // ➕ aseta tulot
+  setIncome(value: number) {
+    this.income.next(value);
+  }
 
   // ➕ lisää kulu
   addExpense(expense: Expense) {
@@ -22,13 +29,18 @@ export class BudgetService {
     this.expenses.next([...current, expense]);
   }
 
-  // 💰 laske menot yhteensä
+  // 💰 kulut yhteensä
   getTotalExpenses(): number {
     return this.expenses.value.reduce((sum, e) => sum + e.amount, 0);
   }
 
-  // 📊 hae kaikki kulut (jos joskus tarvitset suoraan)
+  // 🧾 kaikki kulut
   getExpenses(): Expense[] {
     return this.expenses.value;
+  }
+
+  // 🧮 saldo
+  getBalance(): number {
+    return this.income.value - this.getTotalExpenses();
   }
 }
