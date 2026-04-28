@@ -1,2 +1,24 @@
-<p>home works!</p>
-<button (click)="handleSignOut()">Sign Out</button>
+<h2>📊 Yhteenveto</h2>
+
+<div class="cards">
+  <div class="card">
+    <h3>Saldo</h3>
+    <p>{{ budget.getBalance() }} €</p>
+  </div>
+
+  <div class="card">
+    <h3>Tulot</h3>
+    <p>{{ (budget.income$ | async) || 0 }} €</p>
+  </div>
+
+  <div class="card">
+    <h3>Menot</h3>
+    <p>{{ budget.getTotalExpenses() }} €</p>
+  </div>
+</div>
+
+<h3>🧾 Kulut</h3>
+
+<ul>
+  <li *ngFor="let e of budget.expenses$ | async">{{ e.category }} - {{ e.amount }} €</li>
+</ul>
