@@ -20,6 +20,18 @@ mat-card {
 /* login.component.css */
 
 :host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(
+    to bottom,
+    #ffffff,
+    #0f5fcc
+  );
+
   /* Väriteema (Indigo/Material) */
   --amplify-colors-brand-primary-80: #3f51b5;
   --amplify-colors-brand-primary-90: #303f9f;
@@ -31,14 +43,29 @@ mat-card {
 
   /* Fontit */
   --amplify-fonts-default-variable: 'Roboto', sans-serif;
+  
 }
 
 .login-container {
-  max-width: 400px;
-  margin: 50px auto;
+  width: 100%;
+  max-width: 500px;
+}
+
+:host ::ng-deep amplify-authenticator,
+:host ::ng-deep amplify-authenticator * {
+
+  color: #000000 
+}
+
+p {
+   color: #000000 !important;
 }
 
 .logo {
+  display: block;
   width: 180px;
   height: auto;
+  margin: 0 auto 24px;
 }
+
+

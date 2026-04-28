@@ -35,6 +35,7 @@ export class Login {
     // Määritellään suomenkieliset vastineet
     I18n.putVocabularies({
       fi: {
+        'Sign in': 'Kirjaudu sisään', 
         'Sign In': 'Kirjaudu sisään',
         'Sign Up': 'Luo tunnus',
         Email: 'Sähköpostiosoite',
