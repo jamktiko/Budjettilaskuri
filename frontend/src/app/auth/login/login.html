@@ -18,11 +18,12 @@
     <button mat-raised-button color="primary" type="submit" class="full-width">Login</button>
   </mat-card>
 </form> -->
+<img src="/logo.png" alt="Logo" class="logo" />
 <div class="login-container">
   <amplify-authenticator [loginMechanisms]="['email']" [formFields]="formFields">
-    <ng-template amplifySlot="header">
+    <ng-template amplifySlot="header" amplifySlot="authenticated">
       <div style="text-align: center; padding: 1rem">
-        <img src="/logo.png" alt="Logo" class="logo" />
+        <!--<img src="/logo.png" alt="Logo" class="logo" /> -->
       </div>
     </ng-template>
 
