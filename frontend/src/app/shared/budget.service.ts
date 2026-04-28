@@ -6,21 +6,27 @@ export interface Expense {
   amount: number;
 }
 
+export interface Income {
+  source: string;
+  amount: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class BudgetService {
-  // 💰 tulot
-  private income = new BehaviorSubject<number>(0);
-  income$ = this.income.asObservable();
+  // 💰 tulot (lista, ei vain yksi arvo)
+  private incomes = new BehaviorSubject<Income[]>([]);
+  incomes$ = this.incomes.asObservable();
 
   // 🧾 kulut
   private expenses = new BehaviorSubject<Expense[]>([]);
   expenses$ = this.expenses.asObservable();
 
-  // ➕ aseta tulot
-  setIncome(value: number) {
-    this.income.next(value);
+  // ➕ lisää tulo
+  addIncome(income: Income) {
+    const current = this.incomes.value;
+    this.incomes.next([...current, income]);
   }
 
   // ➕ lisää kulu
@@ -29,18 +35,28 @@ export class BudgetService {
     this.expenses.next([...current, expense]);
   }
 
-  // 💰 kulut yhteensä
+  // 💰 tulot yhteensä
+  getTotalIncome(): number {
+    return this.incomes.value.reduce((sum, i) => sum + i.amount, 0);
+  }
+
+  // 🧾 kulut yhteensä
   getTotalExpenses(): number {
     return this.expenses.value.reduce((sum, e) => sum + e.amount, 0);
   }
 
-  // 🧾 kaikki kulut
+  // 🧮 saldo
+  getBalance(): number {
+    return this.getTotalIncome() - this.getTotalExpenses();
+  }
+
+  // 🧾 helper: kaikki kulut
   getExpenses(): Expense[] {
     return this.expenses.value;
   }
 
-  // 🧮 saldo
-  getBalance(): number {
-    return this.income.value - this.getTotalExpenses();
+  // 💰 helper: kaikki tulot
+  getIncomes(): Income[] {
+    return this.incomes.value;
   }
 }
