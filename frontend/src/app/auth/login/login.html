@@ -18,26 +18,19 @@
     <button mat-raised-button color="primary" type="submit" class="full-width">Login</button>
   </mat-card>
 </form> -->
-
-<!-- <amplify-authenticator
-  [loginMechanisms]="['email']"
-  [signUpAttributes]="['name']"
-  [formFields]="formFields"
->
-  <ng-template amplifySlot="authenticated" let-user="user" let-signOut="signOut">
-    <h1>Welcome {{ user.username }}!</h1>
-    <button (click)="signOut()">Sign Out</button>
-  </ng-template>
-</amplify-authenticator> -->
-
+<img src="/logo.png" alt="Logo" class="logo" />
 <div class="login-container">
-  <amplify-authenticator [loginMechanisms]="['email']" [signUpAttributes]="['name']">
-    <ng-template amplifySlot="header">
-      <div style="text-align: center; padding-top: 20px">
-        <img src="/logo.png" alt="Logo" class="logo" />
+  <amplify-authenticator [loginMechanisms]="['email']" [formFields]="formFields">
+    <ng-template amplifySlot="header" amplifySlot="authenticated">
+      <div style="text-align: center; padding: 1rem">
+        <!--<img src="/logo.png" alt="Logo" class="logo" /> -->
       </div>
     </ng-template>
 
-    <ng-template amplifySlot="authenticated"> </ng-template>
+    <ng-template amplifySlot="footer">
+      <div style="text-align: center; padding: 1rem">
+        <p style="font-size: 0.8rem; color: gray">&copy; 2026 Budjettilaskuri</p>
+      </div>
+    </ng-template>
   </amplify-authenticator>
 </div>
