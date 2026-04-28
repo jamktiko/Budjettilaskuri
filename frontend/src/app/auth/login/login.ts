@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Subscription } from 'rxjs/internal/Subscription';
-
+import { I18n } from 'aws-amplify/utils';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -34,13 +34,23 @@ export class Login {
     private router: Router,
   ) {}
   ngOnInit() {
-    // Luodaan tilaus, joka kuuntelee kirjautumista
-    this.authSubscription = this.authenticator.subscribe((data) => {
-      if (data.authStatus === 'authenticated') {
-        // Kun käyttäjä on tunnistettu, hypätään /home -sivulle
-        this.router.navigate(['/home']);
-      }
+    // Määritellään suomenkieliset vastineet
+    I18n.putVocabularies({
+      fi: {
+        'Sign In': 'Kirjaudu sisään',
+        'Sign Up': 'Luo tunnus',
+        Email: 'Sähköpostiosoite',
+        Password: 'Salasana',
+        'Forgot your password?': 'Unohditko salasanasi?',
+        'Create Account': 'Luo uusi tili',
+        'Confirm Password': 'Vahvista salasana',
+        'Full Name': 'Koko nimi',
+        'Signing in': 'Kirjaudutaan sisään...',
+        'Creating Account': 'Luodaan tiliä...',
+      },
     });
+
+    I18n.setLanguage('fi');
   }
 
   ngOnDestroy() {
@@ -71,18 +81,39 @@ export class Login {
     }
   }
 
-  formFields = {
+  public formFields = {
+    signIn: {
+      username: {
+        label: 'Sähköpostiosoite',
+        placeholder: 'Syötä sähköpostisi',
+        isRequired: true,
+      },
+      password: {
+        label: 'Salasana',
+        placeholder: 'Syötä salasana',
+        isRequired: true,
+      },
+    },
     signUp: {
       name: {
-        order: 1,
+        label: 'Koko nimi',
+        placeholder: 'Esim. Matti Meikäläinen',
+        isRequired: true,
+        order: 1, // Järjestysnumero määrittää missä kohtaa kenttä näkyy
       },
       email: {
+        label: 'Sähköpostiosoite',
+        placeholder: 'matti@esimerkki.fi',
         order: 2,
       },
       password: {
+        label: 'Salasana',
+        placeholder: 'Vähintään 8 merkkiä',
         order: 3,
       },
       confirm_password: {
+        label: 'Vahvista salasana',
+        placeholder: 'Kirjoita salasana uudelleen',
         order: 4,
       },
     },
