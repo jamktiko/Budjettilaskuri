@@ -1,16 +1,15 @@
 const mongoose = require('mongoose');
-require('dotenv').config(); //dotenv-moduuli tarvitaan jos aiotaan käyttää .env-filua
 
-/*************************YHTEYS KANTAAN******************************/
+const connectDB = async () => {
+  try {
+    // Haetaan URI Beanstalkin ympäristömuuttujasta
+    const conn = await mongoose.connect(process.env.MONGO_URI);
 
-// yhteydenotto Docker-kontissa sijaitsevaan kantaan, MONGODB_URL on .env-tiedostossa:
-mongoose
-  .connect(process.env.MONGODB_URL)
-  .then(() => {
-    console.log('Database connection successful');
-  })
-  .catch((err) => {
-    console.error('Database connection error: ' + err);
-  });
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+    process.exit(1); // Lopetetaan prosessi, jos yhteys epäonnistuu
+  }
+};
 
-module.exports = mongoose; //viedään mongoose-olio muiden tiedostojen käyttöön
+module.exports = connectDB;
