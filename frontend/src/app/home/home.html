@@ -8,7 +8,7 @@
 
   <div class="card">
     <h3>Tulot</h3>
-    <p>{{ (budget.income$ | async) || 0 }} €</p>
+    <p>{{ budget.getTotalIncome() }} €</p>
   </div>
 
   <div class="card">
