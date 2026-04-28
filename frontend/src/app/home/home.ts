@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { BudgetService } from '../shared/budget.service';
-
+import { AuthenticatorService } from '@aws-amplify/ui-angular';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -10,5 +9,14 @@ import { BudgetService } from '../shared/budget.service';
   styleUrls: ['./home.css'],
 })
 export class Home {
-  constructor(public budget: BudgetService) {}
+  constructor(
+    public authenticator: AuthenticatorService,
+    private router: Router,
+  ) {}
+
+  // Voit halutessasi tehdä oman metodin uloskirjautumiselle
+  handleSignOut() {
+    this.authenticator.signOut();
+    this.router.navigate(['/login']); // Ohjataan takaisin kirjautumissivulle
+  }
 }

@@ -1,34 +1,83 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+/*
+app.js on express-sovelluksen päätiedosto josta sovellus lähtee käyntiin
+*/
+const express = require('express');
+const session = require('express-session');
+const path = require('path');
+// const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const validator = require('express-validator');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const cors = require('cors'); //cors-moduuli tarvitaan jos halutaan sallia cross-origin resource sharing, eli resurssien jakaminen eri domainien välillä
 
-var app = express();
+require('dotenv').config(); //dotenv-moduuli tarvitaan jos aiotaan käyttää .env-filua
+
+require('./dbconnection'); //tiedosto joka hoitaa yhteydenoton kantaan
+
+const index = require('./routes/index');
+const users = require('./routes/users');
+const students = require('./routes/students');
+
+const app = express();
+
+const corsOptions = {
+  origin: 'http://localhost:4200', // salli vain localhost:4200 domainin pyynnöt
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+// corsin käyttöönotto
+app.use(cors(corsOptions));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: false,
+  }),
+);
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+/*Session käyttöönotto
+  Sessio toimii siten että luotaessa sessio syntyy selaimelle automaattisesti cookie jonka
+  nimi on connect.sid (sessionid). Se ylläpitää yhteyttä palvelimella olevaan sessioon
+  sen sisältämän sessioid:n avulla.
+  Itse sessio sisältää sessiomuuttujia, joita voidaan lukea siirryttäessä sivulta toiselle.
+  Jos sessiomuuttujana on vaikka salasana, niin sivuille siirryttäessä voidaan tutkia onko
+  salasana oikea ja jos on, päästetään käyttäjä sivulle. Session voimassaoloaika on tässä 10 minuuttia.
+*/
+app.use(
+  session({
+    secret: 'salausarvo',
+    cookie: {
+      maxAge: 600000,
+    },
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(validator()); // lomakevalidaattorin käyttöönotto
 
+app.use('/', index); // index-reitti
+app.use('/users', users); // users-reitti
+app.use('/students', students); // students-reitti
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

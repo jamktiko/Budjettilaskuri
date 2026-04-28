@@ -1,4 +1,4 @@
-<form (ngSubmit)="login()" class="login-container">  
+<!-- <form (ngSubmit)="login()" class="login-container">  
 
 <img src="/logo.png" alt="Logo" class="logo"/>
 
@@ -17,4 +17,27 @@
 
     <button mat-raised-button color="primary" type="submit" class="full-width">Login</button>
   </mat-card>
-</form>
+</form> -->
+
+<!-- <amplify-authenticator
+  [loginMechanisms]="['email']"
+  [signUpAttributes]="['name']"
+  [formFields]="formFields"
+>
+  <ng-template amplifySlot="authenticated" let-user="user" let-signOut="signOut">
+    <h1>Welcome {{ user.username }}!</h1>
+    <button (click)="signOut()">Sign Out</button>
+  </ng-template>
+</amplify-authenticator> -->
+
+<div class="login-container">
+  <amplify-authenticator [loginMechanisms]="['email']" [signUpAttributes]="['name']">
+    <ng-template amplifySlot="header">
+      <div style="text-align: center; padding-top: 20px">
+        <img src="/logo.png" alt="Logo" class="logo" />
+      </div>
+    </ng-template>
+
+    <ng-template amplifySlot="authenticated"> </ng-template>
+  </amplify-authenticator>
+</div>
