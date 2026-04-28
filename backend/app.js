@@ -1,90 +1,76 @@
-/*
-app.js on express-sovelluksen päätiedosto josta sovellus lähtee käyntiin
-*/
+const createError = require('http-errors');
 const express = require('express');
-const session = require('express-session');
 const path = require('path');
-// const favicon = require('serve-favicon');
-const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const validator = require('express-validator');
+const logger = require('morgan');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-const cors = require('cors'); //cors-moduuli tarvitaan jos halutaan sallia cross-origin resource sharing, eli resurssien jakaminen eri domainien välillä
-
-require('dotenv').config(); //dotenv-moduuli tarvitaan jos aiotaan käyttää .env-filua
-
-require('./dbconnection'); //tiedosto joka hoitaa yhteydenoton kantaan
-
-const index = require('./routes/index');
-const users = require('./routes/users');
-const students = require('./routes/students');
+// Reittitiedostot
+const indexRouter = require('./routes/index');
 
 const app = express();
 
-const corsOptions = {
-  origin: 'http://localhost:4200', // salli vain localhost:4200 domainin pyynnöt
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-};
+// 1. CORS-asetukset (CloudFrontia varten)
+app.use(cors());
 
-// corsin käyttöönotto
-app.use(cors(corsOptions));
+// 2. MongoDB-yhteys (Pidetään auki koko sovelluksen elinkaaren ajan)
+// Käytetään MONGO_URI, jonka sanoit asettaneesi Beanstalkiin
+const MONGO_URI = process.env.MONGO_URI;
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+if (MONGO_URI) {
+  mongoose
+    .connect(MONGO_URI)
+    .then(() => console.log('MongoDB Atlas yhteys päällä!'))
+    .catch((err) => console.error('MongoDB yhteysvirhe:', err));
+} else {
+  console.warn('VAROITUS: MONGO_URI puuttuu ympäristömuuttujista.');
+}
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// Perusmiddlewaret
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(
-  bodyParser.urlencoded({
-    extended: false,
-  }),
-);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-/*Session käyttöönotto
-  Sessio toimii siten että luotaessa sessio syntyy selaimelle automaattisesti cookie jonka
-  nimi on connect.sid (sessionid). Se ylläpitää yhteyttä palvelimella olevaan sessioon
-  sen sisältämän sessioid:n avulla.
-  Itse sessio sisältää sessiomuuttujia, joita voidaan lukea siirryttäessä sivulta toiselle.
-  Jos sessiomuuttujana on vaikka salasana, niin sivuille siirryttäessä voidaan tutkia onko
-  salasana oikea ja jos on, päästetään käyttäjä sivulle. Session voimassaoloaika on tässä 10 minuuttia.
-*/
-app.use(
-  session({
-    secret: 'salausarvo',
-    cookie: {
-      maxAge: 600000,
-    },
-    resave: true,
-    saveUninitialized: true,
-  }),
-);
 
-app.use(validator()); // lomakevalidaattorin käyttöönotto
+// 3. REITIT
 
-app.use('/', index); // index-reitti
-app.use('/users', users); // users-reitti
-app.use('/students', students); // students-reitti
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+// Health check (Beanstalkin kuormantasaajalle ja sinulle)
+app.get('/', (req, res) => {
+  res.status(200).send('Backend on pystyssä!');
 });
 
-// error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// Testireitti tietokannalle (Nyt ilman connect/close säätöä)
+app.get('/api/test-db', (req, res) => {
+  const status = mongoose.connection.readyState;
+  // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+  if (status === 1) {
+    res.json({
+      message: 'Yhteys MongoDB Atlakseen on kunnossa!',
+      status: 'Connected',
+    });
+  } else {
+    res.status(500).json({
+      error: 'Tietokantayhteys ei ole aktiivinen.',
+      code: status,
+    });
+  }
+});
 
-  // render the error page
+app.use('/', indexRouter);
+
+// 4. VIRHEIDEN KÄSITTELY
+app.use(function (req, res, next) {
+  next(createError(404));
+});
+
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+    message: err.message,
+    error: req.app.get('env') === 'development' ? err : {},
+  });
 });
 
 module.exports = app;
