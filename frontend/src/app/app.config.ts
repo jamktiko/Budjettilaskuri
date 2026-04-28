@@ -9,7 +9,7 @@ import { routes } from './app.routes';
 import { Amplify } from 'aws-amplify';
 import { environment } from '../environments/environment';
 import { AmplifyAuthenticatorModule } from '@aws-amplify/ui-angular';
-
+import { provideHttpClient } from '@angular/common/http';
 Amplify.configure({
   Auth: {
     Cognito: {
@@ -21,6 +21,7 @@ Amplify.configure({
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),

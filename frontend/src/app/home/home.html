@@ -22,3 +22,22 @@
 <ul>
   <li *ngFor="let e of budget.expenses$ | async">{{ e.category }} - {{ e.amount }} €</li>
 </ul>
+<div class="test-container" style="padding: 20px; border: 1px solid #ccc; border-radius: 8px">
+  <h3>Tietokantayhteyden testaus</h3>
+
+  <button
+    (click)="testConnection()"
+    [disabled]="isLoading"
+    style="padding: 10px 20px; cursor: pointer"
+  >
+    {{ isLoading ? 'Testataan...' : 'Paina tästä testataksesi yhteys' }}
+  </button>
+
+  <div
+    style="margin-top: 20px; padding: 10px; border-radius: 4px"
+    [style.backgroundColor]="isError ? '#ffd2d2' : '#d2ffd2'"
+    *ngIf="connectionStatus !== 'Ei testattu'"
+  >
+    <strong>Status:</strong> {{ connectionStatus }}
+  </div>
+</div>
