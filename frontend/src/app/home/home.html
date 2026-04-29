@@ -1,26 +1,24 @@
-<h2>📊 Yhteenveto</h2>
+<h2>Dashboard</h2>
 
-<div class="cards">
-  <div class="card">
-    <h3>Saldo</h3>
-    <p>{{ budget.getBalance() }} €</p>
-  </div>
+<!-- SUMMARY -->
+<app-summary [income]="income$ | async" [expenses]="expenses$ | async" [balance]="balance$ | async">
+</app-summary>
 
-  <div class="card">
-    <h3>Tulot</h3>
-    <p>{{ budget.getTotalIncome() }} €</p>
-  </div>
+<!-- PIE CHART -->
+<app-pie-chart [transactions]="transactions$ | async"> </app-pie-chart>
 
-  <div class="card">
-    <h3>Menot</h3>
-    <p>{{ budget.getTotalExpenses() }} €</p>
-  </div>
-</div>
-
-<h3>🧾 Kulut</h3>
+<!-- LISTA -->
+<h3>Tapahtumat</h3>
 
 <ul>
-  <li *ngFor="let e of budget.expenses$ | async">{{ e.category }} - {{ e.amount }} €</li>
+  <li *ngFor="let t of transactions$ | async">{{ t.category }} - {{ t.amount }} €</li>
+</ul>
+
+<!-- INCOME / EXPENSE (jos haluat erillisen UI:n) -->
+<app-income-expense [transactions]="transactions$ | async"> </app-income-expense>
+
+<ul>
+  <li *ngFor="let t of transactions$ | async">{{ t.category }} - {{ t.amount }} €</li>
 </ul>
 <div class="test-container" style="padding: 20px; border: 1px solid #ccc; border-radius: 8px">
   <h3>Tietokantayhteyden testaus</h3>

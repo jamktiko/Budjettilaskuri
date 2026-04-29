@@ -1,62 +1,55 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
-export interface Expense {
-  category: string;
-  amount: number;
-}
-
-export interface Income {
-  source: string;
-  amount: number;
-}
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { Transaction } from '../models/transaction.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BudgetService {
-  // 💰 tulot (lista, ei vain yksi arvo)
-  private incomes = new BehaviorSubject<Income[]>([]);
-  incomes$ = this.incomes.asObservable();
+  // =========================
+  // STATE
+  // =========================
+  private transactions = new BehaviorSubject<Transaction[]>([]);
+  transactions$ = this.transactions.asObservable();
 
-  // 🧾 kulut
-  private expenses = new BehaviorSubject<Expense[]>([]);
-  expenses$ = this.expenses.asObservable();
-
-  // ➕ lisää tulo
-  addIncome(income: Income) {
-    const current = this.incomes.value;
-    this.incomes.next([...current, income]);
+  // =========================
+  // MUTATION
+  // =========================
+  addTransaction(transaction: Transaction) {
+    this.transactions.next([...this.transactions.value, transaction]);
   }
 
-  // ➕ lisää kulu
-  addExpense(expense: Expense) {
-    const current = this.expenses.value;
-    this.expenses.next([...current, expense]);
-  }
+  // =========================
+  // DERIVED STREAMS
+  // =========================
 
-  // 💰 tulot yhteensä
-  getTotalIncome(): number {
-    return this.incomes.value.reduce((sum, i) => sum + i.amount, 0);
-  }
+  incomeTotal$ = this.transactions$.pipe(
+    map((list) => list.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0)),
+  );
 
-  // 🧾 kulut yhteensä
-  getTotalExpenses(): number {
-    return this.expenses.value.reduce((sum, e) => sum + e.amount, 0);
-  }
+  expensesTotal$ = this.transactions$.pipe(
+    map((list) => list.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)),
+  );
 
-  // 🧮 saldo
-  getBalance(): number {
-    return this.getTotalIncome() - this.getTotalExpenses();
-  }
+  balance$ = combineLatest([this.incomeTotal$, this.expensesTotal$]).pipe(
+    map(([income, expenses]) => income - expenses),
+  );
 
-  // 🧾 helper: kaikki kulut
-  getExpenses(): Expense[] {
-    return this.expenses.value;
-  }
+  // =========================
+  // 🧠 OPTIONAL (TÄRKEÄ FIX SUN VIRHEISIIN)
+  // =========================
 
-  // 💰 helper: kaikki tulot
-  getIncomes(): Income[] {
-    return this.incomes.value;
+  // 👉 helpottaa IncomeExpense + PieChart
+  incomeTransactions$ = this.transactions$.pipe(
+    map((list) => list.filter((t) => t.type === 'income')),
+  );
+
+  expenseTransactions$ = this.transactions$.pipe(
+    map((list) => list.filter((t) => t.type === 'expense')),
+  );
+
+  // 👉 suora snapshot (jos joskus tarvitaan)
+  getAll(): Transaction[] {
+    return this.transactions.value;
   }
 }

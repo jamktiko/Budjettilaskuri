@@ -1,33 +1,41 @@
 <mat-card class="form">
   <h2>Lisää tapahtuma</h2>
 
-  <!-- TOGGLE -->
+  <!-- TYPE TOGGLE -->
   <div class="toggle">
-    <button mat-button (click)="setType('expense')" [color]="type === 'expense' ? 'primary' : ''">
+    <button
+      mat-raised-button
+      (click)="setType('expense')"
+      [color]="type === 'expense' ? 'primary' : ''"
+    >
       Kulu
     </button>
 
-    <button mat-button (click)="setType('income')" [color]="type === 'income' ? 'primary' : ''">
+    <button
+      mat-raised-button
+      (click)="setType('income')"
+      [color]="type === 'income' ? 'primary' : ''"
+    >
       Tulo
     </button>
   </div>
 
-  <!-- EXPENSE FIELD -->
-  <mat-form-field appearance="outline" *ngIf="type === 'expense'">
+  <!-- CATEGORY (molemmille sama) -->
+  <mat-form-field appearance="outline">
     <mat-label>Kategoria</mat-label>
     <input matInput [(ngModel)]="category" />
-  </mat-form-field>
-
-  <!-- INCOME FIELD -->
-  <mat-form-field appearance="outline" *ngIf="type === 'income'">
-    <mat-label>Lähde</mat-label>
-    <input matInput [(ngModel)]="source" />
   </mat-form-field>
 
   <!-- AMOUNT -->
   <mat-form-field appearance="outline">
     <mat-label>Summa</mat-label>
     <input matInput type="number" [(ngModel)]="amount" />
+  </mat-form-field>
+
+  <!-- NOTE (optional) -->
+  <mat-form-field appearance="outline">
+    <mat-label>Muistiinpano</mat-label>
+    <input matInput [(ngModel)]="note" />
   </mat-form-field>
 
   <!-- SAVE -->
