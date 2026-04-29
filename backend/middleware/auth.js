@@ -1,22 +1,30 @@
 const { CognitoJwtVerifier } = require('aws-jwt-verify');
 
-// Määritä verifioija
+// Alustetaan verifioija Cognito-tiedoilla, beanstalkista
 const verifier = CognitoJwtVerifier.create({
   userPoolId: process.env.COGNITO_USER_POOL_ID,
-  tokenUse: 'access', // tai "id"
+  tokenUse: 'access',
   clientId: process.env.COGNITO_CLIENT_ID,
 });
 
 const checkAuth = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(' ')[1]; // Odottaa "Bearer <token>"
-    if (!token) throw new Error('Token missing');
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) return res.status(401).json({ message: 'Token puuttuu' });
 
     const payload = await verifier.verify(token);
-    req.user = payload; // Tallennetaan käyttäjän tiedot pyyntöön
+
+    // Poimitaan tiedot tokenista.
+    // Huom: Cognitossa kenttä on yleensä 'name', mutta mallissasi se on 'nimi'.
+    req.user = {
+      id: payload.sub,
+      email: payload.email,
+      name: payload.name || payload.given_name || 'Käyttäjä',
+    };
+
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Luvaton pääsy', error: err.message });
+    res.status(401).json({ message: 'Luvaton pääsy' });
   }
 };
 

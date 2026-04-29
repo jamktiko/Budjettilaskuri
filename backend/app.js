@@ -8,6 +8,8 @@ const cors = require('cors');
 
 // Reittitiedostot
 const indexRouter = require('./routes/index');
+const transactionsRouter = require('./routes/transactions');
+const usersRouter = require('./routes/users');
 
 const app = express();
 
@@ -59,6 +61,8 @@ app.get('/api/test-db', (req, res) => {
 });
 
 app.use('/', indexRouter);
+app.use('/api/transactions', transactionsRouter);
+app.use('/api/users', usersRouter);
 
 // 4. VIRHEIDEN KÄSITTELY
 app.use(function (req, res, next) {
