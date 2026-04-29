@@ -1,0 +1,68 @@
+.profile-page {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.profile-card {
+  background: #1980f4;
+  color: white;
+  padding: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+   border: 0.5px solid #a1a1a1;
+}
+
+.profile-card .avatar {
+  width: 80px;
+  height: 80px;
+  font-size: 80px;
+  margin-right: 65px;
+}
+
+.settings-card {
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  border: 0.5px solid #a1a1a1;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.theme-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logout {
+  width: 400px;          /* lyhyempi leveys */
+  padding: 16px;
+  background: #de211e;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+
+  display: flex;         /* näyttää ikonin ja tekstin rinnakkain */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;              /* väli ikonin ja tekstin välillä */
+  
+  margin: 20px auto;     /* keskittää napin */
+  border: 0.5px solid #a1a1a1;
+}
+
+.dark-theme {
+  background: #121212;
+  color: white;
+}
+
