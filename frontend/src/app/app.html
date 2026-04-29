@@ -1,3 +1,19 @@
+<header class="top-bar">
+  <div class="top-bar-left">
+    <a routerLink="/home" aria-label="Home">
+      <img src="/logo.png" alt="Logo" class="top-bar-logo" />
+    </a>
+  </div>
+  <div class="top-bar-right">
+    <button mat-icon-button aria-label="Ilmoitukset" (click)="openNotificationsDialog()">
+      <mat-icon>notifications</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Profiili" routerLink="/profile" routerLinkActive="active">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</header>
+
 <router-outlet></router-outlet>
 
 <nav class="bottom-nav" *ngIf="showNav">

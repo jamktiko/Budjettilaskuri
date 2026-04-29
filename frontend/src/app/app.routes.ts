@@ -4,6 +4,7 @@ import { Home } from './home/home';
 import { Register } from './register/register';
 import { authGuard } from './auth.guard';
 import { AddExpense } from './expense/add-expense/add-expense';
+import { Profile } from './shared/profile/profile';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -13,6 +14,8 @@ export const routes: Routes = [
   { path: 'home', component: Home, canActivate: [authGuard] },
 
   { path: 'add', component: AddExpense },
+
+  { path: 'profile', component: Profile, canActivate: [authGuard] },
 
   { path: 'register', component: Register },
 ];
