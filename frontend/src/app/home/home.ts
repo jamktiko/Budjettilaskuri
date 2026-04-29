@@ -1,63 +1,60 @@
 import { Component } from '@angular/core';
-import { AuthenticatorService } from '@aws-amplify/ui-angular';
-import { Router } from '@angular/router';
-import { BudgetService } from '../shared/budget.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
+import { AuthenticatorService } from '@aws-amplify/ui-angular';
+import { BudgetService } from '../shared/budget.service';
 import { DataService } from '../data';
 
-// 🔥 (valinnainen mutta hyvä tyyppien takia)
-import { Observable } from 'rxjs';
-import { Transaction } from '../models/transaction.model';
+import { Summary } from './summary/summary';
+import { IncomeExpense } from './income-expense/income-expense';
+import { PieChart } from './pie-chart/pie-chart';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, Summary, IncomeExpense, PieChart],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
 export class Home {
-  // ===== Backend test UI =====
-  connectionStatus: string = 'Ei testattu';
-  isLoading: boolean = false;
-  isError: boolean = false;
+  // UI
+  connectionStatus = 'Ei testattu';
+  isLoading = false;
+  isError = false;
 
-  // ===== 🔥 REAKTIIVINEN BUDJETTIDATA =====
-  transactions$: Observable<Transaction[]> = this.budget.transactions$;
-  income$: Observable<number> = this.budget.income$;
-  expenses$: Observable<number> = this.budget.expenses$;
-  balance$: Observable<number> = this.budget.balance$;
+  // DATA
+  income$;
+  expenses$;
+  balance$;
+  transactions$;
 
   constructor(
     private dataService: DataService,
     public authenticator: AuthenticatorService,
     private router: Router,
-    private budget: BudgetService, // 🔥 ei enää public (ei käytetä templaatissa suoraan)
-  ) {}
+    private budget: BudgetService,
+  ) {
+    this.income$ = this.budget.incomeTotal$;
+    this.expenses$ = this.budget.expensesTotal$;
+    this.balance$ = this.budget.balance$;
+    this.transactions$ = this.budget.transactions$;
+  }
 
-  // ===== DB CONNECTION TEST =====
   testConnection() {
     this.isLoading = true;
     this.isError = false;
-    this.connectionStatus = 'Yhdistetään...';
 
     this.dataService.testDbConnection().subscribe({
-      next: (response) => {
-        this.connectionStatus = response.message;
+      next: (res) => {
+        this.connectionStatus = res.message;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Yhteysvirhe:', err);
-        this.connectionStatus = 'Virhe: ' + (err.error?.error || 'Palvelimeen ei saada yhteyttä');
+      error: () => {
+        this.connectionStatus = 'Virhe';
         this.isError = true;
         this.isLoading = false;
       },
     });
-  }
-
-  // ===== AUTH =====
-  handleSignOut() {
-    this.authenticator.signOut();
-    this.router.navigate(['/login']);
   }
 }

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BudgetService } from '../../shared/budget.service';
 
-// Material
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+
+import { BudgetService } from '../../shared/budget.service';
 
 @Component({
   selector: 'app-add-expense',
@@ -15,20 +15,18 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     CommonModule,
     FormsModule,
+    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatCardModule,
   ],
   templateUrl: './add-expense.html',
-  styleUrls: ['./add-expense.css'],
 })
 export class AddExpense {
   type: 'income' | 'expense' = 'expense';
-
-  category = '';
-  source = '';
-  amount: number | null = null;
+  category: string = '';
+  amount: number = 0;
+  note: string = '';
 
   constructor(private budget: BudgetService) {}
 
@@ -37,23 +35,18 @@ export class AddExpense {
   }
 
   save() {
-    if (this.amount === null) return;
-
-    if (this.type === 'income') {
-      this.budget.addIncome({
-        source: this.source || 'Muu',
-        amount: this.amount,
-      });
-    } else {
-      this.budget.addExpense({
-        category: this.category || 'Muu',
-        amount: this.amount,
-      });
-    }
+    this.budget.addTransaction({
+      id: crypto.randomUUID(),
+      type: this.type,
+      amount: this.amount,
+      category: this.category,
+      date: new Date(),
+      note: this.note,
+    });
 
     // reset
+    this.amount = 0;
     this.category = '';
-    this.source = '';
-    this.amount = null;
+    this.note = '';
   }
 }
