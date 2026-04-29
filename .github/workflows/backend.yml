@@ -37,4 +37,4 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           application-name: budjettilaskuri
           environment-name: Budjettilaskuri-env-1
-          deployment-package: deploy.zip
+          deployment-package-path: deploy.zip
