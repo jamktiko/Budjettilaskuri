@@ -62,20 +62,10 @@ export class Home {
         });
     }
   }
-  testConnection() {
-    this.isLoading = true;
-    this.isError = false;
-
-    this.dataService.testDbConnection().subscribe({
-      next: (res) => {
-        this.connectionStatus = res.message;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.connectionStatus = 'Virhe';
-        this.isError = true;
-        this.isLoading = false;
-      },
+  testaaYhteys() {
+    this.http.get('/api/users/me').subscribe({
+      next: (data) => console.log('Yhteys toimii ja token meni läpi!', data),
+      error: (err) => console.error('Interceptor ei ehkä lisännytkään tokenia:', err),
     });
   }
 }
