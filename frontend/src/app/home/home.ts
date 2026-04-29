@@ -47,7 +47,7 @@ export class Home {
   async ngOnInit() {
     // 1. Haetaan token AuthServicestä
     const session = await this.authservice.getCurrentSession();
-    const token = session?.accessToken.toString();
+    const token = await this.authservice.getIdToken(); // Haetaan IdToken
 
     if (token) {
       // 2. Kutsutaan backendia, jotta se luo käyttäjän kantaan jos sitä ei ole

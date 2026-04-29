@@ -24,6 +24,11 @@ export class AuthService {
     const session = await fetchAuthSession();
     return session.tokens?.accessToken.toString();
   }
+  async getIdToken(): Promise<string | undefined> {
+    const session = await fetchAuthSession();
+    // idToken sisältää emailin ja nimen, accessToken ei
+    return session.tokens?.idToken?.toString();
+  }
 
   signOut() {
     signOut();
