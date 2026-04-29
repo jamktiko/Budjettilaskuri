@@ -8,5 +8,3 @@ router.get('/', auth, transactionController.getTransactions);
 router.post('/', auth, transactionController.createTransaction);
 
 module.exports = router;
-
-module.exports = router;
