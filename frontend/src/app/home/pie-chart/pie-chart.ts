@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Transaction } from '../models/transaction.model';
 
 @Component({
   selector: 'app-pie-chart',
-  imports: [],
+  standalone: true,
   templateUrl: './pie-chart.html',
-  styleUrl: './pie-chart.css',
 })
 export class PieChart {
-
+  @Input() transactions: Transaction[] | null = [];
 }

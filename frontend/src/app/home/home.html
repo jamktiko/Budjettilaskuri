@@ -1,23 +1,13 @@
 <h2>📊 Yhteenveto</h2>
 
-<div class="cards">
-  <div class="card">
-    <h3>Saldo</h3>
-    <p>{{ budget.getBalance() }} €</p>
-  </div>
+<app-summary [balance]="balance$ | async" [income]="income$ | async" [expenses]="expenses$ | async">
+</app-summary>
 
-  <div class="card">
-    <h3>Tulot</h3>
-    <p>{{ budget.getTotalIncome() }} €</p>
-  </div>
+<app-pie-chart [transactions]="transactions$ | async"> </app-pie-chart>
 
-  <div class="card">
-    <h3>Menot</h3>
-    <p>{{ budget.getTotalExpenses() }} €</p>
-  </div>
-</div>
+<h3>🧾 Tapahtumat</h3>
 
-<h3>🧾 Kulut</h3>
+<app-income-expense [transactions]="transactions$ | async"> </app-income-expense>
 
 <ul>
   <li *ngFor="let e of budget.expenses$ | async">{{ e.category }} - {{ e.amount }} €</li>

@@ -5,6 +5,10 @@ import { BudgetService } from '../shared/budget.service';
 import { CommonModule } from '@angular/common';
 import { DataService } from '../data';
 
+// 🔥 (valinnainen mutta hyvä tyyppien takia)
+import { Observable } from 'rxjs';
+import { Transaction } from '../models/transaction.model';
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -13,16 +17,25 @@ import { DataService } from '../data';
   styleUrls: ['./home.css'],
 })
 export class Home {
+  // ===== Backend test UI =====
   connectionStatus: string = 'Ei testattu';
   isLoading: boolean = false;
   isError: boolean = false;
+
+  // ===== 🔥 REAKTIIVINEN BUDJETTIDATA =====
+  transactions$: Observable<Transaction[]> = this.budget.transactions$;
+  income$: Observable<number> = this.budget.income$;
+  expenses$: Observable<number> = this.budget.expenses$;
+  balance$: Observable<number> = this.budget.balance$;
 
   constructor(
     private dataService: DataService,
     public authenticator: AuthenticatorService,
     private router: Router,
-    public budget: BudgetService,
+    private budget: BudgetService, // 🔥 ei enää public (ei käytetä templaatissa suoraan)
   ) {}
+
+  // ===== DB CONNECTION TEST =====
   testConnection() {
     this.isLoading = true;
     this.isError = false;
@@ -30,7 +43,7 @@ export class Home {
 
     this.dataService.testDbConnection().subscribe({
       next: (response) => {
-        this.connectionStatus = response.message; // "Yhteys MongoDB Atlakseen on kunnossa!"
+        this.connectionStatus = response.message;
         this.isLoading = false;
       },
       error: (err) => {
@@ -41,9 +54,10 @@ export class Home {
       },
     });
   }
-  // Voit halutessasi tehdä oman metodin uloskirjautumiselle
+
+  // ===== AUTH =====
   handleSignOut() {
     this.authenticator.signOut();
-    this.router.navigate(['/login']); // Ohjataan takaisin kirjautumissivulle
+    this.router.navigate(['/login']);
   }
 }

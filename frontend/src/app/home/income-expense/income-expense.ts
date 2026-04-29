@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Transaction } from '../models/transaction.model';
 
 @Component({
   selector: 'app-income-expense',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './income-expense.html',
-  styleUrl: './income-expense.css',
 })
 export class IncomeExpense {
-
+  @Input() transactions: Transaction[] | null = [];
 }
