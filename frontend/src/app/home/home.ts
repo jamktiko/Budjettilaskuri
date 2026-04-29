@@ -9,6 +9,8 @@ import { DataService } from '../data';
 import { Summary } from './summary/summary';
 import { IncomeExpense } from './income-expense/income-expense';
 import { PieChart } from './pie-chart/pie-chart';
+import { AuthService } from '../auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -34,13 +36,32 @@ export class Home {
     public authenticator: AuthenticatorService,
     private router: Router,
     private budget: BudgetService,
+    private authservice: AuthService,
+    private http: HttpClient,
   ) {
     this.income$ = this.budget.incomeTotal$;
     this.expenses$ = this.budget.expensesTotal$;
     this.balance$ = this.budget.balance$;
     this.transactions$ = this.budget.transactions$;
   }
+  async ngOnInit() {
+    // 1. Haetaan token AuthServicestä
+    const session = await this.authservice.getCurrentSession();
+    const token = session?.accessToken.toString();
 
+    if (token) {
+      // 2. Kutsutaan backendia, jotta se luo käyttäjän kantaan jos sitä ei ole
+      // Tämä on se "sync"-vaihe!
+      this.http
+        .get('/api/users/me', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .subscribe({
+          next: (user) => console.log('Käyttäjä synkronoitu tietokantaan:', user),
+          error: (err) => console.error('Synkronointi epäonnistui:', err),
+        });
+    }
+  }
   testConnection() {
     this.isLoading = true;
     this.isError = false;
