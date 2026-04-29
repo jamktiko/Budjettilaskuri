@@ -1,1 +1,4 @@
-<p>income-expense works!</p>
+<div *ngFor="let t of transactions">
+  <strong>{{ t.category }}</strong>
+  {{ t.amount }} € ({{ t.type }})
+</div>

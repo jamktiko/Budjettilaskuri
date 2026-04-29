@@ -1,0 +1,66 @@
+:host {
+  display: block;
+  margin: 20px 0;
+}
+
+/* KORTTIRIVI */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* YKSITTÄINEN KORTTI */
+.card {
+  background: linear-gradient(135deg, #f8f9ff, #eef2ff);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+/* hover efekti */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* otsikko */
+.card h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* arvo */
+.card p {
+  margin: 10px 0 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #222;
+}
+
+/* eri värit korteille (valinnainen UX parannus) */
+.card:nth-child(1) {
+  border-left: 5px solid #4f46e5; /* saldo */
+}
+
+.card:nth-child(2) {
+  border-left: 5px solid #22c55e; /* tulot */
+}
+
+.card:nth-child(3) {
+  border-left: 5px solid #ef4444; /* menot */
+}
+
+/* responsiivisuus */
+@media (max-width: 768px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}
