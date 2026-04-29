@@ -1,0 +1,40 @@
+name: Deploy Backend to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create deployment ZIP
+        run: |
+          cd backend
+          zip -r ../deploy.zip . -x "*.git*" "node_modules/*" ".gitignore" "bktestcon.zip" "createtoken.js" "verifytoken.js" "dbconnection.js"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to Elastic Beanstalk
+        uses: aws-actions/aws-elasticbeanstalk-deploy@v1.0.0
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          application-name: budjettilaskuri
+          environment-name: Budjettilaskuri-env-1
+          deployment-package-path: deploy.zip

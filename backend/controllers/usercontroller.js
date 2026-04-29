@@ -1,74 +1,28 @@
-/* UserController on Userin tietokantaoperaatiot
-ja autentikaation sisältävä kontrolleri.
-Se sisältää kaksi metodia: registerUser jolla
-luodaan uusi käyttäjä kantaan ja authenticateUser
-jolla suoritetaan autentikaatio.
-*/
+const User = require('../models/User');
 
-const bcrypt = require('bcryptjs');
-const User = require('../models/User.js');
-const createToken = require('../createtoken.js');
+exports.syncUser = async (req, res) => {
+  try {
+    // req.user tiedot tulevat auth-middlewaresta
+    const { id, email, name } = req.user;
 
-const UserController = {
-  // uuden käyttäjän rekisteröinti
-  async registerUser(req, res, next) {
-    // passu kryptataan ennen kantaan laittamista
-    const hashedPassword = bcrypt.hashSync(req.body.password, 8);
+    // 1. Etsitään käyttäjää id:n perusteella
+    let user = await User.findById(id);
 
-    const user = await User.create({
-      username: req.body.username,
-      password: hashedPassword,
-      isadmin: req.body.isadmin,
-    }).catch((error) => {
-      return res
-        .status(500)
-        .send('Käyttäjän rekisteröinti epäonnistui.' + error);
-    });
-    const token = createToken(user); // tokenin luontimetodi
-    // palautetaan token JSON-muodossa
-    res.json({
-      success: true,
-      message: 'Tässä on valmis Token!',
-      token: token,
-    });
-  },
-
-  // olemassa olevan käyttäjän autentikaatio
-  // jos autentikaatio onnistuu, käyttäjälle luodaan token
-  async authenticateUser(req, res, next) {
-    // etsitään käyttäjä kannasta http-pyynnöstä saadun käyttäjätunnuksen perusteella
-    const user = await User.findOne({
-      username: req.body.username,
-    }).catch((error) => {
-      throw error;
-    });
+    // 2. Jos käyttäjää ei löydy, luodaan uusi
     if (!user) {
-      res.json({
-        success: false,
-        message: 'Autentikaatio epäonnistui.',
+      console.log(`Luodaan uusi käyttäjä tietokantaan: ${email}`);
+      user = new User({
+        _id: id, // Cognito sub
+        email: email, // Cognitosta tullut email
+        nimi: name, // Cognitosta tullut name
       });
-    } else if (user) {
-      // console.log(req.body.password); // lomakkelle syötetty salasana
-      // console.log(user.password); // kannassa oleva salasana
-      // verrataan lomakkeelle syötettyä salasanaa kannassa olevaan salasanaan
-      // jos vertailtavat eivät ole samat, palautetaan tieto siitä että salasana oli väärä
-      if (bcrypt.compareSync(req.body.password, user.password) === false) {
-        res.json({
-          success: false,
-          message: 'Autentikaatio epäonnistui.',
-        });
-      } else {
-        // jos salasanat ovat samat, luodaan token
-        const token = createToken(user); // tokenin luontimetodi
-        // palautetaan token JSON-muodossa
-        res.json({
-          success: true,
-          message: 'Tässä on valmis Token!',
-          token: token,
-        });
-      }
+      await user.save();
     }
-  },
-};
 
-module.exports = UserController;
+    // 3. Palautetaan käyttäjän profiili
+    res.status(200).json(user);
+  } catch (err) {
+    console.error('Virhe käyttäjän synkronoinnissa:', err);
+    res.status(500).json({ error: 'Palvelinvirhe käyttäjää synkronoitaessa' });
+  }
+};
