@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,17 +11,13 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./profile.css'],
 })
 export class Profile {
-
+  private authService = inject(AuthService);
+  logout() {
+    this.authService.signOut();
+  }
 }
-const logoutBtn = document.getElementById("logoutBtn");
-const themeToggle = document.getElementById("themeToggle") as HTMLInputElement;
+const themeToggle = document.getElementById('themeToggle') as HTMLInputElement;
 
-logoutBtn?.addEventListener("click", () => {
-  // esim. tyhjennä tokenit
-  localStorage.clear();
-  window.location.href = "/login";
-});
-
-themeToggle?.addEventListener("change", () => {
-  document.body.classList.toggle("dark-theme", themeToggle.checked);
+themeToggle?.addEventListener('change', () => {
+  document.body.classList.toggle('dark-theme', themeToggle.checked);
 });

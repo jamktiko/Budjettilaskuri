@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AuthUser, getCurrentUser, signOut, fetchAuthSession, AuthTokens } from 'aws-amplify/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor() {}
+  constructor(private router: Router) {}
 
   async getCurrentUser(): Promise<AuthUser> {
     return await getCurrentUser();
@@ -30,7 +31,12 @@ export class AuthService {
     return session.tokens?.idToken?.toString();
   }
 
-  signOut() {
-    signOut();
+  async signOut() {
+    try {
+      await signOut();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Uloskirjautuminen epäonnistui', error);
+    }
   }
 }
