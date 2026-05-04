@@ -39,5 +39,7 @@
   </mat-form-field>
 
   <!-- SAVE -->
-  <button mat-raised-button color="primary" (click)="save()">Lisää</button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="loading">
+    {{ loading ? 'Tallennetaan...' : 'Lisää' }}>Lisää
+  </button>
 </mat-card>
