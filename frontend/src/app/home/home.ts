@@ -11,6 +11,8 @@ import { IncomeExpense } from './income-expense/income-expense';
 import { PieChart } from './pie-chart/pie-chart';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-home',
@@ -42,7 +44,16 @@ export class Home {
     this.income$ = this.budget.incomeTotal$;
     this.expenses$ = this.budget.expensesTotal$;
     this.balance$ = this.budget.balance$;
-    this.transactions$ = this.budget.transactions$;
+this.transactions$ = this.budget.transactions$.pipe(
+  map(list =>
+    list.map(t => ({
+      ...t,
+      amount: Number(String(t.amount).replace('€', '').trim())
+    }))
+  )
+);
+
+
   }
   async ngOnInit() {
     // 1. Haetaan token AuthServicestä

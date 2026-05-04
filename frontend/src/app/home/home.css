@@ -11,3 +11,165 @@
   background: #f5f5f5;
   text-align: center;
 }
+
+.dashboard-card {
+  max-width: 1000px;
+  margin: 40px auto 30px;
+  padding: 28px 24px;
+  background: linear-gradient(135deg, #5c9ce4, #106fdb);
+  border-radius: 22px;
+  color: #ffffff;
+  box-shadow: 0 16px 30px rgba(13, 71, 161, 0.22);
+  text-align: center;
+}
+
+.dashboard-card h2 {
+  margin-bottom: 18px;
+  font-size: 1.9rem;
+  letter-spacing: 0.03em;
+}
+
+.dashboard-stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+}
+
+.dashboard-stat {
+  min-width: 150px;
+  flex: 1;
+  padding: 18px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.blue-card {
+  max-width: 1000px;
+  background:#ffffff;
+  border-radius: 18px;
+  color: #000000;
+   margin: 40px auto 30px;
+  padding: 28px 24px;
+  box-shadow: 0 12px 24px rgba(13, 71, 161, 0.25);
+}
+
+
+.blue-card h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.event-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+}
+
+.event-list li:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.stat-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.stat-value.income {
+  color: #8df690;
+}
+
+.stat-value.expense {
+  color: #ffb6bd;
+}
+.history-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.history-date {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #777;
+}
+
+.history-right {
+  font-size: 15px;
+  font-weight: 600;
+  color: #4caf50; 
+}
+
+
+.history-right.negative {
+  color: #f44336;
+}
+
+@media (max-width: 600px) {
+  .dashboard-card {
+    padding: 20px 16px;
+    margin: 20px auto;
+  }
+
+  .dashboard-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+  }
+
+  .dashboard-stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dashboard-stat {
+    min-width: unset;
+    width: 100%;
+    padding: 14px 10px;
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+  }
+}
