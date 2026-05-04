@@ -15,9 +15,23 @@ export class BudgetService1 {
   // =========================
   // MUTATION
   // =========================
-  addTransaction(transaction: Transaction) {
-    this.transactions.next([...this.transactions.value, transaction]);
+ addTransaction(transaction: Transaction) {
+  let amount = Number(transaction.amount);
+
+  if (transaction.type === 'expense') {
+    amount = -Math.abs(amount);   // aina negatiivinen
+  } else {
+    amount = Math.abs(amount);    // aina positiivinen
   }
+
+  const fixedTransaction = {
+    ...transaction,
+    amount
+  };
+
+  this.transactions.next([...this.transactions.value, fixedTransaction]);
+}
+
 
   // =========================
   // DERIVED STREAMS
@@ -31,9 +45,10 @@ export class BudgetService1 {
     map((list) => list.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0)),
   );
 
-  balance$ = combineLatest([this.incomeTotal$, this.expensesTotal$]).pipe(
-    map(([income, expenses]) => income - expenses),
-  );
+balance$ = combineLatest([this.incomeTotal$, this.expensesTotal$]).pipe(
+  map(([income, expenses]) => income + expenses),
+);
+
 
   // =========================
   // 🧠 OPTIONAL (TÄRKEÄ FIX SUN VIRHEISIIN)
@@ -52,4 +67,5 @@ export class BudgetService1 {
   getAll(): Transaction[] {
     return this.transactions.value;
   }
+  
 }

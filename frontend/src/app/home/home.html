@@ -1,25 +1,57 @@
-<h2>Dashboard</h2>
-
-<!-- SUMMARY -->
-<app-summary [income]="income$ | async" [expenses]="expenses$ | async" [balance]="balance$ | async">
-</app-summary>
+<div class="dashboard-card">
+  <h2>Budjetti</h2>
+  <div class="dashboard-stats">
+    <div class="dashboard-stat">
+      <span class="stat-label">Saldo</span>
+      <span class="stat-value">{{ balance$ | async | number:'1.2-2' }} €</span>
+    </div>
+    <div class="dashboard-stat">
+      <span class="stat-label">Tulot</span>
+      <span class="stat-value income">{{ income$ | async | number:'1.2-2' }} €</span>
+    </div>
+    <div class="dashboard-stat">
+      <span class="stat-label">Menot</span>
+      <span class="stat-value expense">{{ expenses$ | async | number:'1.2-2' }} €</span>
+    </div>
+  </div>
+</div>
 
 <!-- PIE CHART -->
-<app-pie-chart [transactions]="transactions$ | async"> </app-pie-chart>
+<div class="blue-card">
+  <app-pie-chart [transactions]="transactions$ | async"></app-pie-chart>
+</div>
 
-<!-- LISTA -->
-<h3>Tapahtumat</h3>
+
+<div class="blue-card">
+  <h2>Tapahtumat</h2>
+
+  <div class="history-card">
+    <div class="history-item" *ngFor="let t of transactions$ | async">
+      <div class="history-left">
+        <p class="history-title">{{ t.category }}</p>
+        <p class="history-date">{{ t.date | date:'dd.MM.yyyy' }}</p>
+      </div>
+
+      <div class="history-right" [class.negative]="t.amount < 0">
+  {{ t.amount }} €
+</div>
+    </div>
+  </div>
+</div>
+
+ 
+<!--
+<app-income-expense [transactions]="transactions$ | async"></app-income-expense>
 
 <ul>
-  <li *ngFor="let t of transactions$ | async">{{ t.category }} - {{ t.amount }} €</li>
+  <li *ngFor="let t of transactions$ | async">
+    {{ t.category }} - {{ t.amount }} €
+  </li>
 </ul>
+-->
 
-<!-- INCOME / EXPENSE (jos haluat erillisen UI:n) -->
-<app-income-expense [transactions]="transactions$ | async"> </app-income-expense>
 
-<ul>
-  <li *ngFor="let t of transactions$ | async">{{ t.category }} - {{ t.amount }} €</li>
-</ul>
+
 <div class="test-container" style="padding: 20px; border: 1px solid #ccc; border-radius: 8px">
   <h3>Tietokantayhteyden testaus</h3>
 
