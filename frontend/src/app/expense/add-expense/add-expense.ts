@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
-import { BudgetService } from '../../shared/budget.service';
+import { BudgetService } from '../../budget.service';
 
 @Component({
   selector: 'app-add-expense',
@@ -21,6 +21,7 @@ import { BudgetService } from '../../shared/budget.service';
     MatButtonModule,
   ],
   templateUrl: './add-expense.html',
+  styleUrls: ['./add-expense.css'],
 })
 export class AddExpense {
   type: 'income' | 'expense' = 'expense';

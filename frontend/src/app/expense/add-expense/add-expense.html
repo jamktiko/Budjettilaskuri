@@ -6,16 +6,12 @@
     <button
       mat-raised-button
       (click)="setType('expense')"
-      [color]="type === 'expense' ? 'primary' : ''"
+      [class.active-expense]="type === 'expense'"
     >
-      Kulu
+      Meno
     </button>
 
-    <button
-      mat-raised-button
-      (click)="setType('income')"
-      [color]="type === 'income' ? 'primary' : ''"
-    >
+    <button mat-raised-button (click)="setType('income')" [class.active-income]="type === 'income'">
       Tulo
     </button>
   </div>
