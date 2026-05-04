@@ -20,4 +20,13 @@ export class BudgetService {
       throw error;
     }
   }
+
+  async getTransactions() {
+    try {
+      return await firstValueFrom(this.http.get(this.apiUrl));
+    } catch (error) {
+      console.error('Virhe haussa:', error);
+      throw error;
+    }
+  }
 }

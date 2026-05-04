@@ -39,3 +39,19 @@
     <strong>Status:</strong> {{ connectionStatus }}
   </div>
 </div>
+<div *ngIf="loading">Ladataan tapahtumia...</div>
+
+<div *ngIf="!loading && transactions.length === 0">Ei tapahtumia tallennettuna.</div>
+
+<div class="transaction-list" *ngIf="!loading">
+  <div *ngFor="let t of transactions" class="transaction-item">
+    <span>{{ t.date | date: 'dd.MM.yyyy' }}</span>
+    <strong>{{ t.category }}</strong>
+    <span [style.color]="t.type === 'expense' ? 'red' : 'green'">
+      {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount }} €
+    </span>
+    <p *ngIf="t.note">
+      <em>{{ t.note }}</em>
+    </p>
+  </div>
+</div>
