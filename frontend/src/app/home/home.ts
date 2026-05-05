@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 
 import { AuthenticatorService } from '@aws-amplify/ui-angular';
-import { BudgetService1 } from '../shared/budget.service';
+//import { BudgetService1 } from '../shared/budget.service';
 import { DataService } from '../data';
 
 import { Summary } from './summary/summary';
@@ -29,13 +29,20 @@ export class Home {
   isError = false;
 
   // DATA
-  income$;
-  expenses$;
-  balance$;
-  transactions$;
+  // income$;
+  // expenses$;
+  // balance$;
+  //transactions$;
 
   // Tietokantaan liittyvää
   // Luodaan muuttuja transaktioille
+
+  stats = {
+    balance: 0,
+    income: 0,
+    expenses: 0,
+  };
+
   transactions: any[] = [];
   loading: boolean = false;
 
@@ -43,23 +50,24 @@ export class Home {
     private dataService: DataService,
     public authenticator: AuthenticatorService,
     private router: Router,
-    private budget1: BudgetService1,
+    // private budget1: BudgetService1,
     private authservice: AuthService,
     private http: HttpClient,
     private budget: BudgetService,
   ) {
-    this.income$ = this.budget1.incomeTotal$;
-    this.expenses$ = this.budget1.expensesTotal$;
-    this.balance$ = this.budget1.balance$;
-    this.transactions$ = this.budget1.transactions$.pipe(
-      map((list) =>
-        list.map((t) => ({
-          ...t,
-          amount: Number(String(t.amount).replace('€', '').trim()),
-        })),
-      ),
-    );
+    // this.income$ = this.budget1.incomeTotal$;
+    // this.expenses$ = this.budget1.expensesTotal$;
+    // this.balance$ = this.budget1.balance$;
+    // this.transactions$ = this.budget1.transactions$.pipe(
+    //   map((list) =>
+    //     list.map((t) => ({
+    //       ...t,
+    //       amount: Number(String(t.amount).replace('€', '').trim()),
+    //     })),
+    //   ),
+    // );
   }
+
   async ngOnInit() {
     // 1. Haetaan token AuthServicestä
     const session = await this.authservice.getCurrentSession();
@@ -89,8 +97,28 @@ export class Home {
     this.loading = true;
     try {
       // Kutsutaan palvelun metodia (Interceptor hoitaa tokenin automaattisesti)
-      const data = await this.budget.getTransactions();
-      this.transactions = data as any[];
+      const data = (await this.budget.getTransactions()) as any[];
+      this.transactions = data;
+
+      // Lasketaan summat käyttäen 'type' -kenttää
+      const totals = data.reduce(
+        (acc, curr) => {
+          if (curr.type === 'income') {
+            acc.income += curr.amount;
+          } else if (curr.type === 'expense') {
+            acc.expenses += curr.amount;
+          }
+          return acc;
+        },
+        { income: 0, expenses: 0 },
+      );
+
+      // Päivitetään näkymään menevät tiedot
+      this.stats = {
+        income: totals.income,
+        expenses: totals.expenses,
+        balance: totals.income - totals.expenses,
+      };
       console.log('Tapahtumat haettu:', this.transactions);
     } catch (err) {
       console.error('Tapahtumien haku epäonnistui:', err);

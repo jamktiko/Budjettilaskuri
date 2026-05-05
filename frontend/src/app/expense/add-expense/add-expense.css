@@ -1,12 +1,30 @@
 .form {
-  width: 300px;
+  width: 100vw;
+  max-width: 460px;
+  height: calc(100vh - 200px);
+  min-height: 358px;
   margin: 20px auto;
   padding: 16px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 mat-form-field {
   width: 100%;
   margin-bottom: 10px;
+}
+
+.toggle {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 12px;
 }
 
 .active-expense {
@@ -19,4 +37,9 @@ mat-form-field {
   background-color: #4caf50 !important;
   color: white !important;
   font-weight: bold;
+}
+
+.lisaa_button {
+  margin-top: auto;
+  min-height: 40px;
 }

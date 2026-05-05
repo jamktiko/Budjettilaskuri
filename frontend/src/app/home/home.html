@@ -3,43 +3,39 @@
   <div class="dashboard-stats">
     <div class="dashboard-stat">
       <span class="stat-label">Saldo</span>
-      <span class="stat-value">{{ balance$ | async | number:'1.2-2' }} €</span>
+      <span class="stat-value">{{ stats.balance | number: '1.2-2' }} €</span>
     </div>
     <div class="dashboard-stat">
       <span class="stat-label">Tulot</span>
-      <span class="stat-value income">{{ income$ | async | number:'1.2-2' }} €</span>
+      <span class="stat-value income">{{ stats.income | number: '1.2-2' }} €</span>
     </div>
     <div class="dashboard-stat">
       <span class="stat-label">Menot</span>
-      <span class="stat-value expense">{{ expenses$ | async | number:'1.2-2' }} €</span>
+      <span class="stat-value expense">{{ stats.expenses | number: '1.2-2' }} €</span>
     </div>
   </div>
 </div>
 
 <!-- PIE CHART -->
 <div class="blue-card">
-  <app-pie-chart [transactions]="transactions$ | async"></app-pie-chart>
+  <app-pie-chart [transactions]="transactions"></app-pie-chart>
 </div>
-
 
 <div class="blue-card">
   <h2>Tapahtumat</h2>
 
   <div class="history-card">
-    <div class="history-item" *ngFor="let t of transactions$ | async">
+    <div class="history-item" *ngFor="let t of transactions">
       <div class="history-left">
         <p class="history-title">{{ t.category }}</p>
-        <p class="history-date">{{ t.date | date:'dd.MM.yyyy' }}</p>
+        <p class="history-date">{{ t.date | date: 'dd.MM.yyyy' }}</p>
       </div>
 
-      <div class="history-right" [class.negative]="t.amount < 0">
-  {{ t.amount }} €
-</div>
+      <div class="history-right" [class.negative]="t.amount < 0">{{ t.amount }} €</div>
     </div>
   </div>
 </div>
 
- 
 <!--
 <app-income-expense [transactions]="transactions$ | async"></app-income-expense>
 
@@ -50,9 +46,7 @@
 </ul>
 -->
 
-
-
-<div class="test-container" style="padding: 20px; border: 1px solid #ccc; border-radius: 8px">
+<!-- <div class="test-container" style="padding: 20px; border: 1px solid #ccc; border-radius: 8px">
   <h3>Tietokantayhteyden testaus</h3>
 
   <button
@@ -70,7 +64,7 @@
   >
     <strong>Status:</strong> {{ connectionStatus }}
   </div>
-</div>
+</div> -->
 <div *ngIf="loading">Ladataan tapahtumia...</div>
 
 <div *ngIf="!loading && transactions.length === 0">Ei tapahtumia tallennettuna.</div>
