@@ -5,7 +5,7 @@ import { Register } from './register/register';
 import { authGuard } from './auth.guard';
 import { AddExpense } from './expense/add-expense/add-expense';
 import { Profile } from './shared/profile/profile';
-import { Addbudget } from './addbudget/addbudget';
+import { AddBudget } from './addbudget/addbudget';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,5 +18,5 @@ export const routes: Routes = [
 
   { path: 'profile', component: Profile, canActivate: [authGuard] },
 
-  { path: 'addbudget', component: Addbudget },
+  { path: 'addbudget', component: AddBudget },
 ];

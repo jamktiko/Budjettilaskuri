@@ -1,1 +1,36 @@
-<p>addbudget works!</p>
+<div class="container">
+  <h2 class="title">Luo budjetti</h2>
+  <p class="subtitle">Aseta kuukausi- tai viikkobudjetti</p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- Category -->
+    <mat-form-field appearance="outline">
+      <mat-label>Kategoria</mat-label>
+      <mat-select formControlName="category">
+        <mat-option *ngFor="let c of categories" [value]="c">
+          {{ c }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Limit -->
+    <mat-form-field appearance="outline">
+      <mat-label>Budjetti raja (€)</mat-label>
+      <input matInput type="number" formControlName="limit" />
+    </mat-form-field>
+
+    <!-- Period -->
+    <mat-form-field appearance="outline">
+      <mat-label>Aika</mat-label>
+      <mat-select formControlName="period">
+        <mat-option value="monthly">Kuukausi</mat-option>
+        <mat-option value="weekly">Viikko</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Submit -->
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+      Luo Budjetti
+    </button>
+  </form>
+</div>
