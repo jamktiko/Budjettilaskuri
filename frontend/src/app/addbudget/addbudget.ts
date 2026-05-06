@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -30,6 +31,7 @@ export class AddBudget {
   private fb = inject(FormBuilder);
   private budgetService = inject(BudgetService);
   private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
 
   categories = ['Ruoka', 'Auto', 'Vuokra', 'Viihde', 'Muu'];
 
@@ -56,24 +58,12 @@ export class AddBudget {
     };
 
     try {
-      // Oletan että budgetService.addBudget palauttaa Observablen tai Promisen
-      await this.budgetService.addBudget(budgetData);
-
-      this.snackBar.open('Budjetti tallennettu!', 'OK', {
-        duration: 2000,
-      });
-
-      // Resetoidaan lomake alkutilaan
-      this.form.reset({
-        category: '',
-        amount: 0,
-        time: 'monthly',
-      });
-    } catch (err) {
-      console.error(err);
-      this.snackBar.open('Virhe tallennuksessa', 'OK', {
-        duration: 2000,
-      });
+      await this.budgetService.addBudget(this.form.value);
+      this.snackBar.open('Budjetti tallennettu!', 'OK', { duration: 3000 });
+      this.router.navigate(['/home']);
+    } catch (err: any) {
+      const errorMsg = err.error?.error || 'Virhe tallennuksessa';
+      this.snackBar.open(errorMsg, 'OK', { duration: 5000 });
     }
   }
 }
