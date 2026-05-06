@@ -13,6 +13,7 @@ const BudgetSchema = new mongoose.Schema({
   },
   amount: { type: Number, required: true },
   time: { type: String, required: true, enum: ['monthly', 'weekly'] },
+  date: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model('Budget', BudgetSchema);
