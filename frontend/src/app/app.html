@@ -1,4 +1,4 @@
-<header class="top-bar">
+<header class="top-bar" *ngIf="showNav">
   <div class="top-bar-left">
     <a routerLink="/home" aria-label="Home">
       <img src="/logo.png" alt="Logo" class="top-bar-logo" />
@@ -18,17 +18,14 @@
 
 <nav class="bottom-nav" *ngIf="showNav">
   <button mat-button routerLink="/home" routerLinkActive="active">
-    <mat-icon>home</mat-icon>
-    <span>Home</span>
+    <mat-icon>home</mat-icon><span class="desktoptext">Home</span>
   </button>
 
   <button mat-button routerLink="/add" routerLinkActive="active">
-    <mat-icon>add_circle</mat-icon>
-    <span>Lisää</span>
+    <mat-icon>add_circle</mat-icon><span class="desktoptext">Lisää</span>
   </button>
 
   <button mat-button routerLink="/addbudget" routerLinkActive="active">
-    <mat-icon>add_circle</mat-icon>
-    <span>Budjetti</span>
+    <mat-icon>add_circle</mat-icon><span class="desktoptext">Budjetti</span>
   </button>
 </nav>
