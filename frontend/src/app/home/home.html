@@ -13,7 +13,7 @@
     <div class="dashboard-stat">
       <span class="stat-label">Menot</span>
       <span class="stat-value expense">
-        {{ monthlySummary?.monthlySpent ?? 0 | number: '1.2-2' }} €
+        {{ monthlySummary.monthlySpent | number: '1.2-2' }} €
       </span>
     </div>
 
@@ -21,8 +21,8 @@
     <div class="dashboard-stat">
       <span class="stat-label">Budjettia jäljellä</span>
 
-      <span class="stat-value" [class.negative]="(monthlySummary?.remaining ?? 0) < 0">
-        {{ monthlySummary?.remaining ?? 0 | number: '1.2-2' }} €
+      <span class="stat-value" [class.negative]="monthlySummary.remaining < 0">
+        {{ monthlySummary.remaining | number: '1.2-2' }} €
       </span>
     </div>
   </div>
