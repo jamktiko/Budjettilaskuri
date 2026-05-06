@@ -6,7 +6,7 @@
 }
 
 .form {
-  width: 100vw;
+  width: 100%;
   max-width: 420px;
   min-height: 358px;
   margin: 10px auto;
