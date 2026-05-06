@@ -33,38 +33,45 @@ export class AddBudget {
 
   categories = ['Ruoka', 'Auto', 'Vuokra', 'Viihde', 'Muu'];
 
+  // Jaksojen on vastattava Mongoon määriteltyä enumia ('monthly', 'weekly')
+  periods = [
+    { value: 'monthly', viewValue: 'Kuukausi' },
+    { value: 'weekly', viewValue: 'Viikko' },
+  ];
+
   form = this.fb.group({
     category: ['', Validators.required],
-    limit: [0, [Validators.required, Validators.min(1)]],
-    period: ['monthly', Validators.required],
+    amount: [0, [Validators.required, Validators.min(1)]],
+    time: ['monthly', Validators.required],
   });
 
   async onSubmit() {
     if (this.form.invalid) return;
 
-    const budget = {
-      id: crypto.randomUUID(),
-      type: 'budget', // 🔥 tärkeä erotus backendille
+    // Luodaan objekti joka vastaa tismalleen backendin Mongoose-mallia
+    const budgetData = {
       category: this.form.value.category,
-      amount: this.form.value.limit, // backend ei tunne "limit"
-      period: this.form.value.period,
-      createdAt: new Date(),
+      amount: this.form.value.amount,
+      time: this.form.value.time,
     };
 
     try {
-      await this.budgetService.addTransaction(budget);
+      // Oletan että budgetService.addBudget palauttaa Observablen tai Promisen
+      await this.budgetService.addBudget(budgetData);
 
-      this.snackBar.open('Budget saved', 'OK', {
+      this.snackBar.open('Budjetti tallennettu!', 'OK', {
         duration: 2000,
       });
 
+      // Resetoidaan lomake alkutilaan
       this.form.reset({
         category: '',
-        limit: 0,
-        period: 'monthly',
+        amount: 0,
+        time: 'monthly',
       });
     } catch (err) {
-      this.snackBar.open('Error saving budget', 'OK', {
+      console.error(err);
+      this.snackBar.open('Virhe tallennuksessa', 'OK', {
         duration: 2000,
       });
     }
