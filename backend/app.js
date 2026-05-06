@@ -10,7 +10,7 @@ const cors = require('cors');
 const indexRouter = require('./routes/index');
 const transactionsRouter = require('./routes/transactions');
 const usersRouter = require('./routes/users');
-
+const budgetsRouter = require('./routes/budget');
 const app = express();
 
 // 1. CORS-asetukset (CloudFrontia varten)
@@ -63,6 +63,7 @@ app.get('/api/test-db', (req, res) => {
 app.use('/', indexRouter);
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/budgets', budgetsRouter); // Lisää tämä rivi budjettireitille
 
 // 4. VIRHEIDEN KÄSITTELY
 app.use(function (req, res, next) {
