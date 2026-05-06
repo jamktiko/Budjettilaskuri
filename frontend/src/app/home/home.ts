@@ -67,7 +67,7 @@ export class Home implements OnInit {
 
     // 3. HAETAAN SEKÄ TAPAHTUMAT ETTÄ BUDJETIT
     this.getTransactions();
-    this.getBudgetData();
+    //this.getBudgetData();
   }
 
   async getTransactions() {
@@ -90,11 +90,14 @@ export class Home implements OnInit {
         expenses: totals.expenses,
         balance: totals.income - totals.expenses,
       };
-
-      // Päivitetään yhteenveto
-      this.calculateMonthlySummary();
+      this.monthlySummary = {
+        monthlyBudget: this.stats.income,
+        monthlySpent: this.stats.expenses,
+        remaining: this.stats.balance, // Saldo
+        percentUsed: this.stats.income > 0 ? (this.stats.expenses / this.stats.income) * 100 : 0,
+      };
     } catch (err) {
-      console.error('Tapahtumien haku epäonnistui');
+      console.error('Datan haku epäonnistui');
     } finally {
       this.loading = false;
     }
@@ -107,22 +110,9 @@ export class Home implements OnInit {
       if (budgets && budgets.length > 0) {
         this.chartLabels = budgets.map((b) => b.category);
         this.chartData = budgets.map((b) => b.amount);
-
-        // Lasketaan kuukausibudjetti yhteensä summaryyn
-        this.monthlySummary.monthlyBudget = budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
-        this.calculateMonthlySummary();
       }
     } catch (err) {
       console.error('Budjettien haku epäonnistui');
     }
-  }
-
-  calculateMonthlySummary() {
-    const spent = this.stats.expenses;
-    const budgetTotal = this.monthlySummary.monthlyBudget;
-
-    this.monthlySummary.monthlySpent = spent;
-    this.monthlySummary.remaining = budgetTotal - spent;
-    this.monthlySummary.percentUsed = budgetTotal > 0 ? (spent / budgetTotal) * 100 : 0;
   }
 }
