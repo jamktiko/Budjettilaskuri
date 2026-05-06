@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { DataService } from '../data';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { PieChart } from './pie-chart/pie-chart';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { BudgetService } from '../budget.service';
-
-type TransactionType = 'income' | 'expense' | 'budget';
 
 @Component({
   selector: 'app-home',
@@ -32,14 +29,14 @@ export class Home {
   budgets: any[] = [];
   expenses: any[] = [];
 
-  // Stats
+  // STATS
   stats = {
     balance: 0,
     income: 0,
     expenses: 0,
   };
 
-  // 🔥 nyt nullable (parempi Angularille)
+  // 🔥 uusi dashboard data
   monthlySummary: {
     monthlyBudget: number;
     monthlySpent: number;
@@ -81,13 +78,14 @@ export class Home {
 
       this.transactions = data;
 
-      // 🔥 turvallinen type-normalisointi
-      const normalize = (t: any): TransactionType => (t.type || '').toLowerCase();
+      // 🔥 normalize type (tärkeä bugien estoon)
+      const normalize = (t: any) => (t.type || '').toLowerCase();
 
+      // 🔥 jaottelu
       this.budgets = data.filter((t) => normalize(t) === 'budget');
       this.expenses = data.filter((t) => normalize(t) === 'expense');
 
-      // 🔥 stats
+      // 🔥 income/expense stats
       const totals = data.reduce(
         (acc, curr) => {
           const type = normalize(curr);
@@ -117,7 +115,7 @@ export class Home {
     }
   }
 
-  // 🔥 yksi totuus budjeteille
+  // 🔥 YDIN: kuukausibudjetti
   calculateMonthlySummary() {
     const monthlyBudget = this.budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
 
