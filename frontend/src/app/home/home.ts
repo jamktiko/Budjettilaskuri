@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+
 import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { DataService } from '../data';
 
-import { PieChart } from './pie-chart/pie-chart';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { BudgetService } from '../budget.service';
@@ -13,7 +13,7 @@ import { BudgetService } from '../budget.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule /*PieChart*/, MatProgressBarModule],
+  imports: [CommonModule, MatProgressBarModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
@@ -36,7 +36,7 @@ export class Home {
     expenses: 0,
   };
 
-  // 🔥 uusi dashboard data
+  // dashboard
   monthlySummary: {
     monthlyBudget: number;
     monthlySpent: number;
@@ -76,22 +76,30 @@ export class Home {
     try {
       const data = (await this.budget.getTransactions()) as any[];
 
+      console.log('ALL DATA:', data);
+
       this.transactions = data;
 
-      // 🔥 normalize type (tärkeä bugien estoon)
       const normalize = (t: any) => (t.type || '').toLowerCase();
+
+      const toNumber = (v: any) => Number(v) || 0;
 
       // 🔥 jaottelu
       this.budgets = data.filter((t) => normalize(t) === 'budget');
+
       this.expenses = data.filter((t) => normalize(t) === 'expense');
 
-      // 🔥 income/expense stats
+      console.log('BUDGETS:', this.budgets);
+      console.log('EXPENSES:', this.expenses);
+
+      // 🔥 stats
       const totals = data.reduce(
         (acc, curr) => {
           const type = normalize(curr);
+          const amount = toNumber(curr.amount);
 
-          if (type === 'income') acc.income += curr.amount;
-          if (type === 'expense') acc.expenses += curr.amount;
+          if (type === 'income') acc.income += amount;
+          if (type === 'expense') acc.expenses += amount;
 
           return acc;
         },
@@ -104,10 +112,7 @@ export class Home {
         balance: totals.income - totals.expenses,
       };
 
-      // 🔥 kuukausilaskenta
       this.calculateMonthlySummary();
-
-      console.log('Tapahtumat haettu:', this.transactions);
     } catch (err) {
       console.error('Tapahtumien haku epäonnistui:', err);
     } finally {
@@ -115,11 +120,10 @@ export class Home {
     }
   }
 
-  // 🔥 YDIN: kuukausibudjetti
   calculateMonthlySummary() {
-    const monthlyBudget = this.budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
+    const monthlyBudget = this.budgets.reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
 
-    const monthlySpent = this.expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+    const monthlySpent = this.expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
     const remaining = monthlyBudget - monthlySpent;
 
