@@ -110,6 +110,9 @@ export class Home implements OnInit {
       if (budgets && budgets.length > 0) {
         this.chartLabels = budgets.map((b) => b.category);
         this.chartData = budgets.map((b) => b.amount);
+
+        this.manualBudgetTotal = budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
+        this.updateDashboard();
       }
     } catch (err) {
       console.error('Budjettien haku epäonnistui');
