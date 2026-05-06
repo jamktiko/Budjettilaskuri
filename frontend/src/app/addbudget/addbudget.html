@@ -16,15 +16,16 @@
     <!-- Limit -->
     <mat-form-field appearance="outline">
       <mat-label>Budjetti raja (€)</mat-label>
-      <input matInput type="number" formControlName="limit" />
+      <input matInput type="number" formControlName="amount" />
     </mat-form-field>
 
     <!-- Period -->
     <mat-form-field appearance="outline">
       <mat-label>Aika</mat-label>
-      <mat-select formControlName="period">
-        <mat-option value="monthly">Kuukausi</mat-option>
-        <mat-option value="weekly">Viikko</mat-option>
+      <mat-select formControlName="time">
+        <mat-option *ngFor="let p of periods" [value]="p.value">
+          {{ p.viewValue }}
+        </mat-option>
       </mat-select>
     </mat-form-field>
 
