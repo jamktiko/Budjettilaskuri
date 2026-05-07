@@ -47,6 +47,7 @@
   width: 400px;
   padding: 16px;
   background: #de211e;
+  
   color: white;
   border: none;
   border-radius: 8px;
@@ -73,11 +74,6 @@
   transform: scale(0.97);          /* “painallus” efekti */
 }
 
-
-.dark-theme {
-  background: #121212;
-  color: white;
-}
 
 /* --- RESPONSIIVISUUS --- */
 @media (max-width: 768px) {

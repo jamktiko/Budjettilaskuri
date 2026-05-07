@@ -21,3 +21,14 @@ body {
 .amplify-button--primary {
   background-color: #1980f4;}
 
+.dark-theme .dashboard-card,
+.dark-theme .blue-card,
+.dark-theme .history-card {
+  background-color: #212121 !important;
+  color: white !important;
+}
+
+.dark-theme .settings-card {
+  background-color: #6e6e6e !important;
+  color: white !important;
+}

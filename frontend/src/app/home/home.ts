@@ -21,6 +21,7 @@ import { BudgetService } from '../budget.service';
   imports: [CommonModule, Summary, IncomeExpense, PieChart],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
+
 })
 export class Home {
   // UI
