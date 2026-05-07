@@ -6,13 +6,13 @@ const BudgetSchema = new mongoose.Schema({
     ref: 'User', // Tämä auttaa Mongoosea ymmärtämään relaation
     required: true,
   },
-  category: {
-    type: String,
-    required: true,
-    enum: ['Ruoka', 'Auto', 'Vuokra', 'Viihde', 'Muu'],
-  },
+  // category: {
+  //   type: String,
+  //   required: true,
+  //   enum: ['Ruoka', 'Auto', 'Vuokra', 'Viihde', 'Muu'],
+  // },
   amount: { type: Number, required: true },
-  time: { type: String, required: true, enum: ['monthly', 'weekly'] },
+  // time: { type: String, required: true, enum: ['monthly', 'weekly'] },
   date: { type: Date, default: Date.now },
 });
 

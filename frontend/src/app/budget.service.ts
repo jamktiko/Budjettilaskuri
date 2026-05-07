@@ -46,4 +46,12 @@ export class BudgetService {
       throw error;
     }
   }
+  async updateBudget(id: string, budgetData: any) {
+    try {
+      return await firstValueFrom(this.http.put(`${this.budgetUrl}/${id}`, budgetData));
+    } catch (error) {
+      console.error('Virhe päivityksessä:', error);
+      throw error;
+    }
+  }
 }
