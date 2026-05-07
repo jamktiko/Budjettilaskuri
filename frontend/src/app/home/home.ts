@@ -85,9 +85,31 @@ export class Home implements OnInit {
 
   async getBudgetData() {
     try {
-      const budgets = (await this.budget.getBudgets()) as any[];
-      if (!budgets?.length) return; // Keskeytetään jos ei dataa
+      // Haetaan kaikki budjetit
+      const allBudgets = (await this.budget.getBudgets()) as any[];
+      if (!allBudgets?.length) return;
 
+      // Selvitetään kuluva kuukausi ja vuosi
+      const now = new Date();
+      const currentMonth = now.getMonth(); // Palauttaa 0-11 (Tammi = 0)
+      const currentYear = now.getFullYear();
+
+      // Suodatetaan datasta vain tämän kuukauden rivit
+      const budgets = allBudgets.filter((b) => {
+        const budgetDate = new Date(b.date);
+        return budgetDate.getMonth() === currentMonth && budgetDate.getFullYear() === currentYear;
+      });
+
+      // Jos tässä kuussa ei ole vielä dataa, tyhjennetään arvot
+      if (budgets.length === 0) {
+        this.chartLabels = ['Ei dataa'];
+        this.chartData = [0];
+        this.manualBudgetTotal = 0;
+        this.updateDashboard();
+        return;
+      }
+
+      // Muuten asetetaan tämän kuukauden data paikoilleen
       this.chartLabels = budgets.map((b) => b.category);
       this.chartData = budgets.map((b) => b.amount);
       this.manualBudgetTotal = budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
