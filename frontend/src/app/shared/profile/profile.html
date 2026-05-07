@@ -4,8 +4,8 @@
   <div class="profile-card">
     <mat-icon class="avatar">account_circle</mat-icon>
     <div class="info">
-      <h3>Matti Meikäläinen</h3>
-      <p>AG7362@jamk.fi</p>
+      <h3>{{ name }}</h3>
+      <p>{{ email }}</p>
     </div>
   </div>
 
@@ -19,11 +19,7 @@
       </div>
 
       <!-- 🌙 Angular-controlled toggle -->
-      <input
-        type="checkbox"
-        [checked]="isDark"
-        (change)="toggleTheme($event)"
-      />
+      <input type="checkbox" [checked]="isDark" (change)="toggleTheme($event)" />
     </div>
   </div>
 
