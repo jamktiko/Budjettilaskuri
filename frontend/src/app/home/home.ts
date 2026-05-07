@@ -62,7 +62,20 @@ export class Home implements OnInit {
   async getTransactions() {
     this.loading = true;
     try {
-      this.transactions = (await this.budget.getTransactions()) as any[];
+      const allTransactions = (await this.budget.getTransactions()) as any[];
+
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      // 2. Suodatetaan 'allTransactions' ja tallennetaan tulos 'this.transactions'
+      this.transactions = allTransactions.filter((t) => {
+        const transactionDate = new Date(t.date); // HUOM: Varmista että kenttä on 'date'
+        return (
+          transactionDate.getMonth() === currentMonth &&
+          transactionDate.getFullYear() === currentYear
+        );
+      });
 
       // Lasketaan statsit suoraan yhteen paikkaan
       this.stats = this.transactions.reduce(
