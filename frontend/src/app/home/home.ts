@@ -15,7 +15,6 @@ import { PieChart } from './pie-chart/pie-chart';
   imports: [CommonModule, PieChart, MatProgressBarModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
-
 })
 export class Home implements OnInit {
   // RIIPPUVUUDET
@@ -100,17 +99,30 @@ export class Home implements OnInit {
   }
 
   updateDashboard() {
-    const budget = this.manualBudgetTotal;
+    // 1. Perusbudjetti
+    const baseBudget = this.manualBudgetTotal;
 
-    // NETTOMENOT: Menot miinus tulot
-    // (esim. 900 € menot - 200 € tulot = 700 €)
-    const netSpent = this.stats.expenses - this.stats.income;
+    // 2. Puhtaat menot (esim. 900 €) - ei vähennellä tuloja!
+    const totalSpent = this.stats.expenses;
+
+    // 3. Tulot (esim. 200 €)
+    const totalIncome = this.stats.income;
+
+    // 4. LASKETAAN KÄYTETTÄVISSÄ OLEVA RAHA (Perusbudjetti + Tulot)
+    // Esim. 1 300 € + 200 € = 1 500 €
+    const availableMoney = baseBudget + totalIncome;
 
     this.monthlySummary = {
-      monthlyBudget: budget,
-      monthlySpent: netSpent,
-      remaining: budget - netSpent,
-      percentUsed: budget > 0 ? (netSpent / budget) * 100 : 0,
+      // Näyttää vasemmassa laatikossa asetetun budjetin (1 300 €)
+      monthlyBudget: baseBudget,
+
+      // Näyttää keskellä rehelliset menot (900 €)
+      monthlySpent: totalSpent,
+
+      // Jäljellä: Käytettävissä oleva raha miinus menot (1 500 € - 900 € = 600 €)
+      remaining: availableMoney - totalSpent,
+
+      percentUsed: availableMoney > 0 ? (totalSpent / availableMoney) * 100 : 0,
     };
   }
 }
