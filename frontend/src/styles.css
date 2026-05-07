@@ -21,14 +21,31 @@ body {
 .amplify-button--primary {
   background-color: #1980f4;}
 
-.dark-theme .dashboard-card,
+/*tumma teema*/
+
+
+.dark-theme .dashboard-card {
+  background: #1a1d25 !important;
+  color: white !important;
+}
+
 .dark-theme .blue-card,
 .dark-theme .history-card {
-  background-color: #212121 !important;
+  background-color: #1a1d25 !important;
   color: white !important;
 }
 
 .dark-theme .settings-card {
-  background-color: #6e6e6e !important;
+  background-color: #1a1d25 !important;
   color: white !important;
+}
+
+.dark-theme .profile-card {
+  background-color: #1a1d25 !important;
+  color: white !important;
+}
+
+
+.dark-theme .logout{
+  background-color: #a21717 !important;
 }

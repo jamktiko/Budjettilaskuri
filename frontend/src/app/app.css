@@ -68,7 +68,7 @@
 /* tumma teema */
 
 .dark-theme {
-  background-color: #5c5c5c !important;
+  background-color: #2b2e3e !important;
   color: white !important;
 }
 
@@ -79,11 +79,11 @@
 
 
 .dark-theme .top-bar {
-  background-color: #434344;
+  background-color: #1a1d25;
 }
 
 .dark-theme .bottom-nav {
-  background-color: #434344;
+  background-color: #1a1d25;
 }
 
 .dark-theme mat-icon {
@@ -93,7 +93,7 @@
 .dark-theme .dashboard-card,
 .dark-theme .blue-card,
 .dark-theme .history-card {
-  background-color: #1e1e1e !important;
+  background-color: #1a1d25 !important;
   color: white !important;
 }
 
@@ -108,7 +108,7 @@
 .dark-theme p,
 .dark-theme span,
 .dark-theme label {
-  color: white;
+  color: white !important;
 }
 
 /* responsiivisuus */
