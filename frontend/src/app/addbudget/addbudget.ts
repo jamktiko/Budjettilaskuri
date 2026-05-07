@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -27,7 +27,8 @@ import { BudgetService } from '../budget.service';
   templateUrl: './addbudget.html',
   styleUrls: ['./addbudget.css'],
 })
-export class AddBudget {
+export class AddBudget implements OnInit {
+  // Toteutetaan OnInit
   private fb = inject(FormBuilder);
   private budgetService = inject(BudgetService);
   private snackBar = inject(MatSnackBar);
@@ -37,61 +38,73 @@ export class AddBudget {
   createdBudget: any = null;
   isEditing = false;
   currentBudgetId: string | null = null;
+  loading = true; // Lisätään lataustila
+
+  form = this.fb.group({
+    category: ['Yleinen'],
+    amount: [0, [Validators.required, Validators.min(1)]],
+    time: ['monthly'],
+  });
+
+  async ngOnInit() {
+    await this.checkExistingBudget();
+  }
+
+  async checkExistingBudget() {
+    this.loading = true;
+    try {
+      const budgets = (await this.budgetService.getBudgets()) as any[];
+      const now = new Date();
+
+      // Etsitään budjetti, joka on luotu tässä kuussa
+      const existing = budgets.find((b) => {
+        const d = new Date(b.date);
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      });
+
+      if (existing) {
+        this.createdBudget = existing;
+        this.currentBudgetId = existing._id;
+        this.isSubmitted = true; // Näytetään suoraan se "onnistumiskortti"
+      }
+    } catch (err) {
+      console.error('Virhe tarkistuksessa', err);
+    } finally {
+      this.loading = false;
+    }
+  }
 
   startEdit(budget: any) {
     this.isEditing = true;
     this.isSubmitted = false;
-    this.currentBudgetId = budget._id; // Backendin antama ID
+    this.currentBudgetId = budget._id;
 
-    // Täytetään lomake vanhoilla tiedoilla
     this.form.patchValue({
       amount: budget.amount,
+      category: budget.category || 'Yleinen',
+      time: budget.time || 'monthly',
     });
   }
 
-  //categories = ['Ruoka', 'Auto', 'Vuokra', 'Viihde', 'Muu'];
-
-  // Jaksojen on vastattava Mongoon määriteltyä enumia ('monthly', 'weekly')
-  // periods = [
-  //   { value: 'monthly', viewValue: 'Kuukausi' },
-  //   { value: 'weekly', viewValue: 'Viikko' },
-  // ];
-
-  form = this.fb.group({
-    amount: [0, [Validators.required, Validators.min(1)]],
-  });
-
   async onSubmit() {
     if (this.form.invalid) return;
-
-    // Käytetään suoraan lomakkeen arvoja
     const budgetData = this.form.value;
 
     try {
       if (this.isEditing && this.currentBudgetId) {
-        // 1. MUOKKAUS
         const updated = await this.budgetService.updateBudget(this.currentBudgetId, budgetData);
-        this.createdBudget = updated; // Tallennetaan backendin palauttama päivitetty data
+        this.createdBudget = updated;
         this.snackBar.open('Budjetti päivitetty!', 'OK', { duration: 2000 });
       } else {
-        // 2. UUSI TALLENNUS
         const saved = await this.budgetService.addBudget(budgetData);
-        this.createdBudget = saved; // Tallennetaan backendin palauttama uusi data (sisältää ID:n)
+        this.createdBudget = saved;
         this.snackBar.open('Budjetti tallennettu!', 'OK', { duration: 3000 });
       }
 
-      // Asetetaan näkymä onnistuneeksi (lomake katoaa, yhteenveto tulee näkyviin)
       this.isSubmitted = true;
       this.isEditing = false;
-
-      // HUOM: Jos haluat että käyttäjä näkee yhteenvedon, ÄLÄ navigoi heti kotiin.
-      // Navigointi kannattaa tehdä vasta "Palaa Dashboardille" -napista HTML-puolella.
-      // this.router.navigate(['/home']);
     } catch (err: any) {
-      // Haetaan virheviesti backendiltä tai käytetään oletusta
-      const errorMsg = err.error?.error || err.error?.message || 'Toiminto epäonnistui';
-      this.snackBar.open(errorMsg, 'OK', { duration: 5000 });
-      console.error('Tallennusvirhe:', err);
+      this.snackBar.open(err.error?.message || 'Virhe tallennuksessa', 'OK', { duration: 5000 });
     }
   }
 }
