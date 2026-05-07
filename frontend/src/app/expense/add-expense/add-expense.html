@@ -2,8 +2,10 @@
 <p class="subtitle">Määritä tulo tai meno</p>
 
 <mat-card class="form">
-  <!-- TYPE TOGGLE -->
-  <div class="toggle">
+  <!-- TYPE TOGGLE 
+  KOmmentoin tämän pois, koska poistetaan tulon lisääminen. Menot ovat valmiiksi defaulttina 
+  -->
+  <!-- <div class="toggle">
     <button
       mat-raised-button
       (click)="setType('expense')"
@@ -15,7 +17,7 @@
     <button mat-raised-button (click)="setType('income')" [class.active-income]="type === 'income'">
       Tulo
     </button>
-  </div>
+  </div> -->
 
   <!-- CATEGORY (molemmille sama) -->
   <mat-form-field appearance="outline">

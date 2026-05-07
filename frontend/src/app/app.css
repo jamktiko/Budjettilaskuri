@@ -1,3 +1,15 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
 .top-bar {
   width: 100%;
   display: flex;
@@ -5,8 +17,6 @@
   align-items: center;
   padding: px 0;
   background-color: rgb(255, 255, 255);
-  position: sticky;
-  top: 0;
   z-index: 1000;
   border-bottom: 1px solid #ddd;
 }
@@ -37,10 +47,10 @@
   color: #1980f4;
 }
 .bottom-nav {
-  position: fixed;
+  /* position: fixed;
   bottom: 0;
   left: 0;
-  right: 0;
+  right: 0; */
 
   display: flex;
   justify-content: space-around;
@@ -72,11 +82,9 @@
   color: white !important;
 }
 
-
 .dark-theme * {
   color: inherit;
 }
-
 
 .dark-theme .top-bar {
   background-color: #1a1d25;
@@ -122,4 +130,3 @@
 .bottom-nav .active {
   color: #1980f4;
 }
-

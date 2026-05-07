@@ -1,1 +1,5 @@
-<p>notification works!</p>
+<div class="notification-panel">
+  <div class="notification" *ngFor="let notification of notifications$ | async">
+    {{ notification.message }}
+  </div>
+</div>
