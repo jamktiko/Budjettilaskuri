@@ -17,7 +17,13 @@
         <mat-icon>dark_mode</mat-icon>
         <h3>Teema</h3>
       </div>
-      <input type="checkbox" id="themeToggle" />
+
+      <!-- 🌙 Angular-controlled toggle -->
+      <input
+        type="checkbox"
+        [checked]="isDark"
+        (change)="toggleTheme($event)"
+      />
     </div>
   </div>
 

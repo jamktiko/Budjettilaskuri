@@ -15,6 +15,7 @@ import { PieChart } from './pie-chart/pie-chart';
   imports: [CommonModule, PieChart, MatProgressBarModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
+
 })
 export class Home implements OnInit {
   // RIIPPUVUUDET

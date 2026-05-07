@@ -1,16 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 
+
+// 🔔 Notifications dialog
 @Component({
   selector: 'notifications-dialog',
   standalone: true,
-  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
+  imports: [
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogClose,
+    MatButtonModule
+  ],
   template: `
     <h2 mat-dialog-title>Ilmoitukset</h2>
     <mat-dialog-content>
@@ -24,6 +31,8 @@ import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } fr
 })
 export class NotificationsDialogComponent {}
 
+
+// 🌙 APP
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -35,20 +44,46 @@ export class NotificationsDialogComponent {}
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    NotificationsDialogComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App {
-  showNav = false;
+export class App implements OnInit {
 
-  constructor(public router: Router, private dialog: MatDialog) {
-    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((e: any) => {
-      this.showNav = !e.urlAfterRedirects.startsWith('/login');
-    });
+  showNav = false;
+  isDark = false;
+
+  constructor(
+    public router: Router,
+    private dialog: MatDialog
+  ) {
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationEnd))
+      .subscribe((e: any) => {
+        this.showNav = !e.urlAfterRedirects.startsWith('/login');
+      });
   }
 
+ngOnInit() {
+  const saved = localStorage.getItem('darkMode');
+  this.isDark = saved === 'true';
+
+  // 👇 kuuntelee muutoksia muista komponenteista
+  window.addEventListener('storage', () => {
+    const updated = localStorage.getItem('darkMode');
+    this.isDark = updated === 'true';
+  });
+}
+
+  // 🌙 toggle theme
+  toggleTheme() {
+    this.isDark = !this.isDark;
+    localStorage.setItem('darkMode', String(this.isDark));
+  }
+
+  // 🔔 open dialog
   openNotificationsDialog() {
-    const dialogRef = this.dialog.open(NotificationsDialogComponent);
+    this.dialog.open(NotificationsDialogComponent);
   }
 }
