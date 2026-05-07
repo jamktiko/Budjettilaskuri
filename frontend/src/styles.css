@@ -45,7 +45,45 @@ body {
   color: white !important;
 }
 
-
 .dark-theme .logout{
   background-color: #a21717 !important;
+   box-shadow: 0 16px 30px rgba(123, 3, 3, 0.22) !important;
+}
+
+.dark-theme {
+  --text-color: white;
+  --muted-text: rgb(186, 186, 186);
+  --card-bg: #1a1d25;
+}
+
+.dark-theme .bottom-nav {
+  border-top: none !important;
+}
+
+.dark-theme .top-bar {
+  border-bottom: none !important;
+}
+
+.dark-theme .form {
+  background: var(--card-bg) !important;
+  color: var(--text-color) !important;
+}
+
+.dark-theme .form input,
+.dark-theme .form textarea {
+  color: var(--text-color) !important;
+}
+
+.dark-theme .subtitle {
+  color: var(--muted-text) !important;
+}
+
+.dark-theme .lisaa_button {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+.dark-theme form {
+  background: #1a1d25 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
