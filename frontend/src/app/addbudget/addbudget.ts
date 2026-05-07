@@ -45,9 +45,7 @@ export class AddBudget {
 
     // Täytetään lomake vanhoilla tiedoilla
     this.form.patchValue({
-      category: budget.category,
       amount: budget.amount,
-      time: budget.time,
     });
   }
 
@@ -60,9 +58,7 @@ export class AddBudget {
   // ];
 
   form = this.fb.group({
-    category: ['', Validators.required],
     amount: [0, [Validators.required, Validators.min(1)]],
-    time: ['monthly', Validators.required],
   });
 
   async onSubmit() {
