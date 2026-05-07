@@ -1,35 +1,35 @@
 <div class="app" [class.dark-theme]="isDark">
+  <header class="top-bar" *ngIf="showNav">
+    <div class="top-bar-left">
+      <a routerLink="/home" aria-label="Home">
+        <img src="/logo.png" alt="Logo" class="top-bar-logo" />
+      </a>
+    </div>
+    <div class="top-bar-right">
+      <button mat-icon-button aria-label="Ilmoitukset" (click)="openNotificationsDialog()">
+        <mat-icon>notifications</mat-icon>
+      </button>
+      <button mat-icon-button aria-label="Profiili" routerLink="/profile" routerLinkActive="active">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+  </header>
 
-<header class="top-bar" *ngIf="showNav">
-  <div class="top-bar-left">
-    <a routerLink="/home" aria-label="Home">
-      <img src="/logo.png" alt="Logo" class="top-bar-logo" />
-    </a>
-  </div>
-  <div class="top-bar-right">
-    <button mat-icon-button aria-label="Ilmoitukset" (click)="openNotificationsDialog()">
-      <mat-icon>notifications</mat-icon>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <nav class="bottom-nav" *ngIf="showNav">
+    <button mat-button routerLink="/home" routerLinkActive="active">
+      <mat-icon>home</mat-icon><span class="desktoptext">Home</span>
     </button>
-    <button mat-icon-button aria-label="Profiili" routerLink="/profile" routerLinkActive="active">
-      <mat-icon>account_circle</mat-icon>
+
+    <button mat-button routerLink="/add" routerLinkActive="active">
+      <mat-icon>add_circle</mat-icon><span class="desktoptext">Lisää</span>
     </button>
-  </div>
-</header>
 
-<router-outlet></router-outlet>
-
-<nav class="bottom-nav" *ngIf="showNav">
-  <button mat-button routerLink="/home" routerLinkActive="active">
-    <mat-icon>home</mat-icon><span class="desktoptext">Home</span>
-  </button>
-
-  <button mat-button routerLink="/add" routerLinkActive="active">
-    <mat-icon>add_circle</mat-icon><span class="desktoptext">Lisää</span>
-  </button>
-
-  <button mat-button routerLink="/addbudget" routerLinkActive="active">
-    <mat-icon>add_circle</mat-icon><span class="desktoptext">Budjetti</span>
-  </button>
-</nav>
-
+    <button mat-button routerLink="/addbudget" routerLinkActive="active">
+      <mat-icon>add_circle</mat-icon><span class="desktoptext">Budjetti</span>
+    </button>
+  </nav>
 </div>
