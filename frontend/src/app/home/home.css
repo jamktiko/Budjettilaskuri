@@ -1,10 +1,34 @@
+:host {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .cards {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
 
+.fulldashboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1300px;
+  padding: 0 15px;
+  box-sizing: border-box;
+  margin-bottom: 75px;
+}
 
+@media (max-width: 600px) {
+  .fulldashboard {
+    gap: 5px;
+  }
+}
 
 .card {
   flex: 1;
@@ -15,8 +39,9 @@
 }
 
 .dashboard-card {
-  max-width: 1000px;
-  margin: 40px auto 30px;
+  width: 100%; /* Safely fills the space between the parent's padding */
+  margin: 0 0; /* We only need top and bottom margin now! */
+  box-sizing: border-box;
   padding: 28px 24px;
   background: linear-gradient(135deg, #5c9ce4, #106fdb);
   border-radius: 22px;
@@ -47,15 +72,15 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
 }
 .blue-card {
-  max-width: 1000px;
-  background:#ffffff;
+  width: 100%;
+  background: #ffffff;
   border-radius: 18px;
   color: #000000;
-   margin: 40px auto 30px;
+  margin: 0 0;
   padding: 28px 24px;
+  box-sizing: border-box;
   box-shadow: 0 12px 24px rgba(13, 71, 161, 0.25);
 }
-
 
 .blue-card h2 {
   margin: 0 0 12px;
@@ -71,7 +96,7 @@
 
 .event-list li {
   padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .event-list li:last-child {
@@ -102,7 +127,7 @@
   background: #ffffff;
   border-radius: 16px;
   padding: 10px 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .history-item {
@@ -137,9 +162,8 @@
 .history-right {
   font-size: 15px;
   font-weight: 600;
-  color: #4caf50; 
+  color: #4caf50;
 }
-
 
 .history-right.negative {
   color: #f44336;

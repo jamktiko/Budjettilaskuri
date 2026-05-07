@@ -1,37 +1,52 @@
 <div class="container">
-  <h2 class="title">Luo budjetti</h2>
-  <p class="subtitle">Aseta kuukausi- tai viikkobudjetti</p>
+  <div *ngIf="!isSubmitted">
+    <h2 class="title">Luo budjetti</h2>
+    <p class="subtitle">Aseta kuukausi- tai viikkobudjetti</p>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <!-- Category -->
-    <mat-form-field appearance="outline">
-      <mat-label>Kategoria</mat-label>
-      <mat-select formControlName="category">
-        <mat-option *ngFor="let c of categories" [value]="c">
-          {{ c }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <!-- Category -->
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Kategoria</mat-label>
+        <mat-select formControlName="category">
+          <mat-option *ngFor="let c of categories" [value]="c">
+            {{ c }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> -->
 
-    <!-- Limit -->
-    <mat-form-field appearance="outline">
-      <mat-label>Budjetti raja (€)</mat-label>
-      <input matInput type="number" formControlName="amount" />
-    </mat-form-field>
+      <!-- Limit -->
+      <mat-form-field appearance="outline">
+        <mat-label>Budjetti raja (€)</mat-label>
+        <input matInput type="number" formControlName="amount" />
+      </mat-form-field>
 
-    <!-- Period -->
-    <mat-form-field appearance="outline">
-      <mat-label>Aika</mat-label>
-      <mat-select formControlName="time">
-        <mat-option *ngFor="let p of periods" [value]="p.value">
-          {{ p.viewValue }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+      <!-- Period -->
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>Aika</mat-label>
+        <mat-select formControlName="time">
+          <mat-option *ngFor="let p of periods" [value]="p.value">
+            {{ p.viewValue }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field> -->
 
-    <!-- Submit -->
-    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
-      Luo Budjetti
-    </button>
-  </form>
+      <!-- Submit -->
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+        {{ isEditing ? 'Tallenna muutokset' : 'Luo Budjetti' }}
+      </button>
+    </form>
+  </div>
+
+  <div *ngIf="isSubmitted" class="success-card">
+    <div class="success-icon">✅</div>
+    <h2 class="title">Budjetti asetettu!</h2>
+
+    <div class="budget-details">
+      <div class="detail-item">
+        <span>Summa:</span>
+        <strong>{{ createdBudget.amount | number: '1.2-2' }} €</strong>
+      </div>
+    </div>
+    <button mat-stroked-button (click)="startEdit(createdBudget)">Muokkaa tietoja</button>
+  </div>
 </div>

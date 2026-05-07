@@ -63,3 +63,22 @@ exports.getBudgets = async (req, res) => {
     res.status(500).json({ message: 'Haku epäonnistui', error: err.message });
   }
 };
+exports.updateBudget = async (req, res) => {
+  try {
+    const budgetId = req.params.id;
+    const updatedBudget = await Budget.findOneAndUpdate(
+      { _id: budgetId, user_id: req.user.id }, // Varmistetaan, että käyttäjä omistaa budjetin
+      req.body,
+      { new: true },
+    );
+
+    if (!updatedBudget) {
+      return res.status(404).json({ message: 'Budjettia ei löydy' });
+    }
+    res.json(updatedBudget);
+  } catch (err) {
+    res
+      .status(400)
+      .json({ message: 'Päivitys epäonnistui', error: err.message });
+  }
+};

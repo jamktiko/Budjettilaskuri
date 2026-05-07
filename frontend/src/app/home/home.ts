@@ -121,8 +121,8 @@ export class Home implements OnInit {
   }
   updateDashboard() {
     // KOKONAISBUDJETTI = Asetetut rajat + Tulot
-    const totalBudget = this.manualBudgetTotal + this.incomeTotal;
-    const spent = this.expenseTotal;
+    const totalBudget = this.manualBudgetTotal;
+    const spent = this.expenseTotal - this.incomeTotal;
 
     this.monthlySummary = {
       monthlyBudget: totalBudget,

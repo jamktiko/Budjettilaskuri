@@ -1,68 +1,76 @@
 <!-- 🔵 KUUKAUSIBUDJETTI -->
-<div class="dashboard-card">
-  <h2>Kuukausibudjetti</h2>
+<div class="fulldashboard">
+  <div class="dashboard-card">
+    <h2>Kuukausibudjetti</h2>
 
-  <div class="dashboard-stats">
-    <!-- TULOT -->
-    <div class="dashboard-stat">
-      <span class="stat-label">Budjetti</span>
-      <span class="stat-value income">
-        {{ monthlySummary.monthlyBudget | number: '1.2-2' }} €
-      </span>
-    </div>
-
-    <!-- MENOT -->
-    <div class="dashboard-stat">
-      <span class="stat-label">Menot</span>
-      <span class="stat-value expense">
-        {{ monthlySummary.monthlySpent | number: '1.2-2' }} €
-      </span>
-    </div>
-
-    <!-- JÄLJELLÄ -->
-    <div class="dashboard-stat">
-      <span class="stat-label">Budjettia jäljellä</span>
-
-      <span class="stat-value" [class.negative]="monthlySummary.remaining < 0">
-        {{ monthlySummary.remaining | number: '1.2-2' }} €
-      </span>
-    </div>
-  </div>
-
-  <!-- PROGRESS -->
-  <div class="budget-progress" *ngIf="monthlySummary as m">
-    <mat-progress-bar
-      mode="determinate"
-      [value]="m.percentUsed"
-      [color]="m.percentUsed > 100 ? 'warn' : 'primary'"
-    >
-    </mat-progress-bar>
-
-    <p>Käytetty {{ m.percentUsed | number: '1.0-0' }} %</p>
-  </div>
-</div>
-
-<!-- 🔵 TAPAHTUMAT (KORJATTU + SELKEÄ) -->
-<div class="blue-card">
-  <h2>Tapahtumat</h2>
-
-  <div *ngIf="loading">Ladataan tapahtumia...</div>
-
-  <div *ngIf="!loading && transactions.length === 0">Ei tapahtumia tallennettuna.</div>
-
-  <div class="history-card" *ngIf="!loading">
-    <div class="history-item" *ngFor="let t of transactions">
-      <div class="history-left">
-        <p class="history-title">{{ t.category }}</p>
-
-        <p class="history-date">
-          {{ t.date | date: 'dd.MM.yyyy' }}
-        </p>
+    <div class="dashboard-stats">
+      <!-- TULOT -->
+      <div class="dashboard-stat">
+        <span class="stat-label">Budjetti</span>
+        <span class="stat-value income">
+          {{ monthlySummary.monthlyBudget | number: '1.2-2' }} €
+        </span>
       </div>
 
-      <div class="history-right" [class.negative]="t.type === 'expense'">
-        {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount }} €
+      <!-- MENOT -->
+      <div class="dashboard-stat">
+        <span class="stat-label">Menot</span>
+        <span class="stat-value expense">
+          {{ monthlySummary.monthlySpent | number: '1.2-2' }} €
+        </span>
+      </div>
+
+      <!-- JÄLJELLÄ -->
+      <div class="dashboard-stat">
+        <span class="stat-label">Budjettia jäljellä</span>
+
+        <span class="stat-value" [class.negative]="monthlySummary.remaining < 0">
+          {{ monthlySummary.remaining | number: '1.2-2' }} €
+        </span>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="budget-progress" *ngIf="monthlySummary as m">
+      <mat-progress-bar
+        mode="determinate"
+        [value]="m.percentUsed"
+        [color]="m.percentUsed > 100 ? 'warn' : 'primary'"
+      >
+      </mat-progress-bar>
+
+      <p>Käytetty {{ m.percentUsed | number: '1.0-0' }} %</p>
+    </div>
+  </div>
+
+  <!-- 🔵 TAPAHTUMAT (KORJATTU + SELKEÄ) -->
+  <div class="blue-card">
+    <h2>Tapahtumat</h2>
+
+    <div *ngIf="loading">Ladataan tapahtumia...</div>
+
+    <div *ngIf="!loading && transactions.length === 0">Ei tapahtumia tallennettuna.</div>
+
+    <div class="history-card" *ngIf="!loading">
+      <div class="history-item" *ngFor="let t of transactions">
+        <div class="history-left">
+          <p class="history-title">{{ t.category }}</p>
+
+          <p class="history-date">
+            {{ t.date | date: 'dd.MM.yyyy' }}
+          </p>
+        </div>
+
+        <div class="history-right" [class.negative]="t.type === 'expense'">
+          {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount }} €
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- <div>
+
+    ** Pie chart tähän, poista kommentit **
+  
+  </div> -->
 </div>
