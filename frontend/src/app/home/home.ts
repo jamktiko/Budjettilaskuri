@@ -1,16 +1,13 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { AuthService } from '../auth.service';
-import { HttpClient } from '@angular/common/http';
 import { BudgetService } from '../budget.service';
 
 // Tuodaan omat komponentit
 import { PieChart } from './pie-chart/pie-chart';
-// import { Summary } from './summary/summary'; // Jos sinulla on tämä
-// import { IncomeExpense } from './income-expense/income-expense'; // Jos sinulla on tämä
 
 @Component({
   selector: 'app-home',
@@ -20,23 +17,21 @@ import { PieChart } from './pie-chart/pie-chart';
   styleUrls: ['./home.css'],
 })
 export class Home implements OnInit {
-  loading = false;
+  // RIIPPUVUUDET
+  public authenticator = inject(AuthenticatorService);
+  private authservice = inject(AuthService);
+  private http = inject(HttpClient);
+  private budget = inject(BudgetService);
 
-  // DATA
+  // 2. TILA
+  loading = false;
   transactions: any[] = [];
 
-  // MUUTTUJAT chartille
   chartLabels: string[] = ['Ei dataa'];
   chartData: number[] = [0];
 
-  // STATS (Summary-komponentille)
-  stats = {
-    balance: 0,
-    income: 0,
-    expenses: 0,
-  };
+  stats = { balance: 0, income: 0, expenses: 0 };
 
-  // DASHBOARD DATA (Edistymispalkille)
   monthlySummary = {
     monthlyBudget: 0,
     monthlySpent: 0,
@@ -44,57 +39,42 @@ export class Home implements OnInit {
     percentUsed: 0,
   };
 
-  private manualBudgetTotal = 0; // Asetettujen budjettien summa
-  private incomeTotal = 0; // Tulojen summa
-  private expenseTotal = 0; // Menojen summa
+  private manualBudgetTotal = 0;
 
-  constructor(
-    public authenticator: AuthenticatorService,
-    private authservice: AuthService,
-    private http: HttpClient,
-    private budget: BudgetService,
-  ) {}
-
+  // 3. KÄYNNISTYS
   async ngOnInit() {
-    // Synkronoidaan käyttäjä
-    const token = await this.authservice.getIdToken();
-    if (token) {
-      this.http
-        .get('/api/users/me', {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .subscribe({
-          next: (user) => console.log('Käyttäjä OK'),
-          error: (err) => console.error('Synkronointi epäonnistui'),
-        });
-    }
+    this.syncUser();
+    // Haetaan data rinnakkain, jotta sivu latautuu nopeammin
+    await Promise.all([this.getTransactions(), this.getBudgetData()]);
+  }
 
-    // 3. HAETAAN SEKÄ TAPAHTUMAT ETTÄ BUDJETIT
-    this.getTransactions();
-    this.getBudgetData();
+  // 4. METODIT
+  private async syncUser() {
+    const token = await this.authservice.getIdToken();
+    if (!token) return;
+
+    this.http.get('/api/users/me', { headers: { Authorization: `Bearer ${token}` } }).subscribe({
+      next: () => console.log('Käyttäjä OK'),
+      error: () => console.error('Synkronointi epäonnistui'),
+    });
   }
 
   async getTransactions() {
     this.loading = true;
     try {
-      const data = (await this.budget.getTransactions()) as any[];
-      this.transactions = data;
+      this.transactions = (await this.budget.getTransactions()) as any[];
 
-      const totals = data.reduce(
-        (acc, curr) => {
-          if (curr.type === 'income') acc.income += curr.amount;
-          if (curr.type === 'expense') acc.expenses += curr.amount;
+      // Lasketaan statsit suoraan yhteen paikkaan
+      this.stats = this.transactions.reduce(
+        (acc, t) => {
+          if (t.type === 'income') acc.income += t.amount;
+          if (t.type === 'expense') acc.expenses += t.amount;
+          acc.balance = acc.income - acc.expenses;
           return acc;
         },
-        { income: 0, expenses: 0 },
+        { income: 0, expenses: 0, balance: 0 },
       );
-      this.incomeTotal = totals.income;
-      this.expenseTotal = totals.expenses;
-      this.stats = {
-        income: totals.income,
-        expenses: totals.expenses,
-        balance: totals.income - totals.expenses,
-      };
+
       this.updateDashboard();
     } catch (err) {
       console.error('Datan haku epäonnistui');
@@ -103,31 +83,30 @@ export class Home implements OnInit {
     }
   }
 
-  // 4. HAETAAN BUDJETIT PIIRAKKAA VARTEN
   async getBudgetData() {
     try {
       const budgets = (await this.budget.getBudgets()) as any[];
-      if (budgets && budgets.length > 0) {
-        this.chartLabels = budgets.map((b) => b.category);
-        this.chartData = budgets.map((b) => b.amount);
+      if (!budgets?.length) return; // Keskeytetään jos ei dataa
 
-        this.manualBudgetTotal = budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
-        this.updateDashboard();
-      }
+      this.chartLabels = budgets.map((b) => b.category);
+      this.chartData = budgets.map((b) => b.amount);
+      this.manualBudgetTotal = budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
+
+      this.updateDashboard();
     } catch (err) {
       console.error('Budjettien haku epäonnistui');
     }
   }
+
   updateDashboard() {
-    // KOKONAISBUDJETTI = Asetetut rajat + Tulot
-    const totalBudget = this.manualBudgetTotal;
-    const netspent = this.expenseTotal - this.incomeTotal;
+    const budget = this.manualBudgetTotal;
+    const spent = this.stats.expenses;
 
     this.monthlySummary = {
-      monthlyBudget: totalBudget,
-      monthlySpent: netspent,
-      remaining: totalBudget - netspent,
-      percentUsed: totalBudget > 0 ? (netspent / totalBudget) * 100 : 0,
+      monthlyBudget: budget,
+      monthlySpent: spent,
+      remaining: budget - spent,
+      percentUsed: budget > 0 ? (spent / budget) * 100 : 0,
     };
   }
 }
