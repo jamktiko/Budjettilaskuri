@@ -1,83 +1,68 @@
+<!-- 🔵 KUUKAUSIBUDJETTI -->
 <div class="dashboard-card">
-  <h2>Budjetti</h2>
+  <h2>Kuukausibudjetti</h2>
+
   <div class="dashboard-stats">
+    <!-- TULOT -->
     <div class="dashboard-stat">
-      <span class="stat-label">Saldo</span>
-      <span class="stat-value">{{ stats.balance | number: '1.2-2' }} €</span>
+      <span class="stat-label">Budjetti</span>
+      <span class="stat-value income">
+        {{ monthlySummary.monthlyBudget | number: '1.2-2' }} €
+      </span>
     </div>
-    <div class="dashboard-stat">
-      <span class="stat-label">Tulot</span>
-      <span class="stat-value income">{{ stats.income | number: '1.2-2' }} €</span>
-    </div>
+
+    <!-- MENOT -->
     <div class="dashboard-stat">
       <span class="stat-label">Menot</span>
-      <span class="stat-value expense">{{ stats.expenses | number: '1.2-2' }} €</span>
+      <span class="stat-value expense">
+        {{ monthlySummary.monthlySpent | number: '1.2-2' }} €
+      </span>
     </div>
+
+    <!-- JÄLJELLÄ -->
+    <div class="dashboard-stat">
+      <span class="stat-label">Budjettia jäljellä</span>
+
+      <span class="stat-value" [class.negative]="monthlySummary.remaining < 0">
+        {{ monthlySummary.remaining | number: '1.2-2' }} €
+      </span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="budget-progress" *ngIf="monthlySummary as m">
+    <mat-progress-bar
+      mode="determinate"
+      [value]="m.percentUsed"
+      [color]="m.percentUsed > 100 ? 'warn' : 'primary'"
+    >
+    </mat-progress-bar>
+
+    <p>Käytetty {{ m.percentUsed | number: '1.0-0' }} %</p>
   </div>
 </div>
 
-<!-- PIE CHART -->
-<div class="blue-card">
-  <app-pie-chart [transactions]="transactions"></app-pie-chart>
-</div>
-
+<!-- 🔵 TAPAHTUMAT (KORJATTU + SELKEÄ) -->
 <div class="blue-card">
   <h2>Tapahtumat</h2>
 
-  <div class="history-card">
+  <div *ngIf="loading">Ladataan tapahtumia...</div>
+
+  <div *ngIf="!loading && transactions.length === 0">Ei tapahtumia tallennettuna.</div>
+
+  <div class="history-card" *ngIf="!loading">
     <div class="history-item" *ngFor="let t of transactions">
       <div class="history-left">
         <p class="history-title">{{ t.category }}</p>
-        <p class="history-date">{{ t.date | date: 'dd.MM.yyyy' }}</p>
+
+        <p class="history-date">
+          {{ t.date | date: 'dd.MM.yyyy' }}
+        </p>
       </div>
 
-      <div class="history-right" [class.negative]="t.amount < 0">{{ t.amount }} €</div>
+      <div class="history-right" [class.negative]="t.type === 'expense'">
+        {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount }} €
+      </div>
     </div>
-  </div>
-</div>
-
-<!--
-<app-income-expense [transactions]="transactions$ | async"></app-income-expense>
-
-<ul>
-  <li *ngFor="let t of transactions$ | async">
-    {{ t.category }} - {{ t.amount }} €
-  </li>
-</ul>
--->
-
-<!-- <div class="test-container" style="padding: 20px; border: 1px solid #ccc; border-radius: 8px">
-  <h3>Tietokantayhteyden testaus</h3>
-
-  <button
-    (click)="testaaYhteys()"
-    [disabled]="isLoading"
-    style="padding: 10px 20px; cursor: pointer"
-  >
-    {{ isLoading ? 'Testataan...' : 'Paina tästä testataksesi yhteys' }}
-  </button>
-
-  <div
-    style="margin-top: 20px; padding: 10px; border-radius: 4px"
-    [style.backgroundColor]="isError ? '#ffd2d2' : '#d2ffd2'"
-    *ngIf="connectionStatus !== 'Ei testattu'"
-  >
-    <strong>Status:</strong> {{ connectionStatus }}
-  </div>
-</div> -->
-<div *ngIf="loading">Ladataan tapahtumia...</div>
-
-<div *ngIf="!loading && transactions.length === 0">Ei tapahtumia tallennettuna.</div>
-
-<div class="transaction-list" *ngIf="!loading">
-  <div *ngFor="let t of transactions" class="transaction-item">
-    <span>{{ t.date | date: 'dd.MM.yyyy' }}</span>
-    <strong>{{ t.category }}</strong>
-    <span [style.color]="t.type === 'expense' ? 'red' : 'green'">
-      {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount }} €
-    </span>
-    <p *ngIf="t.note">
-      <em>{{ t.note }}</em>
-    </p>
   </div>
 </div>

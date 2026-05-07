@@ -1,130 +1,134 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthenticatorService } from '@aws-amplify/ui-angular';
-//import { BudgetService1 } from '../shared/budget.service';
-import { DataService } from '../data';
-
-import { Summary } from './summary/summary';
-import { IncomeExpense } from './income-expense/income-expense';
-import { PieChart } from './pie-chart/pie-chart';
 import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-
 import { BudgetService } from '../budget.service';
+
+// Tuodaan omat komponentit
+import { PieChart } from './pie-chart/pie-chart';
+// import { Summary } from './summary/summary'; // Jos sinulla on tämä
+// import { IncomeExpense } from './income-expense/income-expense'; // Jos sinulla on tämä
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, Summary, IncomeExpense, PieChart],
+  imports: [CommonModule, PieChart, MatProgressBarModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 
 })
-export class Home {
-  // UI
-  connectionStatus = 'Ei testattu';
-  isLoading = false;
-  isError = false;
+export class Home implements OnInit {
+  loading = false;
 
   // DATA
-  // income$;
-  // expenses$;
-  // balance$;
-  //transactions$;
+  transactions: any[] = [];
 
-  // Tietokantaan liittyvää
-  // Luodaan muuttuja transaktioille
+  // MUUTTUJAT chartille
+  chartLabels: string[] = ['Ei dataa'];
+  chartData: number[] = [0];
 
+  // STATS (Summary-komponentille)
   stats = {
     balance: 0,
     income: 0,
     expenses: 0,
   };
 
-  transactions: any[] = [];
-  loading: boolean = false;
+  // DASHBOARD DATA (Edistymispalkille)
+  monthlySummary = {
+    monthlyBudget: 0,
+    monthlySpent: 0,
+    remaining: 0,
+    percentUsed: 0,
+  };
+
+  private manualBudgetTotal = 0; // Asetettujen budjettien summa
+  private incomeTotal = 0; // Tulojen summa
+  private expenseTotal = 0; // Menojen summa
 
   constructor(
-    private dataService: DataService,
     public authenticator: AuthenticatorService,
-    private router: Router,
-    // private budget1: BudgetService1,
     private authservice: AuthService,
     private http: HttpClient,
     private budget: BudgetService,
-  ) {
-    // this.income$ = this.budget1.incomeTotal$;
-    // this.expenses$ = this.budget1.expensesTotal$;
-    // this.balance$ = this.budget1.balance$;
-    // this.transactions$ = this.budget1.transactions$.pipe(
-    //   map((list) =>
-    //     list.map((t) => ({
-    //       ...t,
-    //       amount: Number(String(t.amount).replace('€', '').trim()),
-    //     })),
-    //   ),
-    // );
-  }
+  ) {}
 
   async ngOnInit() {
-    // 1. Haetaan token AuthServicestä
-    const session = await this.authservice.getCurrentSession();
-    const token = await this.authservice.getIdToken(); // Haetaan IdToken
-
+    // Synkronoidaan käyttäjä
+    const token = await this.authservice.getIdToken();
     if (token) {
-      // 2. Kutsutaan backendia, jotta se luo käyttäjän kantaan jos sitä ei ole
-      // Tämä on se "sync"-vaihe!
       this.http
         .get('/api/users/me', {
           headers: { Authorization: `Bearer ${token}` },
         })
         .subscribe({
-          next: (user) => console.log('Käyttäjä synkronoitu tietokantaan:', user),
-          error: (err) => console.error('Synkronointi epäonnistui:', err),
+          next: (user) => console.log('Käyttäjä OK'),
+          error: (err) => console.error('Synkronointi epäonnistui'),
         });
     }
+
+    // 3. HAETAAN SEKÄ TAPAHTUMAT ETTÄ BUDJETIT
     this.getTransactions();
+    this.getBudgetData();
   }
-  testaaYhteys() {
-    this.http.get('/api/users/me').subscribe({
-      next: (data) => console.log('Yhteys toimii ja token meni läpi!', data),
-      error: (err) => console.error('Interceptor ei ehkä lisännytkään tokenia:', err),
-    });
-  }
+
   async getTransactions() {
     this.loading = true;
     try {
-      // Kutsutaan palvelun metodia (Interceptor hoitaa tokenin automaattisesti)
       const data = (await this.budget.getTransactions()) as any[];
       this.transactions = data;
 
-      // Lasketaan summat käyttäen 'type' -kenttää
       const totals = data.reduce(
         (acc, curr) => {
-          if (curr.type === 'income') {
-            acc.income += curr.amount;
-          } else if (curr.type === 'expense') {
-            acc.expenses += curr.amount;
-          }
+          if (curr.type === 'income') acc.income += curr.amount;
+          if (curr.type === 'expense') acc.expenses += curr.amount;
           return acc;
         },
         { income: 0, expenses: 0 },
       );
-
-      // Päivitetään näkymään menevät tiedot
+      this.incomeTotal = totals.income;
+      this.expenseTotal = totals.expenses;
       this.stats = {
         income: totals.income,
         expenses: totals.expenses,
         balance: totals.income - totals.expenses,
       };
-      console.log('Tapahtumat haettu:', this.transactions);
+      this.updateDashboard();
     } catch (err) {
-      console.error('Tapahtumien haku epäonnistui:', err);
+      console.error('Datan haku epäonnistui');
     } finally {
       this.loading = false;
     }
+  }
+
+  // 4. HAETAAN BUDJETIT PIIRAKKAA VARTEN
+  async getBudgetData() {
+    try {
+      const budgets = (await this.budget.getBudgets()) as any[];
+      if (budgets && budgets.length > 0) {
+        this.chartLabels = budgets.map((b) => b.category);
+        this.chartData = budgets.map((b) => b.amount);
+
+        this.manualBudgetTotal = budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
+        this.updateDashboard();
+      }
+    } catch (err) {
+      console.error('Budjettien haku epäonnistui');
+    }
+  }
+  updateDashboard() {
+    // KOKONAISBUDJETTI = Asetetut rajat + Tulot
+    const totalBudget = this.manualBudgetTotal + this.incomeTotal;
+    const spent = this.expenseTotal;
+
+    this.monthlySummary = {
+      monthlyBudget: totalBudget,
+      monthlySpent: spent,
+      remaining: totalBudget - spent,
+      percentUsed: totalBudget > 0 ? (spent / totalBudget) * 100 : 0,
+    };
   }
 }
