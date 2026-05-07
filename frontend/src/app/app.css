@@ -65,6 +65,54 @@
   margin: 0 !important;
 }
 
+/* tumma teema */
+
+.dark-theme {
+  background-color: #2b2e3e !important;
+  color: white !important;
+}
+
+
+.dark-theme * {
+  color: inherit;
+}
+
+
+.dark-theme .top-bar {
+  background-color: #1a1d25;
+}
+
+.dark-theme .bottom-nav {
+  background-color: #1a1d25;
+}
+
+.dark-theme mat-icon {
+  color: white;
+}
+
+.dark-theme .dashboard-card,
+.dark-theme .blue-card,
+.dark-theme .history-card {
+  background-color: #1a1d25 !important;
+  color: white !important;
+}
+
+.dark-theme .settings-card {
+  background-color: #2a2a2a !important;
+  color: white !important;
+}
+
+.dark-theme h1,
+.dark-theme h2,
+.dark-theme h3,
+.dark-theme p,
+.dark-theme span,
+.dark-theme label {
+  color: white !important;
+}
+
+/* responsiivisuus */
+
 @media (max-width: 600px) {
   .bottom-nav .desktoptext {
     display: none;
@@ -74,3 +122,4 @@
 .bottom-nav .active {
   color: #1980f4;
 }
+

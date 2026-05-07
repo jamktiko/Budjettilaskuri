@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../auth.service';
@@ -10,14 +10,28 @@ import { AuthService } from '../../auth.service';
   templateUrl: './profile.html',
   styleUrls: ['./profile.css'],
 })
-export class Profile {
+export class Profile implements OnInit {
+
   private authService = inject(AuthService);
+
+  isDark = false;
+
+  ngOnInit() {
+    const saved = localStorage.getItem('darkMode');
+    this.isDark = saved === 'true';
+  }
+
   logout() {
     this.authService.signOut();
   }
-}
-const themeToggle = document.getElementById('themeToggle') as HTMLInputElement;
 
-themeToggle?.addEventListener('change', () => {
-  document.body.classList.toggle('dark-theme', themeToggle.checked);
-});
+  // 🌙 toggle theme
+  toggleTheme(event: any) {
+    this.isDark = event.target.checked;
+
+    localStorage.setItem('darkMode', String(this.isDark));
+
+    // kertoo App-komponentille muutoksesta
+    window.dispatchEvent(new Event('storage'));
+  }
+}
