@@ -121,13 +121,13 @@ export class Home implements OnInit {
   updateDashboard() {
     // KOKONAISBUDJETTI = Asetetut rajat + Tulot
     const totalBudget = this.manualBudgetTotal;
-    const spent = this.expenseTotal - this.incomeTotal;
+    const netspent = this.expenseTotal - this.incomeTotal;
 
     this.monthlySummary = {
       monthlyBudget: totalBudget,
-      monthlySpent: spent,
-      remaining: totalBudget - spent,
-      percentUsed: totalBudget > 0 ? (spent / totalBudget) * 100 : 0,
+      monthlySpent: netspent,
+      remaining: totalBudget - netspent,
+      percentUsed: totalBudget > 0 ? (netspent / totalBudget) * 100 : 0,
     };
   }
 }
