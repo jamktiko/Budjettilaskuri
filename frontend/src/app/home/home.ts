@@ -6,24 +6,33 @@ import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { AuthService } from '../auth.service';
 import { BudgetService } from '../budget.service';
 
-// Tuodaan omat komponentit
 import { PieChart } from './pie-chart/pie-chart';
+
+// 👉 LISÄTTY
+import { NotificationService } from '../shared/notification/notification.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PieChart, MatProgressBarModule],
+  imports: [CommonModule /* PieChart*/, MatProgressBarModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
 export class Home implements OnInit {
+  // -------------------
   // RIIPPUVUUDET
+  // -------------------
   public authenticator = inject(AuthenticatorService);
   private authservice = inject(AuthService);
   private http = inject(HttpClient);
   private budget = inject(BudgetService);
 
-  // 2. TILA
+  // 👉 LISÄTTY
+  private notificationService = inject(NotificationService);
+
+  // -------------------
+  // TILA
+  // -------------------
   loading = false;
   transactions: any[] = [];
 
@@ -41,26 +50,43 @@ export class Home implements OnInit {
 
   private manualBudgetTotal = 0;
 
-  // 3. KÄYNNISTYS
+  // -------------------
+  // NOTIFIKAATIO FLAGIT
+  // -------------------
+  private warning80Shown = false;
+  private budgetExceededShown = false;
+
+  // -------------------
+  // INIT
+  // -------------------
   async ngOnInit() {
     this.syncUser();
-    // Haetaan data rinnakkain, jotta sivu latautuu nopeammin
     await Promise.all([this.getTransactions(), this.getBudgetData()]);
   }
 
-  // 4. METODIT
+  // -------------------
+  // USER SYNC
+  // -------------------
   private async syncUser() {
     const token = await this.authservice.getIdToken();
     if (!token) return;
 
-    this.http.get('/api/users/me', { headers: { Authorization: `Bearer ${token}` } }).subscribe({
-      next: () => console.log('Käyttäjä OK'),
-      error: () => console.error('Synkronointi epäonnistui'),
-    });
+    this.http
+      .get('/api/users/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .subscribe({
+        next: () => console.log('Käyttäjä OK'),
+        error: () => console.error('Synkronointi epäonnistui'),
+      });
   }
 
+  // -------------------
+  // TRANSACTIONS
+  // -------------------
   async getTransactions() {
     this.loading = true;
+
     try {
       const allTransactions = (await this.budget.getTransactions()) as any[];
 
@@ -68,16 +94,11 @@ export class Home implements OnInit {
       const currentMonth = now.getMonth();
       const currentYear = now.getFullYear();
 
-      // 2. Suodatetaan 'allTransactions' ja tallennetaan tulos 'this.transactions'
       this.transactions = allTransactions.filter((t) => {
-        const transactionDate = new Date(t.date); // HUOM: Varmista että kenttä on 'date'
-        return (
-          transactionDate.getMonth() === currentMonth &&
-          transactionDate.getFullYear() === currentYear
-        );
+        const date = new Date(t.date);
+        return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
       });
 
-      // Lasketaan statsit suoraan yhteen paikkaan
       this.stats = this.transactions.reduce(
         (acc, t) => {
           if (t.type === 'income') acc.income += t.amount;
@@ -96,25 +117,24 @@ export class Home implements OnInit {
     }
   }
 
+  // -------------------
+  // BUDGET
+  // -------------------
   async getBudgetData() {
     try {
-      // Haetaan kaikki budjetit
       const allBudgets = (await this.budget.getBudgets()) as any[];
       if (!allBudgets?.length) return;
 
-      // Selvitetään kuluva kuukausi ja vuosi
       const now = new Date();
-      const currentMonth = now.getMonth(); // Palauttaa 0-11 (Tammi = 0)
+      const currentMonth = now.getMonth();
       const currentYear = now.getFullYear();
 
-      // Suodatetaan datasta vain tämän kuukauden rivit
       const budgets = allBudgets.filter((b) => {
-        const budgetDate = new Date(b.date);
-        return budgetDate.getMonth() === currentMonth && budgetDate.getFullYear() === currentYear;
+        const date = new Date(b.date);
+        return date.getMonth() === currentMonth && date.getFullYear() === currentYear;
       });
 
-      // Jos tässä kuussa ei ole vielä dataa, tyhjennetään arvot
-      if (budgets.length === 0) {
+      if (!budgets.length) {
         this.chartLabels = ['Ei dataa'];
         this.chartData = [0];
         this.manualBudgetTotal = 0;
@@ -122,9 +142,9 @@ export class Home implements OnInit {
         return;
       }
 
-      // Muuten asetetaan tämän kuukauden data paikoilleen
       this.chartLabels = budgets.map((b) => b.category);
       this.chartData = budgets.map((b) => b.amount);
+
       this.manualBudgetTotal = budgets.reduce((sum, b) => sum + (b.amount || 0), 0);
 
       this.updateDashboard();
@@ -133,21 +153,45 @@ export class Home implements OnInit {
     }
   }
 
+  // -------------------
+  // DASHBOARD
+  // -------------------
   updateDashboard() {
-    // kuukauden budjetti
     this.monthlySummary.monthlyBudget = this.manualBudgetTotal;
-
-    // kuukauden kulutus
     this.monthlySummary.monthlySpent = this.stats.expenses;
 
-    // jäljellä oleva summa
     this.monthlySummary.remaining =
       this.monthlySummary.monthlyBudget - this.monthlySummary.monthlySpent;
 
-    // prosentti käytetystä budjetista
     this.monthlySummary.percentUsed =
       this.monthlySummary.monthlyBudget > 0
         ? (this.monthlySummary.monthlySpent / this.monthlySummary.monthlyBudget) * 100
         : 0;
+
+    this.checkBudgetWarnings(); // 👉 TÄRKEÄ
+  }
+
+  // -------------------
+  // NOTIFICATIONS
+  // -------------------
+  private checkBudgetWarnings(): void {
+    const spent = this.monthlySummary.monthlySpent;
+    const budget = this.monthlySummary.monthlyBudget;
+
+    if (!budget) return;
+
+    // 80%
+    if (spent >= budget * 0.8 && !this.warning80Shown) {
+      this.notificationService.add('80% budjetista käytetty');
+
+      this.warning80Shown = true;
+    }
+
+    // 100%
+    if (spent >= budget && !this.budgetExceededShown) {
+      this.notificationService.add('Budjetti ylitetty');
+
+      this.budgetExceededShown = true;
+    }
   }
 }
