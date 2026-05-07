@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
-// 🔔 Dialog component (OK pitää tässä tiedostossa)
+// 🔔 NOTIFICATIONS DIALOG
 @Component({
   selector: 'notifications-dialog',
   standalone: true,
@@ -16,11 +16,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
   template: `
     <h2 mat-dialog-title>Ilmoitukset</h2>
 
-    <mat-dialog-content> Haluatko ottaa ilmoitukset päälle? </mat-dialog-content>
+    <mat-dialog-content> Haluatko ottaa ilmoitukset käyttöön? </mat-dialog-content>
 
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Ei kiitos</button>
-      <button mat-button mat-dialog-close cdkFocusInitial>Kyllä</button>
+      <button mat-button [mat-dialog-close]="false">Ei kiitos</button>
+
+      <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Kyllä</button>
     </mat-dialog-actions>
   `,
 })
@@ -46,6 +47,9 @@ export class App implements OnInit {
   showNav = false;
   isDark = false;
 
+  // 👉 uusi: notifications state
+  notificationsEnabled = false;
+
   constructor(
     public router: Router,
     private dialog: MatDialog,
@@ -56,12 +60,20 @@ export class App implements OnInit {
   }
 
   ngOnInit() {
+    // dark mode
     const saved = localStorage.getItem('darkMode');
     this.isDark = saved === 'true';
 
+    // notifications state
+    this.notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
+
+    // sync changes from other tabs
     window.addEventListener('storage', () => {
-      const updated = localStorage.getItem('darkMode');
-      this.isDark = updated === 'true';
+      const updatedDark = localStorage.getItem('darkMode');
+      this.isDark = updatedDark === 'true';
+
+      const updatedNotif = localStorage.getItem('notificationsEnabled');
+      this.notificationsEnabled = updatedNotif === 'true';
     });
   }
 
@@ -71,8 +83,16 @@ export class App implements OnInit {
     localStorage.setItem('darkMode', String(this.isDark));
   }
 
-  // 🔔 open dialog
+  // 🔔 open dialog (CORRECT VERSION)
   openNotificationsDialog() {
-    this.dialog.open(NotificationsDialogComponent);
+    const dialogRef = this.dialog.open(NotificationsDialogComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.notificationsEnabled = result;
+
+      localStorage.setItem('notificationsEnabled', String(result));
+
+      console.log('Notifications enabled:', result);
+    });
   }
 }
