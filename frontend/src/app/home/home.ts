@@ -99,30 +99,20 @@ export class Home implements OnInit {
   }
 
   updateDashboard() {
-    // 1. Perusbudjetti
-    const baseBudget = this.manualBudgetTotal;
+    // kuukauden budjetti
+    this.monthlySummary.monthlyBudget = this.manualBudgetTotal;
 
-    // 2. Puhtaat menot (esim. 900 €) - ei vähennellä tuloja!
-    const totalSpent = this.stats.expenses;
+    // kuukauden kulutus
+    this.monthlySummary.monthlySpent = this.stats.expenses;
 
-    // 3. Tulot (esim. 200 €)
-    const totalIncome = this.stats.income;
+    // jäljellä oleva summa
+    this.monthlySummary.remaining =
+      this.monthlySummary.monthlyBudget - this.monthlySummary.monthlySpent;
 
-    // 4. LASKETAAN KÄYTETTÄVISSÄ OLEVA RAHA (Perusbudjetti + Tulot)
-    // Esim. 1 300 € + 200 € = 1 500 €
-    const availableMoney = baseBudget + totalIncome;
-
-    this.monthlySummary = {
-      // Näyttää vasemmassa laatikossa asetetun budjetin (1 300 €)
-      monthlyBudget: baseBudget,
-
-      // Näyttää keskellä rehelliset menot (900 €)
-      monthlySpent: totalSpent,
-
-      // Jäljellä: Käytettävissä oleva raha miinus menot (1 500 € - 900 € = 600 €)
-      remaining: availableMoney - totalSpent,
-
-      percentUsed: availableMoney > 0 ? (totalSpent / availableMoney) * 100 : 0,
-    };
+    // prosentti käytetystä budjetista
+    this.monthlySummary.percentUsed =
+      this.monthlySummary.monthlyBudget > 0
+        ? (this.monthlySummary.monthlySpent / this.monthlySummary.monthlyBudget) * 100
+        : 0;
   }
 }
