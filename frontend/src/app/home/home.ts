@@ -100,13 +100,16 @@ export class Home implements OnInit {
 
   updateDashboard() {
     const budget = this.manualBudgetTotal;
-    const spent = this.stats.expenses;
+
+    // NETTOMENOT: Menot miinus tulot
+    // (esim. 900 € menot - 200 € tulot = 700 €)
+    const netSpent = this.stats.expenses - this.stats.income;
 
     this.monthlySummary = {
       monthlyBudget: budget,
-      monthlySpent: spent,
-      remaining: budget - spent,
-      percentUsed: budget > 0 ? (spent / budget) * 100 : 0,
+      monthlySpent: netSpent,
+      remaining: budget - netSpent,
+      percentUsed: budget > 0 ? (netSpent / budget) * 100 : 0,
     };
   }
 }
