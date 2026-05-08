@@ -22,7 +22,17 @@
   <!-- CATEGORY (molemmille sama) -->
   <mat-form-field appearance="outline">
     <mat-label>Kategoria</mat-label>
-    <input matInput [(ngModel)]="category" />
+
+    <input type="text" #categoryInput matInput [(ngModel)]="category" [matAutocomplete]="auto" />
+
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="onCategorySelected($event, categoryInput)"
+    >
+      <mat-option *ngFor="let cat of defaultCategories" [value]="cat">
+        {{ cat }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 
   <!-- AMOUNT -->
