@@ -6,7 +6,7 @@ import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { AuthService } from '../auth.service';
 import { BudgetService } from '../budget.service';
 
-import { PieChart } from './pie-chart/pie-chart';
+import { PieChartComponent } from './pie-chart/pie-chart';
 
 // 👉 LISÄTTY
 import { NotificationService } from '../shared/notification/notification.service';
@@ -14,7 +14,7 @@ import { NotificationService } from '../shared/notification/notification.service
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule /* PieChart*/, MatProgressBarModule],
+  imports: [CommonModule, PieChartComponent, MatProgressBarModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
