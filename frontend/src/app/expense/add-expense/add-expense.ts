@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
 
@@ -26,6 +27,7 @@ import { BudgetService } from '../../budget.service';
     MatButtonModule,
     MatAutocompleteModule,
     MatOptionModule,
+    MatAutocompleteTrigger,
   ],
   templateUrl: './add-expense.html',
   styleUrls: ['./add-expense.css'],
@@ -52,16 +54,20 @@ export class AddExpense {
     this.type = type;
   }
 
-  onCategorySelected(event: MatAutocompleteSelectedEvent, inputElement: HTMLInputElement) {
+  onCategorySelected(
+    event: MatAutocompleteSelectedEvent,
+    inputElement: HTMLInputElement,
+    trigger: MatAutocompleteTrigger,
+  ) {
     if (event.option.value === 'Muu') {
-      // 1. Tyhjennetään kenttä
-      this.category = '';
-
-      // 2. Palautetaan kursori takaisin kenttään pienen viiveen jälkeen.
-      // setTimeout varmistaa, että Angular ehtii päivittää näkymän ensin.
       setTimeout(() => {
-        inputElement.focus();
+        this.category = ''; // Tyhjentää Angularin datan
+        inputElement.value = ''; // Tyhjentää kentän visuaalisesti ruudulta
+
+        trigger.closePanel(); // Pakottaa valikon kiinni
+        inputElement.focus(); // Varmistaa, että kursori jää kenttään vilkkumaan
       });
+    } else {
     }
   }
 
