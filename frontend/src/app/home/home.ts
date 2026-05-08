@@ -60,6 +60,7 @@ export class Home implements OnInit {
   // INIT
   // -------------------
   async ngOnInit() {
+    // älä muokkaa tätä, muuten käyttäjätiedot ei synkronoidu ja API-kutsut epäonnistuu
     this.syncUser();
     await Promise.all([this.getTransactions(), this.getBudgetData()]);
   }
@@ -82,7 +83,7 @@ export class Home implements OnInit {
   }
 
   // -------------------
-  // TRANSACTIONS
+  // TRANSACTIONS, älä muokkaa
   // -------------------
   async getTransactions() {
     this.loading = true;
@@ -116,9 +117,28 @@ export class Home implements OnInit {
       this.loading = false;
     }
   }
+  // Transactionin poisto
+  async deleteTransaction(id: string) {
+    try {
+      await this.budget.deleteTransaction(id);
+      this.transactions = this.transactions.filter((t) => t._id !== id);
+      this.stats = this.transactions.reduce(
+        (acc, t) => {
+          if (t.type === 'income') acc.income += t.amount;
+          if (t.type === 'expense') acc.expenses += t.amount;
+          acc.balance = acc.income - acc.expenses;
+          return acc;
+        },
+        { income: 0, expenses: 0, balance: 0 },
+      );
+      this.updateDashboard();
+    } catch (error) {
+      console.error('Virhe poistaessa tapahtumaa:', error);
+    }
+  }
 
   // -------------------
-  // BUDGET
+  // BUDGET, älä muokkaa
   // -------------------
   async getBudgetData() {
     try {
