@@ -11,7 +11,7 @@ export class BudgetService {
   private budgetUrl = '/api/budgets';
 
   constructor(private http: HttpClient) {}
-
+  // Nämä toimii täydellisesti, EI tarvitse muokata
   // Käytetään asynkronista metodia, jotta komponentti voi odottaa vastausta
   async addTransaction(data: any) {
     try {
@@ -51,6 +51,14 @@ export class BudgetService {
       return await firstValueFrom(this.http.put(`${this.budgetUrl}/${id}`, budgetData));
     } catch (error) {
       console.error('Virhe päivityksessä:', error);
+      throw error;
+    }
+  }
+  async deleteTransaction(id: string) {
+    try {
+      return await firstValueFrom(this.http.delete(`${this.apiUrl}/${id}`));
+    } catch (error) {
+      console.error('Virhe poistaessa:', error);
       throw error;
     }
   }

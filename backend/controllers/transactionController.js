@@ -30,3 +30,20 @@ exports.getTransactions = async (req, res) => {
     res.status(500).json({ message: 'Haku epäonnistui', error: err.message });
   }
 };
+// delete
+exports.deleteTransaction = async (req, res) => {
+  try {
+    const transactionId = req.params.id;
+    const deletedTransaction = await Transaction.findOneAndDelete({
+      _id: transactionId,
+      user_id: req.user.id, // Varmistetaan, että käyttäjä omistaa tapahtuman
+    });
+
+    if (!deletedTransaction) {
+      return res.status(404).json({ message: 'Tapahtumaa ei löydy' });
+    }
+    res.json({ message: 'Tapahtuma poistettu onnistuneesti' });
+  } catch (err) {
+    res.status(400).json({ message: 'Poisto epäonnistui', error: err.message });
+  }
+};

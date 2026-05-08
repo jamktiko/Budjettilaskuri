@@ -58,19 +58,23 @@
 
           <p class="history-date">
             {{ t.date | date: 'dd.MM.yyyy' }}
+            {{ t.note ? '- ' + t.note : '' }}
           </p>
         </div>
 
         <div class="history-right" [class.negative]="t.type === 'expense'">
           {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount }} €
         </div>
+        <div class="history-delete">
+          <button mat-icon-button color="warn" (click)="deleteTransaction(t._id)">X</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- <div>
+    <!-- <div>
 
     ** Pie chart tähän, poista kommentit **
   
   </div> -->
+  </div>
 </div>
