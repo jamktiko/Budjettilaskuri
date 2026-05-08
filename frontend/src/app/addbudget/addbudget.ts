@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 
 // TÄMÄ on sun ainoa backend service
 import { BudgetService } from '../budget.service';
@@ -23,6 +24,7 @@ import { BudgetService } from '../budget.service';
     MatSelectModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   templateUrl: './addbudget.html',
   styleUrls: ['./addbudget.css'],
@@ -33,6 +35,7 @@ export class AddBudget implements OnInit {
   private budgetService = inject(BudgetService);
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
+  private dialogRef = inject(MatDialogRef<AddBudget>);
 
   isSubmitted = false;
   createdBudget: any = null;
@@ -103,6 +106,7 @@ export class AddBudget implements OnInit {
 
       this.isSubmitted = true;
       this.isEditing = false;
+      this.dialogRef.close(true);
     } catch (err: any) {
       this.snackBar.open(err.error?.message || 'Virhe tallennuksessa', 'OK', { duration: 5000 });
     }

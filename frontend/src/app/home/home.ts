@@ -5,6 +5,9 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { AuthenticatorService } from '@aws-amplify/ui-angular';
 import { AuthService } from '../auth.service';
 import { BudgetService } from '../budget.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { AddBudget } from '../addbudget/addbudget';
+import { MatIconModule } from '@angular/material/icon';
 
 import { PieChartComponent } from './pie-chart/pie-chart';
 
@@ -14,7 +17,7 @@ import { NotificationService } from '../shared/notification/notification.service
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PieChartComponent, MatProgressBarModule],
+  imports: [CommonModule, PieChartComponent, MatProgressBarModule, MatDialogModule, MatIconModule],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
@@ -26,9 +29,26 @@ export class Home implements OnInit {
   private authservice = inject(AuthService);
   private http = inject(HttpClient);
   private budget = inject(BudgetService);
+  private dialog = inject(MatDialog);
 
   // 👉 LISÄTTY
   private notificationService = inject(NotificationService);
+
+  openBudgetModal() {
+    const dialogRef = this.dialog.open(AddBudget, {
+      width: '90%',
+      maxWidth: '500px',
+    });
+
+    // 👉 3. Mitä tapahtuu kun modaali suljetaan?
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Budjetti päivitetty! Haetaan uudet luvut...');
+        // Jos sinulla on funktio joka hakee datan uudestaan, kutsu sitä tässä!
+        // esim: this.getBudgetData();
+      }
+    });
+  }
 
   // -------------------
   // TILA

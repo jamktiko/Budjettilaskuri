@@ -1,43 +1,62 @@
+/* 1. Host wrapper: Poistetaan padding ja flex-center, koska modaali hoitaa asettelun */
 :host {
-  display: flex;
-  justify-content: center;
-  padding: 24px;
+  display: block;
   width: 100%;
 }
 
-.container {
-  width: 100%;
-  max-width: 420px;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* 👈 tämä keskittää tekstit */
-}
-
-/* Otsikko + teksti */
+/* 2. Tekstit */
 .title {
-  text-align: center;
-  margin-bottom: 4px;
+  margin: 0 0 4px 0;
   font-size: 22px;
   font-weight: 600;
+  text-align: center;
 }
 
 .subtitle {
-  text-align: center;
-  margin-bottom: 16px;
+  margin: 0 0 16px 0;
   color: #777;
   font-size: 14px;
+  text-align: center;
 }
 
-/* Form itse */
+/* 3. Form: Poistettu laatikkovarjot, taustavärit ja tuplapaddingit! */
 form {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
+  margin-top: 8px;
+}
 
-  padding: 24px;
-  border-radius: 16px;
+/* 4. Onnistumistila (Success Card) */
+.success-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  text-align: center;
+}
 
-  background: #fff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+.success-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.budget-details {
+  background: rgba(0, 0, 0, 0.04); /* Kevyt harmaa tausta erottamaan summa */
+  padding: 16px;
+  border-radius: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+/* Tumman teeman tuki onnistumistilan harmaalle laatikolle */
+:host-context(.dark-theme) .budget-details {
+  background: rgba(255, 255, 255, 0.08);
 }
