@@ -23,11 +23,18 @@
   <mat-form-field appearance="outline">
     <mat-label>Kategoria</mat-label>
 
-    <input type="text" #categoryInput matInput [(ngModel)]="category" [matAutocomplete]="auto" />
+    <input
+      type="text"
+      #categoryInput
+      #trigger="matAutocompleteTrigger"
+      matInput
+      [(ngModel)]="category"
+      [matAutocomplete]="auto"
+    />
 
     <mat-autocomplete
       #auto="matAutocomplete"
-      (optionSelected)="onCategorySelected($event, categoryInput)"
+      (optionSelected)="onCategorySelected($event, categoryInput, trigger)"
     >
       <mat-option *ngFor="let cat of defaultCategories" [value]="cat">
         {{ cat }}
