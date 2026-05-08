@@ -107,7 +107,7 @@ export class PieChartComponent implements OnChanges, AfterViewInit {
           tooltip: {
             callbacks: {
               // Formatoidaan tooltip näyttämään eurot oikein
-              label: function (context) {
+              label: function (context): any {
                 let label = context.label || '';
                 if (label) {
                   label += ': ';
