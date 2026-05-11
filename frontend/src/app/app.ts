@@ -63,6 +63,7 @@ export class App implements OnInit {
     // dark mode
     const saved = localStorage.getItem('darkMode');
     this.isDark = saved === 'true';
+    document.body.classList.toggle('dark-theme', this.isDark);
 
     this.updateBodyTheme();
 
