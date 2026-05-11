@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -48,7 +48,10 @@ export class AddExpense {
   amount: number = 0;
   note: string = '';
 
-  constructor(private budget: BudgetService) {}
+  constructor(
+    private budget: BudgetService,
+    private router: Router,
+  ) {}
 
   setType(type: 'income' | 'expense') {
     this.type = type;
@@ -85,5 +88,8 @@ export class AddExpense {
     this.amount = 0;
     this.category = '';
     this.note = '';
+
+    // redirektataan homeen
+    this.router.navigate(['/home']);
   }
 }

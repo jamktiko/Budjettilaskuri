@@ -46,6 +46,7 @@ export class Home implements OnInit {
         console.log('Budjetti päivitetty! Haetaan uudet luvut...');
         // Jos sinulla on funktio joka hakee datan uudestaan, kutsu sitä tässä!
         // esim: this.getBudgetData();
+        this.getBudgetData();
       }
     });
   }

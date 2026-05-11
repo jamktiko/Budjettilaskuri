@@ -46,7 +46,7 @@
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Sulje</button>
+    <button mat-button [mat-dialog-close]="true">Sulje</button>
 
     <button mat-stroked-button color="primary" (click)="startEdit(createdBudget)">
       Muokkaa tietoja
