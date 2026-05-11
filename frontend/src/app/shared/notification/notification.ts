@@ -14,4 +14,12 @@ export class NotificationComponent {
   private notificationService = inject(NotificationService);
 
   notifications$ = this.notificationService.notifications$;
+
+  markAsRead(id: string) {
+    this.notificationService.markAsRead(id);
+  }
+
+  dismiss(id: string) {
+    this.notificationService.dismiss(id);
+  }
 }
