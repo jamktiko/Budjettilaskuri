@@ -1,12 +1,36 @@
 import { Injectable } from '@angular/core';
-import { AuthUser, getCurrentUser, signOut, fetchAuthSession, AuthTokens } from 'aws-amplify/auth';
+import {
+  AuthUser,
+  getCurrentUser,
+  signOut,
+  fetchAuthSession,
+  AuthTokens,
+  fetchUserAttributes,
+} from 'aws-amplify/auth';
 import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  private cachedUserAttributes: any = null;
   constructor(private router: Router) {}
+
+  async getUserAttributes() {
+    if (this.cachedUserAttributes) {
+      console.log('Palautettiin profiilitiedot välimuistista!');
+      return this.cachedUserAttributes;
+    }
+
+    try {
+      const attributes = await fetchUserAttributes();
+      this.cachedUserAttributes = attributes; // Tallennetaan välimuistiin onnistuneen haun jälkeen
+      return attributes;
+    } catch (error) {
+      console.error('Virhe haettaessa profiilitietoja:', error);
+      throw error;
+    }
+  }
 
   async getCurrentUser(): Promise<AuthUser> {
     return await getCurrentUser();
@@ -33,6 +57,7 @@ export class AuthService {
 
   async signOut() {
     try {
+      this.cachedUserAttributes = null;
       await signOut();
       this.router.navigate(['/login']);
     } catch (error) {

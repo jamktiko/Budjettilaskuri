@@ -10,12 +10,18 @@ export class BudgetService {
   private apiUrl = '/api/transactions';
   private budgetUrl = '/api/budgets';
 
+  // Välimuistimuuttujat
+  private cachedTransactions: any = null;
+  private cachedBudgets: any = null;
+
   constructor(private http: HttpClient) {}
   // Nämä toimii täydellisesti, EI tarvitse muokata
   // Käytetään asynkronista metodia, jotta komponentti voi odottaa vastausta
   async addTransaction(data: any) {
     try {
-      return await firstValueFrom(this.http.post(this.apiUrl, data));
+      const result = await firstValueFrom(this.http.post(this.apiUrl, data));
+      this.cachedTransactions = null; //Tyhjennetään välimuisti lisäyksen jälkeen!
+      return result;
     } catch (error) {
       console.error('Virhe tallennuksessa:', error);
       throw error;
@@ -23,8 +29,15 @@ export class BudgetService {
   }
 
   async getTransactions() {
+    // Palautetaan heti välimuistista, jos data on jo olemassa
+    if (this.cachedTransactions) {
+      console.log('Palautettiin transaktiot välimuistista!');
+      return this.cachedTransactions;
+    }
     try {
-      return await firstValueFrom(this.http.get(this.apiUrl));
+      const data = await firstValueFrom(this.http.get(this.apiUrl));
+      this.cachedTransactions = data; // Tallennetaan välimuistiin
+      return data;
     } catch (error) {
       console.error('Virhe haussa:', error);
       throw error;
@@ -32,15 +45,23 @@ export class BudgetService {
   }
   async addBudget(data: any) {
     try {
-      return await firstValueFrom(this.http.post(this.budgetUrl, data));
+      const result = await firstValueFrom(this.http.post(this.budgetUrl, data));
+      this.cachedBudgets = null; //Tyhjennetään välimuisti lisäyksen jälkeen
+      return result;
     } catch (error) {
       console.error('Virhe tallennuksessa:', error);
       throw error;
     }
   }
   async getBudgets() {
+    if (this.cachedBudgets) {
+      console.log('Palautettiin budjetit välimuistista!');
+      return this.cachedBudgets;
+    }
     try {
-      return await firstValueFrom(this.http.get(this.budgetUrl));
+      const data = await firstValueFrom(this.http.get(this.budgetUrl));
+      this.cachedBudgets = data;
+      return data;
     } catch (error) {
       console.error('Virhe haussa:', error);
       throw error;
@@ -48,7 +69,9 @@ export class BudgetService {
   }
   async updateBudget(id: string, budgetData: any) {
     try {
-      return await firstValueFrom(this.http.put(`${this.budgetUrl}/${id}`, budgetData));
+      const result = await firstValueFrom(this.http.put(`${this.budgetUrl}/${id}`, budgetData));
+      this.cachedBudgets = null; //Tyhjennetään välimuisti päivityksen jälkeen!
+      return result;
     } catch (error) {
       console.error('Virhe päivityksessä:', error);
       throw error;
@@ -56,7 +79,9 @@ export class BudgetService {
   }
   async deleteTransaction(id: string) {
     try {
-      return await firstValueFrom(this.http.delete(`${this.apiUrl}/${id}`));
+      const result = await firstValueFrom(this.http.delete(`${this.apiUrl}/${id}`));
+      this.cachedTransactions = null; //Tyhjennetään välimuisti poistamisen jälkeen!
+      return result;
     } catch (error) {
       console.error('Virhe poistaessa:', error);
       throw error;
