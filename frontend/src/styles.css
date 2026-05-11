@@ -19,10 +19,10 @@ body {
   color: #1980f4 !important;
 }
 .amplify-button--primary {
-  background-color: #1980f4;}
+  background-color: #1980f4;
+}
 
 /*tumma teema*/
-
 
 .dark-theme .dashboard-card {
   background: #1a1d25 !important;
@@ -45,9 +45,9 @@ body {
   color: white !important;
 }
 
-.dark-theme .logout{
+.dark-theme .logout {
   background-color: #a21717 !important;
-   box-shadow: 0 16px 30px rgba(123, 3, 3, 0.22) !important;
+  box-shadow: 0 16px 30px rgba(123, 3, 3, 0.22) !important;
 }
 
 .dark-theme {
@@ -85,20 +85,29 @@ body {
 
 .dark-theme form {
   background: #1a1d25 !important;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-.dark-theme .mat-mdc-form-field:hover .mdc-floating-label,
-.dark-theme .mat-mdc-form-field.mat-focused .mdc-floating-label {
-  color: white !important;
+/* Globaali styles.css */
+
+body.dark-theme {
+  background-color: #121212;
+  color: #ffffff;
 }
 
-.dark-theme .mat-mdc-form-field .mdc-floating-label {
-  color: white !important;
+/* Angular Material Modaalin tumma tausta */
+body.dark-theme .mat-mdc-dialog-surface {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
 }
 
-.dark-theme .mat-mdc-form-field .mdc-notched-outline__leading,
-.dark-theme .mat-mdc-form-field .mdc-notched-outline__notch,
-.dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing {
-  border-color: white !important;
+/* Material Input -kenttien tekstit tummassa teemassa */
+body.dark-theme .mdc-text-field--outlined .mdc-notched-outline {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+body.dark-theme .mat-mdc-form-field-input-control {
+  color: #ffffff !important;
+}
+body.dark-theme .mat-mdc-select-value-text {
+  color: #ffffff !important;
 }
