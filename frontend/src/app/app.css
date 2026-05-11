@@ -130,3 +130,32 @@
 .bottom-nav .active {
   color: #1980f4;
 }
+
+body.dark-theme .mdc-dialog__surface {
+  background-color: #242424 !important; /* Nice dark gray card background */
+  color: #ffffff !important;
+}
+
+body.dark-theme .mat-mdc-dialog-title {
+  color: #ffffff !important;
+}
+
+/* 2. Material Input Field (Outlined) */
+body.dark-theme .mdc-text-field--outlined {
+  /* Muutetaan reunuksien ja tekstin värit tummaan teemaan sopiviksi */
+  --mdc-outlined-text-field-outline-color: rgba(255, 255, 255, 0.3);
+  --mdc-outlined-text-field-hover-outline-color: rgba(255, 255, 255, 0.8);
+  --mdc-outlined-text-field-focus-outline-color: #90caf9; /* Tyylikäs vaaleansininen focus */
+  --mdc-outlined-text-field-input-text-color: #ffffff;
+  --mdc-outlined-text-field-caret-color: #ffffff;
+}
+
+/* 3. Input Label (esim. "Budjetti raja (€)") */
+body.dark-theme .mdc-floating-label {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 4. Peruuta-napin väri modaalissa (ilman tätä se voi olla musta) */
+body.dark-theme .mat-mdc-dialog-actions .mat-mdc-button:not(.mat-primary) {
+  color: #bbbbbb !important;
+}

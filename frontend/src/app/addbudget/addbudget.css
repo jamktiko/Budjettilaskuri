@@ -60,3 +60,16 @@ form {
 :host-context(.dark-theme) .budget-details {
   background: rgba(255, 255, 255, 0.08);
 }
+
+:host-context(.dark-theme) .title {
+  color: #ffffff;
+}
+
+:host-context(.dark-theme) .subtitle {
+  color: #aaaaaa; /* Hieman himmeämpi kuin otsikko */
+}
+
+/* Varmistetaan, että onnistumistilan summa näkyy selkeästi */
+:host-context(.dark-theme) .detail-item {
+  color: #ffffff;
+}
