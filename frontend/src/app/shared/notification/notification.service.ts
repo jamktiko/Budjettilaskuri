@@ -7,20 +7,28 @@ import { AppNotification } from './notification.model';
   providedIn: 'root',
 })
 export class NotificationService {
+  private STORAGE_KEY = 'notifications';
+
   private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
 
   notifications$ = this.notificationsSubject.asObservable();
 
-  add(message: string): void {
+  constructor() {
+    this.loadFromLocalStorage();
+  }
+
+  add(message: string, type: AppNotification['type'] = 'warning'): void {
     const notification: AppNotification = {
       id: crypto.randomUUID(),
       message,
-      type: 'warning',
-      createdAt: new Date(),
+      type,
+      createdAt: Date.now(),
       read: false,
     };
 
     this.notificationsSubject.next([notification, ...this.notificationsSubject.value]);
+
+    this.saveToLocalStorage();
   }
 
   markAsRead(id: string): void {
@@ -29,5 +37,43 @@ export class NotificationService {
     );
 
     this.notificationsSubject.next(updated);
+
+    this.saveToLocalStorage();
+  }
+
+  dismiss(id: string): void {
+    const filtered = this.notificationsSubject.value.filter((n) => n.id !== id);
+
+    this.notificationsSubject.next(filtered);
+
+    this.saveToLocalStorage();
+  }
+
+  clearAll(): void {
+    this.notificationsSubject.next([]);
+
+    this.saveToLocalStorage();
+  }
+
+  getUnreadCount(): number {
+    return this.notificationsSubject.value.filter((n) => !n.read).length;
+  }
+
+  private saveToLocalStorage(): void {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.notificationsSubject.value));
+  }
+
+  private loadFromLocalStorage(): void {
+    const stored = localStorage.getItem(this.STORAGE_KEY);
+
+    if (!stored) return;
+
+    try {
+      const notifications: AppNotification[] = JSON.parse(stored);
+
+      this.notificationsSubject.next(notifications);
+    } catch (error) {
+      console.error('Failed to load notifications from localStorage', error);
+    }
   }
 }
