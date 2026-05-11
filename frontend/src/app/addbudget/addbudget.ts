@@ -106,7 +106,7 @@ export class AddBudget implements OnInit {
 
       this.isSubmitted = true;
       this.isEditing = false;
-      this.dialogRef.close(true);
+      //this.dialogRef.close(true);
     } catch (err: any) {
       this.snackBar.open(err.error?.message || 'Virhe tallennuksessa', 'OK', { duration: 5000 });
     }
