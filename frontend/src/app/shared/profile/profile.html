@@ -19,7 +19,7 @@
       </div>
 
       <!-- 🌙 Angular-controlled toggle -->
-      <input type="checkbox" [checked]="isDark" (change)="toggleTheme($event)" />
+      <mat-slide-toggle [checked]="isDark" (change)="toggleTheme()"> </mat-slide-toggle>
     </div>
   </div>
 
