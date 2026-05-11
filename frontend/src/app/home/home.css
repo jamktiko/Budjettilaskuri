@@ -212,3 +212,39 @@
     font-size: 0.85rem;
   }
 }
+
+.edit-budget-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border-radius: 50% !important;
+  border: 2px solid white;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+
+  /* 👉 UUDET SÄÄNNÖT: Pakottaa ikonin tismalleen keskelle */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px; /* Lukitaan leveys */
+  height: 40px; /* Lukitaan korkeus */
+  padding: 0; /* Poistetaan Materialin omat piilotetut välit */
+}
+
+.edit-budget-btn mat-icon {
+  margin: 0 !important;
+}
+
+.edit-budget-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+:host-context(.dark-theme) .edit-budget-btn {
+  /* Tumman teeman kortti on tummanharmaa, joten himmeämpi reunus sopii usein paremmin */
+  border: 2px solid rgba(255, 255, 255, 0.2);
+
+  /* Voit halutessasi vaihtaa myös taustaa tässä! */
+  background: rgba(255, 255, 255, 0.05);
+}
+:host-context(.dark-theme) .edit-budget-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
