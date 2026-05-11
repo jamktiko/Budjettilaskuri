@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../auth.service';
-import { getCurrentUser, fetchUserAttributes } from 'aws-amplify/auth';
 
 @Component({
   selector: 'app-profile',
@@ -41,7 +40,7 @@ export class Profile implements OnInit {
   }
   async getUserData() {
     try {
-      const attributes = await fetchUserAttributes();
+      const attributes = await this.authService.getUserAttributes();
       this.userAttributes = attributes;
 
       //this.name = attributes['name'] || attributes['preferred_username'] || '';
