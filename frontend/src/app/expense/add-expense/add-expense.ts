@@ -74,20 +74,25 @@ export class AddExpense {
     }
   }
 
-  save() {
-    this.budget.addTransaction({
-      id: crypto.randomUUID(),
-      type: this.type,
-      amount: this.amount,
-      category: this.category,
-      date: new Date(),
-      note: this.note,
-    });
-    // redirektataan homeen
-    this.router.navigate(['/home']);
-    // reset
-    this.amount = 0;
-    this.category = '';
-    this.note = '';
+  async save() {
+    try {
+      await this.budget.addTransaction({
+        id: crypto.randomUUID(),
+        type: this.type,
+        amount: this.amount,
+        category: this.category,
+        date: new Date(),
+        note: this.note,
+      });
+      // redirektataan homeen
+      this.router.navigate(['/home']);
+
+      // reset
+      this.amount = 0;
+      this.category = '';
+      this.note = '';
+    } catch (error) {
+      console.error('Virhe kulun lisäämisessä:', error);
+    }
   }
 }

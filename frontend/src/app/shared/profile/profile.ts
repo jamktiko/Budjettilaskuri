@@ -2,11 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '../../auth.service';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatSlideToggleModule],
   templateUrl: './profile.html',
   styleUrls: ['./profile.css'],
 })
@@ -15,7 +16,7 @@ export class Profile implements OnInit {
 
   name: string = '';
   email: string = '';
-  userAttributes: any = null; // Voit käyttää myös tyyppiä Record<string, string> jos haluat olla tarkempi
+  userAttributes: any = null;
   error: string = '';
   isDark = false;
 
@@ -35,30 +36,29 @@ logout() {
   this.authService.signOut();
 }
 
-  // 🌙 toggle theme
-  toggleTheme(event: any) {
-    this.isDark = event.target.checked;
-
+  toggleTheme() {
+    this.isDark = !this.isDark;
     localStorage.setItem('darkMode', String(this.isDark));
+    if (this.isDark) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
 
-    // kertoo App-komponentille muutoksesta
     window.dispatchEvent(new Event('storage'));
   }
+
   async getUserData() {
     try {
       const attributes = await this.authService.getUserAttributes();
       this.userAttributes = attributes;
-
-      //this.name = attributes['name'] || attributes['preferred_username'] || '';
       this.name = attributes['name'] || '';
       this.email = attributes['email'] || '';
     } catch (err) {
       console.error('Virhe haettaessa käyttäjätietoja:', err);
       this.error = 'Käyttäjätietojen haku epäonnistui. Oletko kirjautunut sisään?';
     } finally {
-      console.log('Käyttäjätiedot haettu:');
-      {
-      }
+      console.log('Käyttäjätiedot haettu');
     }
   }
 }
