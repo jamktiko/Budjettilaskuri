@@ -59,7 +59,6 @@ export class AddBudget implements OnInit {
       const budgets = (await this.budgetService.getBudgets()) as any[];
       const now = new Date();
 
-      // Etsitään budjetti, joka on luotu tässä kuussa
       const existing = budgets.find((b) => {
         const d = new Date(b.date);
         return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
@@ -68,7 +67,7 @@ export class AddBudget implements OnInit {
       if (existing) {
         this.createdBudget = existing;
         this.currentBudgetId = existing._id;
-        this.isSubmitted = true; // Näytetään suoraan se "onnistumiskortti"
+        this.isSubmitted = true;
       }
     } catch (err) {
       console.error('Virhe tarkistuksessa', err);
@@ -95,18 +94,14 @@ export class AddBudget implements OnInit {
 
     try {
       if (this.isEditing && this.currentBudgetId) {
-        const updated = await this.budgetService.updateBudget(this.currentBudgetId, budgetData);
-        this.createdBudget = updated;
+        await this.budgetService.updateBudget(this.currentBudgetId, budgetData);
         this.snackBar.open('Budjetti päivitetty!', 'OK', { duration: 2000 });
       } else {
-        const saved = await this.budgetService.addBudget(budgetData);
-        this.createdBudget = saved;
+        await this.budgetService.addBudget(budgetData);
         this.snackBar.open('Budjetti tallennettu!', 'OK', { duration: 3000 });
       }
 
-      this.isSubmitted = true;
-      this.isEditing = false;
-      //this.dialogRef.close(true);
+      this.dialogRef.close(true);
     } catch (err: any) {
       this.snackBar.open(err.error?.message || 'Virhe tallennuksessa', 'OK', { duration: 5000 });
     }
