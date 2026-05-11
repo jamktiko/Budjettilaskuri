@@ -144,8 +144,9 @@
 }
 
 .history-item {
-  display: flex;
-  justify-content: space-between;
+  /* 👉 Vaihdetaan Flexboxista Gridiin! */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 10px 4px;
   border-bottom: 1px solid #eee;
@@ -158,6 +159,8 @@
 .history-left {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 .history-title {
@@ -176,10 +179,39 @@
   font-size: 15px;
   font-weight: 600;
   color: #4caf50;
+  text-align: center;
 }
 
 .history-right.negative {
   color: #f44336;
+}
+
+.history-delete {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.delete-btn {
+  background: transparent !important; /* Removes any default background */
+  color: black !important; /* Forces the icon to be black */
+  border: none;
+  box-shadow: none;
+  transition: all 0.3s ease; /* Smooth fade when switching themes */
+}
+
+/* Subtle hover effect for light theme */
+.delete-btn:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* --- Dark Theme --- */
+:host-context(.dark-theme) .delete-btn {
+  color: white !important; /* Forces the icon to be white */
+}
+
+/* Subtle hover effect for dark theme */
+:host-context(.dark-theme) .delete-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
 }
 
 @media (max-width: 600px) {

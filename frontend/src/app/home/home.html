@@ -69,7 +69,9 @@
           {{ t.type === 'expense' ? '-' : '+' }}{{ t.amount }} €
         </div>
         <div class="history-delete">
-          <button mat-icon-button color="warn" (click)="deleteTransaction(t._id)">X</button>
+          <button mat-icon-button class="delete-btn" (click)="deleteTransaction(t._id)">
+            <mat-icon>delete</mat-icon>
+          </button>
         </div>
       </div>
     </div>
