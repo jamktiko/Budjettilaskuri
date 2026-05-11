@@ -26,9 +26,15 @@ export class Profile implements OnInit {
     this.getUserData();
   }
 
-  logout() {
-    this.authService.signOut();
-  }
+logout() {
+  // 🧹 UI reset
+  document.body.classList.remove('dark-theme');
+  localStorage.removeItem('darkMode');
+  localStorage.removeItem('notificationsEnabled');
+
+  // 🔐 sign out
+  this.authService.signOut();
+}
 
   toggleTheme() {
     this.isDark = !this.isDark;

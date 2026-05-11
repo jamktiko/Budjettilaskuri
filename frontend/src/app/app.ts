@@ -63,6 +63,9 @@ export class App implements OnInit {
     // dark mode
     const saved = localStorage.getItem('darkMode');
     this.isDark = saved === 'true';
+    document.body.classList.toggle('dark-theme', this.isDark);
+
+    this.updateBodyTheme();
 
     // notifications state
     this.notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
@@ -81,6 +84,16 @@ export class App implements OnInit {
   toggleTheme() {
     this.isDark = !this.isDark;
     localStorage.setItem('darkMode', String(this.isDark));
+
+    this.updateBodyTheme();
+  }
+
+  private updateBodyTheme() {
+    if (this.isDark) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
   }
 
   // 🔔 open dialog (CORRECT VERSION)
