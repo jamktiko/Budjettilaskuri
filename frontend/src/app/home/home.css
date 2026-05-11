@@ -191,6 +191,29 @@
   justify-content: flex-end;
 }
 
+.delete-btn {
+  background: transparent !important; /* Removes any default background */
+  color: black !important; /* Forces the icon to be black */
+  border: none;
+  box-shadow: none;
+  transition: all 0.3s ease; /* Smooth fade when switching themes */
+}
+
+/* Subtle hover effect for light theme */
+.delete-btn:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+/* --- Dark Theme --- */
+:host-context(.dark-theme) .delete-btn {
+  color: white !important; /* Forces the icon to be white */
+}
+
+/* Subtle hover effect for dark theme */
+:host-context(.dark-theme) .delete-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
 @media (max-width: 600px) {
   .dashboard-card {
     padding: 20px 16px;
