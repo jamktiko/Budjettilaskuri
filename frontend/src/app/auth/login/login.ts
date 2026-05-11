@@ -36,7 +36,7 @@ export class Login {
     // Määritellään suomenkieliset vastineet
     I18n.putVocabularies({
       fi: {
-        'Sign in': 'Kirjaudu sisään', 
+        'Sign in': 'Kirjaudu sisään',
         'Sign In': 'Kirjaudu sisään',
         'Sign Up': 'Luo tunnus',
         Email: 'Sähköpostiosoite',
@@ -48,18 +48,13 @@ export class Login {
         'Signing in': 'Kirjaudutaan sisään...',
         'Creating Account': 'Luodaan tiliä...',
 
+        'Password must have at least 8 characters': 'Salasanassa täytyy olla vähintään 8 merkkiä',
 
-      'Password must have at least 8 characters':
-      'Salasanassa täytyy olla vähintään 8 merkkiä',
+        'Your passwords must match': 'Salasanojen täytyy täsmätä',
 
-       'Your passwords must match':
-       'Salasanojen täytyy täsmätä',
+        'Incorrect username or password.': 'Virheellinen sähköposti tai salasana',
 
-       'Incorrect username or password.':
-       'Virheellinen sähköposti tai salasana',
-
-       'Incorrect username or password':
-       'Virheellinen sähköposti tai salasana',
+        'Incorrect username or password': 'Virheellinen sähköposti tai salasana',
       },
     });
 
@@ -87,8 +82,8 @@ export class Login {
     },
     signUp: {
       name: {
-        label: 'Koko nimi',
-        placeholder: 'Esim. Matti Meikäläinen',
+        label: 'Käyttäjänimi',
+        placeholder: 'Kirjoita käyttäjänimesi',
         isRequired: true,
         order: 1, // Järjestysnumero määrittää missä kohtaa kenttä näkyy
       },
