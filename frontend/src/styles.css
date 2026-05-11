@@ -88,3 +88,17 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
 
+.dark-theme .mat-mdc-form-field:hover .mdc-floating-label,
+.dark-theme .mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: white !important;
+}
+
+.dark-theme .mat-mdc-form-field .mdc-floating-label {
+  color: white !important;
+}
+
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__leading,
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__notch,
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: white !important;
+}
