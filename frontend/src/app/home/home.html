@@ -10,12 +10,8 @@
         <span class="stat-value income">
           {{ monthlySummary.monthlyBudget | number: '1.2-2' }} €
         </span>
-        <button
-          mat-icon-button
-          (click)="openBudgetModal()"
-          style="background: rgba(255, 255, 255, 0.2); color: white"
-        >
-          <mat-icon>edit</mat-icon>
+        <button mat-icon-button class="edit-budget-btn" (click)="openBudgetModal()">
+          <mat-icon>{{ monthlySummary.monthlyBudget > 0 ? 'edit' : 'add' }}</mat-icon>
         </button>
       </div>
 
