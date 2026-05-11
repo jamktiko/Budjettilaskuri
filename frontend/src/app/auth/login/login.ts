@@ -47,6 +47,19 @@ export class Login {
         'Full Name': 'Koko nimi',
         'Signing in': 'Kirjaudutaan sisään...',
         'Creating Account': 'Luodaan tiliä...',
+
+
+      'Password must have at least 8 characters':
+      'Salasanassa täytyy olla vähintään 8 merkkiä',
+
+       'Your passwords must match':
+       'Salasanojen täytyy täsmätä',
+
+       'Incorrect username or password.':
+       'Virheellinen sähköposti tai salasana',
+
+       'Incorrect username or password':
+       'Virheellinen sähköposti tai salasana',
       },
     });
 
@@ -86,7 +99,7 @@ export class Login {
       },
       password: {
         label: 'Salasana',
-        placeholder: 'Vähintään 8 merkkiä',
+        placeholder: 'Kirjoita salasana',
         order: 3,
       },
       confirm_password: {
