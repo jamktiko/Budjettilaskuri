@@ -83,13 +83,11 @@ export class AddExpense {
       date: new Date(),
       note: this.note,
     });
-
+    // redirektataan homeen
+    this.router.navigate(['/home']);
     // reset
     this.amount = 0;
     this.category = '';
     this.note = '';
-
-    // redirektataan homeen
-    this.router.navigate(['/home']);
   }
 }
