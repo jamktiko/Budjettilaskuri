@@ -46,34 +46,6 @@
 .top-bar-right .active {
   color: #1980f4;
 }
-.bottom-nav {
-  /* position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0; */
-
-  display: flex;
-  justify-content: space-around;
-
-  background: white;
-  border-top: 1px solid #ddd;
-
-  padding: 8px 0;
-}
-
-.bottom-nav button {
-  font-size: 14px;
-  color: #000000;
-  padding: 0 16px; /* Good standard padding for desktop */
-}
-
-.bottom-nav .desktoptext {
-  margin-left: 5px; /* Acts like your 'gap' on desktop */
-}
-
-.bottom-nav button mat-icon {
-  margin: 0 !important;
-}
 
 /* tumma teema */
 
@@ -121,18 +93,54 @@
 
 /* responsiivisuus */
 
+.addbutton {
+  position: fixed;
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+  bottom: 20px;
+  right: 20px;
+  width: 128px;
+  background-color: #1980f4;
+}
+
 @media (max-width: 600px) {
-  .bottom-nav .desktoptext {
+  .addbutton {
+    width: 64px !important;
+    height: 64px !important;
+
+    min-width: 64px !important;
+    min-height: 64px !important;
+    max-width: 64px !important;
+
+    box-sizing: border-box;
+    padding: 0 !important;
+    margin: 0;
+    border-radius: 50% !important;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .addbutton mat-icon {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 600px) {
+  .addbuttontxt {
     display: none;
   }
 }
 
-.bottom-nav .active {
-  color: #1980f4;
-}
-
 body.dark-theme .mdc-dialog__surface {
-  background-color: #242424 !important; /* Nice dark gray card background */
+  background-color: #242424 !important;
   color: #ffffff !important;
 }
 
