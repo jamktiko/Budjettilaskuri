@@ -93,16 +93,26 @@
 
 /* responsiivisuus */
 
+.addbuttontxt {
+  font-size: 18px;
+}
+
+.addbutton mat-icon {
+  display: none;
+}
+
 .addbutton {
   position: fixed;
   display: flex;
   justify-content: space-around;
   padding: 0;
   margin: 0;
-  bottom: 20px;
-  right: 20px;
-  width: 128px;
+  bottom: 30px;
+  right: 60px;
+  width: 140px;
+  height: 64px;
   background-color: #1980f4;
+  font-size: 18px;
 }
 
 @media (max-width: 600px) {
@@ -113,6 +123,9 @@
     min-width: 64px !important;
     min-height: 64px !important;
     max-width: 64px !important;
+
+    bottom: 20px;
+    right: 20px;
 
     box-sizing: border-box;
     padding: 0 !important;
