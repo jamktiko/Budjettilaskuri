@@ -26,12 +26,7 @@
   margin-top: 40px;
 }
 
-@media (max-width: 600px) {
-  .fulldashboard {
-    gap: 5px;
-    margin-top: 0;
-  }
-}
+
 
 .card {
   flex: 1;
@@ -100,7 +95,6 @@
   font-size: 17px;
   font-weight: 500;
 }
-
 
 
 .event-list {
@@ -215,11 +209,23 @@
 :host-context(.dark-theme) .delete-btn:hover {
   background: rgba(255, 255, 255, 0.1) !important;
 }
+@media (max-width: 600px) {
+  .fulldashboard {
+    gap: 5px;
+    margin-top: 10px;
+  }
+}
 
 @media (max-width: 600px) {
   .dashboard-card {
     padding: 20px 16px;
-    margin: 20px auto;
+    margin: 10px auto;
+  }
+}
+  @media (max-width: 600px) {
+  .blue-card {
+    padding: 20px 16px;
+    margin: 10px auto;
   }
 
   .dashboard-card h2 {
