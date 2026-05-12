@@ -22,7 +22,10 @@ export class NotificationService {
 
   add(message: string, type: AppNotification['type'] = 'warning'): void {
     const now = Date.now();
-
+    const notificationsAllowed = localStorage.getItem('notificationsEnabled') === 'true';
+    if (!notificationsAllowed) {
+      return; // Jos ei lupaa, keskeytetään koko funktio! Ilmoitusta ei synny.
+    }
     // 🔥 DUPLICATE GUARD (ESTÄ REFRESH + LOOP SPAM)
     const exists = this.notificationsSubject.value.some((n) => {
       return (
