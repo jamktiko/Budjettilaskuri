@@ -90,7 +90,7 @@ export class App implements OnInit, OnDestroy {
     );
 
     this.subs.add(
-      this.notificationService.latest$.subscribe((n) => {
+      this.notificationService.toast$.subscribe((n) => {
         if (!n) return;
         if (!this.notificationsEnabled) return;
 
