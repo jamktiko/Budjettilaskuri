@@ -23,18 +23,24 @@ export class Profile implements OnInit {
   ngOnInit() {
     const saved = localStorage.getItem('darkMode');
     this.isDark = saved === 'true';
+    if (this.isDark) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+
     this.getUserData();
   }
 
-logout() {
-  // 🧹 UI reset
-  document.body.classList.remove('dark-theme');
-  localStorage.removeItem('darkMode');
-  localStorage.removeItem('notificationsEnabled');
+  logout() {
+    // 🧹 UI reset
+    document.body.classList.remove('dark-theme');
+    localStorage.removeItem('darkMode');
+    localStorage.removeItem('notificationsEnabled');
 
-  // 🔐 sign out
-  this.authService.signOut();
-}
+    // 🔐 sign out
+    this.authService.signOut();
+  }
 
   toggleTheme() {
     this.isDark = !this.isDark;
