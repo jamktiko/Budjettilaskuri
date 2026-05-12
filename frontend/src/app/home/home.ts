@@ -8,6 +8,7 @@ import { BudgetService } from '../budget.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddBudget } from '../addbudget/addbudget';
 import { MatIconModule } from '@angular/material/icon';
+import { Router, RouterLink } from '@angular/router';
 
 import { PieChartComponent } from './pie-chart/pie-chart';
 
@@ -17,7 +18,14 @@ import { NotificationService } from '../shared/notification/notification.service
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, PieChartComponent, MatProgressBarModule, MatDialogModule, MatIconModule],
+  imports: [
+    CommonModule,
+    PieChartComponent,
+    MatProgressBarModule,
+    MatDialogModule,
+    MatIconModule,
+    RouterLink,
+  ],
   templateUrl: './home.html',
   styleUrls: ['./home.css'],
 })
