@@ -229,24 +229,34 @@ export class Home implements OnInit {
 
     if (!budget) return;
 
-    // Luodaan uniikki avain tälle kuukaudelle, esim: "budget_warning_2024_5"
+    // Luodaan uniikki avain tälle kuukaudelle
     const now = new Date();
     const monthKey = `${now.getFullYear()}_${now.getMonth()}`;
 
-    // Tarkistetaan localStoragesta onko ilmoitukset jo näytetty tässä kuussa
     const warning80Key = `warning80_${monthKey}`;
     const warning100Key = `warning100_${monthKey}`;
 
     const warning80Shown = localStorage.getItem(warning80Key) === 'true';
     const budgetExceededShown = localStorage.getItem(warning100Key) === 'true';
 
-    // 80% (näytetään vain, jos 100% ei ole vielä ylittynyt ja tätä ei ole vielä näytetty)
+    // 🧹 NOLLAUSLOGIIKKA (Tämä korjaa ongelmasi!)
+    // Jos kulutus on alle 100%, nollataan 100% ilmoituksen muisti
+    if (spent < budget && budgetExceededShown) {
+      localStorage.removeItem(warning100Key);
+    }
+    // Jos kulutus on alle 80%, nollataan 80% ilmoituksen muisti
+    if (spent < budget * 0.8 && warning80Shown) {
+      localStorage.removeItem(warning80Key);
+    }
+
+    // 🔔 ILMOITUSLOGIIKKA
+    // 80% raja
     if (spent >= budget * 0.8 && spent < budget && !warning80Shown) {
       this.notificationService.add('Olet käyttänyt jo 80% tämän kuun budjetistasi.', 'warning');
       localStorage.setItem(warning80Key, 'true');
     }
 
-    // 100%
+    // 100% raja
     if (spent >= budget && !budgetExceededShown) {
       this.notificationService.add('Huom! Olet ylittänyt tämän kuun budjettisi.', 'error');
       localStorage.setItem(warning100Key, 'true');
