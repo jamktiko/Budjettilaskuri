@@ -229,18 +229,27 @@ export class Home implements OnInit {
 
     if (!budget) return;
 
-    // 80%
-    if (spent >= budget * 0.8 && !this.warning80Shown) {
-      this.notificationService.add('80% budjetista käytetty');
+    // Luodaan uniikki avain tälle kuukaudelle, esim: "budget_warning_2024_5"
+    const now = new Date();
+    const monthKey = `${now.getFullYear()}_${now.getMonth()}`;
 
-      this.warning80Shown = true;
+    // Tarkistetaan localStoragesta onko ilmoitukset jo näytetty tässä kuussa
+    const warning80Key = `warning80_${monthKey}`;
+    const warning100Key = `warning100_${monthKey}`;
+
+    const warning80Shown = localStorage.getItem(warning80Key) === 'true';
+    const budgetExceededShown = localStorage.getItem(warning100Key) === 'true';
+
+    // 80% (näytetään vain, jos 100% ei ole vielä ylittynyt ja tätä ei ole vielä näytetty)
+    if (spent >= budget * 0.8 && spent < budget && !warning80Shown) {
+      this.notificationService.add('Olet käyttänyt jo 80% tämän kuun budjetistasi.', 'warning');
+      localStorage.setItem(warning80Key, 'true');
     }
 
     // 100%
-    if (spent >= budget && !this.budgetExceededShown) {
-      this.notificationService.add('Budjetti ylitetty');
-
-      this.budgetExceededShown = true;
+    if (spent >= budget && !budgetExceededShown) {
+      this.notificationService.add('Huom! Olet ylittänyt tämän kuun budjettisi.', 'error');
+      localStorage.setItem(warning100Key, 'true');
     }
   }
 }

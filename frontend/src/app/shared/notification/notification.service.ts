@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, Subject } from 'rxjs'; // Lisää Subject
 import { AppNotification } from './notification.model';
 
 @Injectable({
@@ -7,16 +7,14 @@ import { AppNotification } from './notification.model';
 })
 export class NotificationService {
   private STORAGE_KEY = 'notifications';
-
   private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
 
   notifications$ = this.notificationsSubject.asObservable();
-
-  // 🔥 NEW: unread badge stream
   unreadCount$ = this.notifications$.pipe(map((list) => list.filter((n) => !n.read).length));
 
-  // 🔥 NEW: latest notification (toast/snackbar)
-  latest$ = this.notifications$.pipe(map((list) => list[0] ?? null));
+  // Poista latest$ ja luo tilalle uusi Subject pop-upeille
+  private toastSubject = new Subject<AppNotification>();
+  toast$ = this.toastSubject.asObservable();
 
   constructor() {
     this.loadFromLocalStorage();
@@ -32,8 +30,10 @@ export class NotificationService {
     };
 
     this.notificationsSubject.next([notification, ...this.notificationsSubject.value]);
-
     this.saveToLocalStorage();
+
+    // Lähetetään tieto Snackbarille vain kun uusi ilmoitus OIKEASTI lisätään
+    this.toastSubject.next(notification);
   }
 
   markAsRead(id: string): void {
