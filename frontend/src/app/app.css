@@ -98,6 +98,7 @@
 }
 
 .addbutton mat-icon {
+  color: white;
   display: none;
 }
 
