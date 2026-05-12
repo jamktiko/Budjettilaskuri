@@ -80,8 +80,14 @@ export class App implements OnInit, OnDestroy {
   ngOnInit() {
     this.isDark = this.getBooleanStorage('darkMode');
     document.body.classList.toggle('dark-theme', this.isDark);
-
-    this.notificationsEnabled = this.getBooleanStorage('notificationsEnabled');
+    const notifSetting = localStorage.getItem('notificationsEnabled');
+    if (notifSetting === null) {
+      // Käyttäjä ei ole vielä valinnut kumpaakaan, avataan kyselymodaali!
+      this.openNotificationsDialog();
+    } else {
+      // Valinta on jo tehty aiemmin, ladataan se muistiin
+      this.notificationsEnabled = notifSetting === 'true';
+    }
 
     this.subs.add(
       this.notificationService.unreadCount$.subscribe((count) => {

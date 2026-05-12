@@ -15,10 +15,6 @@ export class NotificationComponent {
 
   notifications$ = this.notificationService.notifications$;
 
-  markAsRead(id: string) {
-    this.notificationService.markAsRead(id);
-  }
-
   dismiss(id: string) {
     this.notificationService.dismiss(id);
   }

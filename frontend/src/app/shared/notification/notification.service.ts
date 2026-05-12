@@ -11,8 +11,7 @@ export class NotificationService {
   private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
 
   notifications$ = this.notificationsSubject.asObservable();
-
-  unreadCount$ = this.notifications$.pipe(map((list) => list.filter((n) => !n.read).length));
+  unreadCount$ = this.notifications$.pipe(map((list) => list.length));
 
   private toastSubject = new Subject<AppNotification>();
   toast$ = this.toastSubject.asObservable();
@@ -47,15 +46,6 @@ export class NotificationService {
 
     // 🔔 toast only for real new event
     this.toastSubject.next(notification);
-  }
-
-  markAsRead(id: string): void {
-    const updated = this.notificationsSubject.value.map((n) =>
-      n.id === id ? { ...n, read: true } : n,
-    );
-
-    this.notificationsSubject.next(updated);
-    this.saveToLocalStorage();
   }
 
   dismiss(id: string): void {
