@@ -43,19 +43,26 @@ form {
 }
 
 .budget-details {
-  background: rgba(0, 0, 0, 0.04); /* Kevyt harmaa tausta erottamaan summa */
-  padding: 16px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 16px; /* Tämä luo tilan laatikon reunan ja tekstin väliin */
   border-radius: 12px;
-  width: 100%;
   margin-top: 8px;
+
+  /* 👇 TÄMÄ KORJAA SCROLLBARIN: Poistettiin width: 100% */
+  margin-left: 5px;
+  margin-right: 5px;
+
+  /* Varmistaa, että padding ei suurenna laatikkoa vahingossa */
+  box-sizing: border-box;
 }
 
 .detail-item {
   display: flex;
   justify-content: space-between;
   font-size: 16px;
-  margin-left: 5px;
-  margin-right: 5px;
+  /* Marginaalit täällä ovat turvallisia, mutta padding ylempänä hoitaa jo välistyksen! */
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 /* Tumman teeman tuki onnistumistilan harmaalle laatikolle */

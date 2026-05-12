@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Subject } from 'rxjs'; // Lisää Subject
+import { BehaviorSubject, map, Subject } from 'rxjs';
 import { AppNotification } from './notification.model';
 
 @Injectable({
@@ -7,12 +7,12 @@ import { AppNotification } from './notification.model';
 })
 export class NotificationService {
   private STORAGE_KEY = 'notifications';
+
   private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
 
   notifications$ = this.notificationsSubject.asObservable();
   unreadCount$ = this.notifications$.pipe(map((list) => list.length));
 
-  // Poista latest$ ja luo tilalle uusi Subject pop-upeille
   private toastSubject = new Subject<AppNotification>();
   toast$ = this.toastSubject.asObservable();
 
@@ -21,18 +21,30 @@ export class NotificationService {
   }
 
   add(message: string, type: AppNotification['type'] = 'warning'): void {
+    const now = Date.now();
+
+    // 🔥 DUPLICATE GUARD (ESTÄ REFRESH + LOOP SPAM)
+    const exists = this.notificationsSubject.value.some((n) => {
+      return (
+        n.message === message && n.type === type && now - n.createdAt < 60_000 // 1 minuutin ikkuna
+      );
+    });
+
+    if (exists) return;
+
     const notification: AppNotification = {
       id: crypto.randomUUID(),
       message,
       type,
-      createdAt: Date.now(),
+      createdAt: now,
       read: false,
     };
 
     this.notificationsSubject.next([notification, ...this.notificationsSubject.value]);
+
     this.saveToLocalStorage();
 
-    // Lähetetään tieto Snackbarille vain kun uusi ilmoitus OIKEASTI lisätään
+    // 🔔 toast only for real new event
     this.toastSubject.next(notification);
   }
 
@@ -40,7 +52,6 @@ export class NotificationService {
     const filtered = this.notificationsSubject.value.filter((n) => n.id !== id);
 
     this.notificationsSubject.next(filtered);
-
     this.saveToLocalStorage();
   }
 
@@ -49,7 +60,6 @@ export class NotificationService {
     this.saveToLocalStorage();
   }
 
-  // (voit pitää jos haluat imperatiivisen version)
   getUnreadCount(): number {
     return this.notificationsSubject.value.filter((n) => !n.read).length;
   }
@@ -65,6 +75,7 @@ export class NotificationService {
 
     try {
       const notifications: AppNotification[] = JSON.parse(stored);
+
       this.notificationsSubject.next(notifications);
     } catch (error) {
       console.error('Failed to load notifications from localStorage', error);
