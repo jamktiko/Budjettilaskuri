@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
+import { BehaviorSubject, map } from 'rxjs';
 import { AppNotification } from './notification.model';
 
 @Injectable({
@@ -12,6 +11,12 @@ export class NotificationService {
   private notificationsSubject = new BehaviorSubject<AppNotification[]>([]);
 
   notifications$ = this.notificationsSubject.asObservable();
+
+  // 🔥 NEW: unread badge stream
+  unreadCount$ = this.notifications$.pipe(map((list) => list.filter((n) => !n.read).length));
+
+  // 🔥 NEW: latest notification (toast/snackbar)
+  latest$ = this.notifications$.pipe(map((list) => list[0] ?? null));
 
   constructor() {
     this.loadFromLocalStorage();
@@ -51,10 +56,10 @@ export class NotificationService {
 
   clearAll(): void {
     this.notificationsSubject.next([]);
-
     this.saveToLocalStorage();
   }
 
+  // (voit pitää jos haluat imperatiivisen version)
   getUnreadCount(): number {
     return this.notificationsSubject.value.filter((n) => !n.read).length;
   }
@@ -70,7 +75,6 @@ export class NotificationService {
 
     try {
       const notifications: AppNotification[] = JSON.parse(stored);
-
       this.notificationsSubject.next(notifications);
     } catch (error) {
       console.error('Failed to load notifications from localStorage', error);

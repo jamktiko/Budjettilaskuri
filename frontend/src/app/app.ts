@@ -1,14 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, OnDestroy } from '@angular/core';
 import { Router, RouterOutlet, NavigationEnd, RouterLink, RouterLinkActive } from '@angular/router';
 
 import { CommonModule } from '@angular/common';
-import { filter } from 'rxjs/operators';
+import { filter, Subscription } from 'rxjs';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
-// 🔔 NOTIFICATIONS DIALOG
+import { NotificationComponent } from './shared/notification/notification';
+import { NotificationService } from './shared/notification/notification.service';
+
+// 🔔 DIALOG
 @Component({
   selector: 'notifications-dialog',
   standalone: true,
@@ -20,14 +24,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
     <mat-dialog-actions align="end">
       <button mat-button [mat-dialog-close]="false">Ei kiitos</button>
-
       <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Kyllä</button>
     </mat-dialog-actions>
   `,
 })
 export class NotificationsDialogComponent {}
 
-// 🌙 APP COMPONENT
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -39,80 +41,93 @@ export class NotificationsDialogComponent {}
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatSnackBarModule,
+    NotificationComponent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App implements OnInit, OnDestroy {
   showNav = false;
   isDark = false;
 
-  // 👉 uusi: notifications state
   notificationsEnabled = false;
 
-  constructor(
-    public router: Router,
-    private dialog: MatDialog,
-  ) {
-   this.router.events.pipe(filter(e => e instanceof NavigationEnd))
-  .subscribe((e: any) => {
-    this.showNav = !e.urlAfterRedirects.startsWith('/login');
+  unreadCount = 0;
 
-    if (e.urlAfterRedirects.startsWith('/login')) {
-      this.isDark = false;
-      document.body.classList.remove('dark-theme');
-    }
-  });
+  private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+  private notificationService = inject(NotificationService);
 
-  }
+  private subs = new Subscription();
 
-  ngOnInit() {
-    // dark mode
-    const saved = localStorage.getItem('darkMode');
-    this.isDark = saved === 'true';
-    document.body.classList.toggle('dark-theme', this.isDark);
+  constructor() {
+    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((e: any) => {
+      this.showNav = !e.urlAfterRedirects.startsWith('/login');
 
-    this.updateBodyTheme();
-
-    // notifications state
-    this.notificationsEnabled = localStorage.getItem('notificationsEnabled') === 'true';
-
-    // sync changes from other tabs
-    window.addEventListener('storage', () => {
-      const updatedDark = localStorage.getItem('darkMode');
-      this.isDark = updatedDark === 'true';
-
-      const updatedNotif = localStorage.getItem('notificationsEnabled');
-      this.notificationsEnabled = updatedNotif === 'true';
+      if (e.urlAfterRedirects.startsWith('/login')) {
+        this.isDark = false;
+        document.body.classList.remove('dark-theme');
+      }
     });
   }
 
-  // 🌙 theme toggle
+  ngOnInit() {
+    this.isDark = this.getBooleanStorage('darkMode');
+    document.body.classList.toggle('dark-theme', this.isDark);
+
+    this.notificationsEnabled = this.getBooleanStorage('notificationsEnabled');
+
+    this.subs.add(
+      this.notificationService.unreadCount$.subscribe((count) => {
+        this.unreadCount = count;
+      }),
+    );
+
+    this.subs.add(
+      this.notificationService.latest$.subscribe((n) => {
+        if (!n) return;
+        if (!this.notificationsEnabled) return;
+
+        this.snackBar.open(n.message, 'Sulje', {
+          duration: 3000,
+        });
+      }),
+    );
+
+    window.addEventListener('storage', () => {
+      this.isDark = this.getBooleanStorage('darkMode');
+      this.notificationsEnabled = this.getBooleanStorage('notificationsEnabled');
+    });
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
   toggleTheme() {
     this.isDark = !this.isDark;
     localStorage.setItem('darkMode', String(this.isDark));
-
     this.updateBodyTheme();
   }
 
   private updateBodyTheme() {
-    if (this.isDark) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
+    document.body.classList.toggle('dark-theme', this.isDark);
   }
 
-  // 🔔 open dialog (CORRECT VERSION)
   openNotificationsDialog() {
     const dialogRef = this.dialog.open(NotificationsDialogComponent);
 
     dialogRef.afterClosed().subscribe((result) => {
+      if (typeof result !== 'boolean') return;
+
       this.notificationsEnabled = result;
-
       localStorage.setItem('notificationsEnabled', String(result));
-
-      console.log('Notifications enabled:', result);
     });
+  }
+
+  private getBooleanStorage(key: string): boolean {
+    return localStorage.getItem(key) === 'true';
   }
 }
