@@ -1,5 +1,11 @@
-<div class="notification-panel">
-  <div class="notification" *ngFor="let notification of notifications$ | async">
-    {{ notification.message }}
-  </div>
+<div
+  *ngFor="let notification of notifications$ | async"
+  class="notification"
+  [class.unread]="!notification.read"
+>
+  <p>{{ notification.message }}</p>
+
+  <button (click)="markAsRead(notification.id)">Read</button>
+
+  <button (click)="dismiss(notification.id)">Dismiss</button>
 </div>
