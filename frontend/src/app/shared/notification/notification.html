@@ -3,9 +3,19 @@
   class="notification"
   [class.unread]="!notification.read"
 >
-  <p>{{ notification.message }}</p>
+  <!-- 🧾 message -->
+  <div class="content">
+    <p class="message">{{ notification.message }}</p>
 
-  <button (click)="markAsRead(notification.id)">Read</button>
+    <small class="time">
+      {{ notification.createdAt | date: 'short' }}
+    </small>
+  </div>
 
-  <button (click)="dismiss(notification.id)">Dismiss</button>
+  <!-- 🔘 actions -->
+  <div class="actions">
+    <button *ngIf="!notification.read" (click)="markAsRead(notification.id)">Read</button>
+
+    <button (click)="dismiss(notification.id)">Dismiss</button>
+  </div>
 </div>
