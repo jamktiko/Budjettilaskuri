@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -12,7 +12,6 @@ import {
   MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
-
 import { BudgetService } from '../../budget.service';
 
 @Component({
@@ -32,7 +31,7 @@ import { BudgetService } from '../../budget.service';
   templateUrl: './add-expense.html',
   styleUrls: ['./add-expense.css'],
 })
-export class AddExpense {
+export class AddExpense implements OnInit {
   type: 'income' | 'expense' = 'expense';
   defaultCategories: string[] = [
     'Ruoka',
@@ -108,7 +107,7 @@ export class AddExpense {
       console.error('Virhe kulun lisäämisessä:', error);
     }
   }
-  NgOnInit() {
+  ngOnInit() {
     this.checkIfBudgetExists();
   }
 }
