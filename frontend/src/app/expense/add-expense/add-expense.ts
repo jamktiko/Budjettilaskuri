@@ -57,11 +57,20 @@ export class AddExpense implements OnInit {
 
   checkIfBudgetExists() {
     this.budget.getBudgets().then((budgets) => {
-      if (budgets.length === 0) {
-        this.isBudgetEmpty = true;
-      } else {
-        this.isBudgetEmpty = false;
-      }
+      // Haetaan nykyinen kuukausi ja vuosi
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+
+      //Tarkistetaan löytyykö listasta yhtään budjettia tälle kuukaudelle ja vuodelle
+      const hasBudgetForThisMonth = budgets.some((b: any) => {
+        const budgetDate = new Date(b.date);
+
+        return budgetDate.getMonth() === currentMonth && budgetDate.getFullYear() === currentYear;
+      });
+
+      // Jos tälle kuulle löytyi budjetti, isBudgetEmpty on false. Muuten se on true.
+      this.isBudgetEmpty = !hasBudgetForThisMonth;
     });
   }
 
