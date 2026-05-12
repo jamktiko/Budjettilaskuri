@@ -46,13 +46,12 @@
     </div>
   </div>
 
-<!-- 🔵 PIE CHART -->
-<div class="blue-card">
-  <h2>Menot kategorioittain</h2>
+  <!-- 🔵 PIE CHART -->
+  <div class="blue-card">
+    <h2>Menot kategorioittain</h2>
 
-  <app-pie-chart [transactions]="transactions"></app-pie-chart>
-</div>
-
+    <app-pie-chart [transactions]="transactions"></app-pie-chart>
+  </div>
 
   <!-- 🔵 TAPAHTUMAT (KORJATTU + SELKEÄ) -->
   <div class="blue-card">
@@ -83,6 +82,8 @@
         </div>
       </div>
     </div>
-
   </div>
+  <button class="addbutton" mat-button routerLink="/add" routerLinkActive="active">
+    <mat-icon>add_circle</mat-icon><span class="addbuttontxt">Lisää meno</span>
+  </button>
 </div>

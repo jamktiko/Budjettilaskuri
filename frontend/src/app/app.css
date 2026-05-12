@@ -93,67 +93,6 @@
 
 /* responsiivisuus */
 
-.addbuttontxt {
-  font-size: 18px;
-  color: white;
-}
-
-.addbutton mat-icon {
-  color: white;
-  display: none;
-}
-
-.addbutton {
-  position: fixed;
-  display: flex;
-  justify-content: space-around;
-  padding: 0;
-  margin: 0;
-  bottom: 30px;
-  right: 60px;
-  width: 140px;
-  height: 64px;
-  background-color: #1980f4;
-  font-size: 18px;
-}
-
-@media (max-width: 600px) {
-  .addbutton {
-    width: 64px !important;
-    height: 64px !important;
-
-    min-width: 64px !important;
-    min-height: 64px !important;
-    max-width: 64px !important;
-
-    bottom: 20px;
-    right: 20px;
-
-    box-sizing: border-box;
-    padding: 0 !important;
-    margin: 0;
-    border-radius: 50% !important;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .addbutton mat-icon {
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 50px;
-    overflow: visible;
-  }
-}
-
-@media (max-width: 600px) {
-  .addbuttontxt {
-    display: none;
-  }
-}
-
 body.dark-theme .mdc-dialog__surface {
   background-color: #242424 !important;
   color: #ffffff !important;
