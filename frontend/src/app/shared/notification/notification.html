@@ -14,8 +14,6 @@
 
   <!-- 🔘 actions -->
   <div class="actions">
-    <button *ngIf="!notification.read" (click)="markAsRead(notification.id)">Read</button>
-
     <button (click)="dismiss(notification.id)">Dismiss</button>
   </div>
 </div>
