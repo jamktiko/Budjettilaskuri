@@ -1,11 +1,16 @@
-<h2>Lisää tapahtuma</h2>
-<p class="subtitle">Määritä uusi meno</p>
+<!--Tässä on if, jos ei ole budjetteja -->
+@if (isBudgetEmpty) {
+  <h1>Lisää ensin budjetti</h1>
+  <!-- Else jos on-->
+} @else {
+  <h2>Lisää tapahtuma</h2>
+  <p class="subtitle">Määritä uusi meno</p>
 
-<mat-card class="form">
-  <!-- TYPE TOGGLE 
+  <mat-card class="form">
+    <!-- TYPE TOGGLE 
   KOmmentoin tämän pois, koska poistetaan tulon lisääminen. Menot ovat valmiiksi defaulttina 
   -->
-  <!-- <div class="toggle">
+    <!-- <div class="toggle">
     <button
       mat-raised-button
       (click)="setType('expense')"
@@ -19,41 +24,42 @@
     </button>
   </div> -->
 
-  <!-- CATEGORY (molemmille sama) -->
-  <mat-form-field appearance="outline">
-    <mat-label>Kategoria</mat-label>
+    <!-- CATEGORY (molemmille sama) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Kategoria</mat-label>
 
-    <input
-      type="text"
-      #categoryInput
-      #trigger="matAutocompleteTrigger"
-      matInput
-      [(ngModel)]="category"
-      [matAutocomplete]="auto"
-    />
+      <input
+        type="text"
+        #categoryInput
+        #trigger="matAutocompleteTrigger"
+        matInput
+        [(ngModel)]="category"
+        [matAutocomplete]="auto"
+      />
 
-    <mat-autocomplete
-      #auto="matAutocomplete"
-      (optionSelected)="onCategorySelected($event, categoryInput, trigger)"
-    >
-      <mat-option *ngFor="let cat of defaultCategories" [value]="cat">
-        {{ cat }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        (optionSelected)="onCategorySelected($event, categoryInput, trigger)"
+      >
+        <mat-option *ngFor="let cat of defaultCategories" [value]="cat">
+          {{ cat }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
 
-  <!-- AMOUNT -->
-  <mat-form-field appearance="outline">
-    <mat-label>Summa</mat-label>
-    <input matInput type="number" [(ngModel)]="amount" />
-  </mat-form-field>
+    <!-- AMOUNT -->
+    <mat-form-field appearance="outline">
+      <mat-label>Summa</mat-label>
+      <input matInput type="number" [(ngModel)]="amount" />
+    </mat-form-field>
 
-  <!-- NOTE (optional) -->
-  <mat-form-field appearance="outline">
-    <mat-label>Muistiinpano</mat-label>
-    <input matInput [(ngModel)]="note" />
-  </mat-form-field>
+    <!-- NOTE (optional) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Muistiinpano</mat-label>
+      <input matInput [(ngModel)]="note" />
+    </mat-form-field>
 
-  <!-- SAVE -->
-  <button mat-raised-button color="primary" (click)="save()" class="lisaa_button">Lisää</button>
-</mat-card>
+    <!-- SAVE -->
+    <button mat-raised-button color="primary" (click)="save()" class="lisaa_button">Lisää</button>
+  </mat-card>
+}

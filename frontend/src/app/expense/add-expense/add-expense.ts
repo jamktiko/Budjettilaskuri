@@ -48,10 +48,23 @@ export class AddExpense {
   amount: number = 0;
   note: string = '';
 
+  // budjetti variable
+  isBudgetEmpty: boolean = true;
+
   constructor(
     private budget: BudgetService,
     private router: Router,
   ) {}
+
+  checkIfBudgetExists() {
+    this.budget.getBudgets().then((budgets) => {
+      if (budgets.length === 0) {
+        this.isBudgetEmpty = true;
+      } else {
+        this.isBudgetEmpty = false;
+      }
+    });
+  }
 
   setType(type: 'income' | 'expense') {
     this.type = type;
@@ -94,5 +107,8 @@ export class AddExpense {
     } catch (error) {
       console.error('Virhe kulun lisäämisessä:', error);
     }
+  }
+  NgOnInit() {
+    this.checkIfBudgetExists();
   }
 }
