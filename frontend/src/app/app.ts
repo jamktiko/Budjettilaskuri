@@ -54,9 +54,16 @@ export class App implements OnInit {
     public router: Router,
     private dialog: MatDialog,
   ) {
-    this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((e: any) => {
-      this.showNav = !e.urlAfterRedirects.startsWith('/login');
-    });
+   this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+  .subscribe((e: any) => {
+    this.showNav = !e.urlAfterRedirects.startsWith('/login');
+
+    if (e.urlAfterRedirects.startsWith('/login')) {
+      this.isDark = false;
+      document.body.classList.remove('dark-theme');
+    }
+  });
+
   }
 
   ngOnInit() {
