@@ -69,6 +69,10 @@ export class App implements OnInit, OnDestroy {
       if (e.urlAfterRedirects.startsWith('/login')) {
         this.isDark = false;
         document.body.classList.remove('dark-theme');
+      } else {
+        const saved = localStorage.getItem('darkMode');
+        this.isDark = saved === 'true';
+        this.updateBodyTheme();
       }
     });
   }
