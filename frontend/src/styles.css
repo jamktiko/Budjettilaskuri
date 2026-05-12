@@ -111,3 +111,18 @@ body.dark-theme .mat-mdc-form-field-input-control {
 body.dark-theme .mat-mdc-select-value-text {
   color: #ffffff !important;
 }
+
+.dark-theme .mat-mdc-form-field:hover .mdc-floating-label,
+.dark-theme .mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: white !important;
+}
+
+.dark-theme .mat-mdc-form-field .mdc-floating-label {
+  color: white !important;
+}
+
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__leading,
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__notch,
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: white !important;
+}
