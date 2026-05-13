@@ -74,20 +74,22 @@ export class App implements OnInit, OnDestroy {
         this.isDark = saved === 'true';
         this.updateBodyTheme();
       }
+
+      const notifSetting = localStorage.getItem('notificationsEnabled');
+      if (notifSetting === null) {
+        // Varmistetaan, ettei modaali ole jo auki
+        if (this.dialog.openDialogs.length === 0) {
+          this.openNotificationsDialog();
+        }
+      }
     });
   }
 
   ngOnInit() {
     this.isDark = this.getBooleanStorage('darkMode');
     document.body.classList.toggle('dark-theme', this.isDark);
-    const notifSetting = localStorage.getItem('notificationsEnabled');
-    if (notifSetting === null) {
-      // Käyttäjä ei ole vielä valinnut kumpaakaan, avataan kyselymodaali!
-      this.openNotificationsDialog();
-    } else {
-      // Valinta on jo tehty aiemmin, ladataan se muistiin
-      this.notificationsEnabled = notifSetting === 'true';
-    }
+
+    this.notificationsEnabled = this.getBooleanStorage('notificationsEnabled');
 
     this.subs.add(
       this.notificationService.unreadCount$.subscribe((count) => {
