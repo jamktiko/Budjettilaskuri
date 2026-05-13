@@ -45,7 +45,7 @@ export class AddBudget implements OnInit {
 
   form = this.fb.group({
     category: ['Yleinen'],
-    amount: [0, [Validators.required, Validators.min(1)]],
+    amount: [null, [Validators.required, Validators.min(1)]],
     time: ['monthly'],
   });
 
