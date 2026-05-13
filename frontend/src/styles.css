@@ -126,3 +126,30 @@ body.dark-theme .mat-mdc-select-value-text {
 .dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing {
   border-color: white !important;
 }
+
+.dark-theme .mat-mdc-dialog-container {
+  color: white;
+}
+
+.dark-theme .mat-mdc-dialog-container .mdc-dialog__content {
+  color: white;
+}
+
+.dark-theme .mat-mdc-dialog-container .mdc-dialog__title {
+  color: white;
+}
+
+.dark-theme .mat-mdc-button {
+  color: white;
+}
+
+.dark-theme .mat-mdc-dialog-surface {
+  background-color: #1e1e1e;
+  color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+ box-shadow:
+  0 0 12px rgba(100, 181, 246, 0.25),
+  0 0 30px rgba(100, 181, 246, 0.15);
+}
