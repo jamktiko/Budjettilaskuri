@@ -20,7 +20,8 @@ import { NotificationService } from './shared/notification/notification.service'
   template: `
     <h2 mat-dialog-title>Ilmoitukset</h2>
 
-    <mat-dialog-content> Haluatko ottaa ilmoitukset käyttöön? </mat-dialog-content>
+    <mat-dialog-content> Haluatko saada ilmoituksen, kun 80 % budjetista on käytetty tai budjetti ylittyy?
+ </mat-dialog-content>
 
     <mat-dialog-actions align="end">
       <button mat-button [mat-dialog-close]="false">Ei kiitos</button>
