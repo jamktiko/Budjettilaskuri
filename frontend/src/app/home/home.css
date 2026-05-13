@@ -185,8 +185,8 @@
 }
 
 .delete-btn {
-  background: transparent !important; /* Removes any default background */
-  color: black !important; /* Forces the icon to be black */
+  background: transparent !important;
+  color: black !important;
   border: none;
   box-shadow: none;
   transition: all 0.3s ease; /* Smooth fade when switching themes */
