@@ -8,12 +8,12 @@
     <p class="message">{{ notification.message }}</p>
 
     <small class="time">
-      {{ notification.createdAt | date: 'short' }}
+      {{ notification.createdAt | date: 'dd.MM.yyyy HH:mm' }}
     </small>
   </div>
 
   <!-- 🔘 actions -->
   <div class="actions">
-    <button (click)="dismiss(notification.id)">Dismiss</button>
+    <button (click)="dismiss(notification.id)">Selvä</button>
   </div>
 </div>
