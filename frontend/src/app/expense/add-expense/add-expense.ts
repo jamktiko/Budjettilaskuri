@@ -13,6 +13,7 @@ import {
 } from '@angular/material/autocomplete';
 import { MatOptionModule } from '@angular/material/core';
 import { BudgetService } from '../../budget.service';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-add-expense',
@@ -26,7 +27,7 @@ import { BudgetService } from '../../budget.service';
     MatButtonModule,
     MatAutocompleteModule,
     MatOptionModule,
-    MatAutocompleteTrigger,
+    MatSelectModule,
   ],
   templateUrl: './add-expense.html',
   styleUrls: ['./add-expense.css'],
@@ -44,7 +45,7 @@ export class AddExpense implements OnInit {
     'Muu',
   ];
   category: string = '';
-  amount: number = 0;
+  amount: number | null = null;
   note: string = '';
 
   // budjetti variable
@@ -78,24 +79,18 @@ export class AddExpense implements OnInit {
     this.type = type;
   }
 
-  onCategorySelected(
-    event: MatAutocompleteSelectedEvent,
-    inputElement: HTMLInputElement,
-    trigger: MatAutocompleteTrigger,
-  ) {
-    if (event.option.value === 'Muu') {
-      setTimeout(() => {
-        this.category = ''; // Tyhjentää Angularin datan
-        inputElement.value = ''; // Tyhjentää kentän visuaalisesti ruudulta
-
-        trigger.closePanel(); // Pakottaa valikon kiinni
-        inputElement.focus(); // Varmistaa, että kursori jää kenttään vilkkumaan
-      });
-    } else {
-    }
-  }
-
   async save() {
+    // Estetään negatiivisen summan tallennus
+    if (this.amount === null || this.amount < 0) {
+      console.warn('Summa ei voi olla negatiivinen');
+      return;
+    }
+
+    // Varmistetaan, että kategoria on valittu
+    if (!this.category) {
+      console.warn('Valitse kategoria');
+      return;
+    }
     try {
       await this.budget.addTransaction({
         id: crypto.randomUUID(),
@@ -109,7 +104,7 @@ export class AddExpense implements OnInit {
       this.router.navigate(['/home']);
 
       // reset
-      this.amount = 0;
+      this.amount = null;
       this.category = '';
       this.note = '';
     } catch (error) {

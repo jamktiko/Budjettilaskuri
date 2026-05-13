@@ -9,50 +9,20 @@
   <p class="subtitle">Määritä uusi meno</p>
 
   <mat-card class="form">
-    <!-- TYPE TOGGLE 
-  KOmmentoin tämän pois, koska poistetaan tulon lisääminen. Menot ovat valmiiksi defaulttina 
-  -->
-    <!-- <div class="toggle">
-    <button
-      mat-raised-button
-      (click)="setType('expense')"
-      [class.active-expense]="type === 'expense'"
-    >
-      Meno
-    </button>
-
-    <button mat-raised-button (click)="setType('income')" [class.active-income]="type === 'income'">
-      Tulo
-    </button>
-  </div> -->
-
-    <!-- CATEGORY (molemmille sama) -->
+    <!-- CATEGORY (Lukittu pudotusvalikko) -->
     <mat-form-field appearance="outline">
       <mat-label>Kategoria</mat-label>
-
-      <input
-        type="text"
-        #categoryInput
-        #trigger="matAutocompleteTrigger"
-        matInput
-        [(ngModel)]="category"
-        [matAutocomplete]="auto"
-      />
-
-      <mat-autocomplete
-        #auto="matAutocomplete"
-        (optionSelected)="onCategorySelected($event, categoryInput, trigger)"
-      >
+      <mat-select [(ngModel)]="category">
         <mat-option *ngFor="let cat of defaultCategories" [value]="cat">
           {{ cat }}
         </mat-option>
-      </mat-autocomplete>
+      </mat-select>
     </mat-form-field>
 
-    <!-- AMOUNT -->
+    <!-- AMOUNT (Lisätty min="0") -->
     <mat-form-field appearance="outline">
       <mat-label>Summa</mat-label>
-      <input matInput type="number" [(ngModel)]="amount" />
+      <input matInput type="number" [(ngModel)]="amount" min="0" />
     </mat-form-field>
 
     <!-- NOTE (optional) -->
@@ -61,7 +31,15 @@
       <input matInput [(ngModel)]="note" />
     </mat-form-field>
 
-    <!-- SAVE -->
-    <button mat-raised-button color="primary" (click)="save()" class="lisaa_button">Lisää</button>
+    <!-- SAVE (Nappi ei ole painettavissa, jos summa < 0 tai kategoria puuttuu) -->
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="save()"
+      [disabled]="amount === null || amount < 0 || !category"
+      class="lisaa_button"
+    >
+      Lisää
+    </button>
   </mat-card>
 }
