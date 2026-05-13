@@ -67,8 +67,13 @@
   <!-- 🔵 PIE CHART -->
   <div class="blue-card">
     <h2>Menot kategorioittain</h2>
-
-    <app-pie-chart [transactions]="transactions"></app-pie-chart>
+    @if (loading) {
+      <div>Ladataan tietoja...</div>
+    } @else if (transactions.length === 0) {
+      <div>Ei tapahtumia tallennettuna.</div>
+    } @else {
+      <app-pie-chart [transactions]="transactions"></app-pie-chart>
+    }
   </div>
 
   <!-- 🔵 TAPAHTUMAT -->
