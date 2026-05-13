@@ -61,25 +61,35 @@ export class App implements OnInit, OnDestroy {
   private notificationService = inject(NotificationService);
 
   private subs = new Subscription();
+  private initialCheckDone = false;
 
   constructor() {
     this.router.events.pipe(filter((e) => e instanceof NavigationEnd)).subscribe((e: any) => {
-      this.showNav = !e.urlAfterRedirects.startsWith('/login');
+      // Käytetään .includes() varmuuden vuoksi, jotta kaikki /login-variaatiot tarttuvat
+      const isLoginView = e.urlAfterRedirects.includes('/login');
+      this.showNav = !isLoginView;
 
-      if (e.urlAfterRedirects.startsWith('/login')) {
+      if (isLoginView) {
         this.isDark = false;
         document.body.classList.remove('dark-theme');
       } else {
         const saved = localStorage.getItem('darkMode');
         this.isDark = saved === 'true';
         this.updateBodyTheme();
-      }
 
-      const notifSetting = localStorage.getItem('notificationsEnabled');
-      if (notifSetting === null) {
-        // Varmistetaan, ettei modaali ole jo auki
-        if (this.dialog.openDialogs.length === 0) {
-          this.openNotificationsDialog();
+        // 2. TARKISTETAAN, ETTEI OLLA JUUressa ('/') JA ETTÄ TARKISTUS TEHDÄÄN VAIN KERRAN
+        if (!this.initialCheckDone && e.urlAfterRedirects !== '/') {
+          this.initialCheckDone = true; // Merkitään tarkistetuksi
+
+          const notifSetting = localStorage.getItem('notificationsEnabled');
+          if (notifSetting === null) {
+            // Pieni viive varmistaa, että reititys on varmasti asettunut
+            setTimeout(() => {
+              if (this.dialog.openDialogs.length === 0) {
+                this.openNotificationsDialog();
+              }
+            }, 300);
+          }
         }
       }
     });
