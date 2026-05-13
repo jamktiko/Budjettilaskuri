@@ -81,7 +81,7 @@ export class AddExpense implements OnInit {
 
   async save() {
     // Estetään negatiivisen summan tallennus
-    if (this.amount === null || this.amount < 0) {
+    if (this.amount === null || this.amount <= 0) {
       console.warn('Summa ei voi olla negatiivinen');
       return;
     }
