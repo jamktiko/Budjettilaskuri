@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -59,6 +59,7 @@ export class AddExpense implements OnInit {
   // OCR Variables
   isProcessing: boolean = false;
   ocrProgress: number = 0;
+  private cdr = inject(ChangeDetectorRef);
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   // Kategorioiden hakusanat, jotka on linkitetty defaultCategories-listaan
@@ -161,54 +162,54 @@ export class AddExpense implements OnInit {
   }
 
   private extractData(text: string) {
-    // TULOSTETAAN RAAKATEKSTI KONSOLIIN (Auttaa debukkauksessa!)
     console.log('--- OCR RAAKATEKSTI ---');
     console.log(text);
     console.log('-----------------------');
 
     const lowerText = text.toLowerCase();
-
-    // 1. LOPPUSUMMAN ETSINTÄ (Paranneltu versio)
     let extractedAmount: number | null = null;
 
-    // Vaihtoehto A: Löysempi avainsanahaku.
-    // Sallii esim. "Yhteensä EUR 15,50" tai "Yht. 15.50" tai "Maksettavaa 15,50"
-    const keywordRegex = /(?:yhteens[aä]?|yht\.?|total|summa|maksettavaa).*?(\d{1,4}[\.\,]\d{2})/is;
-    const keywordMatch = text.match(keywordRegex);
+    // 1. LOPPUSUMMAN ETSINTÄ (Rivipohjainen taktiikka)
+    const lines = text.split('\n'); // Jaetaan teksti riveihin
+    const amountsOnKeywordLines: number[] = [];
+    const allAmounts: number[] = [];
 
-    if (keywordMatch && keywordMatch[1]) {
-      // Löydettiin avainsanalla!
-      extractedAmount = parseFloat(keywordMatch[1].replace(',', '.'));
-      console.log('Summa löydettiin avainsanalla:', extractedAmount);
-    } else {
-      // Vaihtoehto B: Fallback (Etsitään kuitin isoin luku muodossa x,xx)
-      // Kuitin loppusumma on yleensä suurin luku.
-      const allPricesRegex = /\b(\d{1,4})[\.\,](\d{2})\b/g;
-      let match;
-      let maxPrice = 0;
+    for (const line of lines) {
+      // Etsitään riviltä kaikki x,xx tai x.xx muotoiset luvut
+      const priceMatches = line.match(/\b(\d{1,4})[\.\,](\d{2})\b/g);
 
-      while ((match = allPricesRegex.exec(text)) !== null) {
-        // match[0] on esim "15,50" tai "15.50"
-        const price = parseFloat(match[0].replace(',', '.'));
-        if (price > maxPrice) {
-          maxPrice = price;
+      if (priceMatches) {
+        for (const p of priceMatches) {
+          const price = parseFloat(p.replace(',', '.'));
+          allAmounts.push(price);
+
+          // Jos samalla rivillä lukee EUR, FUR (OCR-virhe), YHT tai SUMMA
+          if (/(yhteens[aä]|yht\.?|total|summa|maksettavaa|eur|fur)/i.test(line)) {
+            amountsOnKeywordLines.push(price);
+          }
         }
-      }
-
-      if (maxPrice > 0) {
-        extractedAmount = maxPrice;
-        console.log('Summa poimittiin kuitin suurimpana lukuna:', extractedAmount);
       }
     }
 
-    // Asetetaan löydetty summa ngModeliin
+    // Valitaan oikea summa
+    if (amountsOnKeywordLines.length > 0) {
+      // Jos avainsanariveiltä löytyi summia, otetaan niistä suurin
+      extractedAmount = Math.max(...amountsOnKeywordLines);
+      console.log('Summa poimittiin avainsanariviltä:', extractedAmount);
+    } else if (allAmounts.length > 0) {
+      // Fallback: Jos avainsanoja ei löytynyt kertaakaan, otetaan kuitin suurin luku
+      extractedAmount = Math.max(...allAmounts);
+      console.log('Summa poimittiin kuitin isoimpana lukuna:', extractedAmount);
+    }
+
+    // Asetetaan summa lomakkeen muuttujaan
     if (extractedAmount) {
       this.amount = extractedAmount;
     } else {
       console.warn('Summaa ei pystytty päättelemättään kuitista.');
     }
 
-    // 2. KATEGORIAN ETSINTÄ (Pysyy samana)
+    // 2. KATEGORIAN ETSINTÄ
     this.category = 'Muu';
     for (const [catName, keywords] of Object.entries(this.categoryKeywords)) {
       if (keywords.some((keyword) => lowerText.includes(keyword))) {
@@ -219,6 +220,9 @@ export class AddExpense implements OnInit {
 
     // 3. Täytetään selite
     this.note = 'Lisätty kuitista automaattisesti.';
+
+    // 4. PAKOTETAAN ANGULAR PÄIVITTÄMÄÄN NÄKYMÄ (Tärkeä!)
+    this.cdr.detectChanges();
   }
   // ---- OCR LOGIIKKA PÄÄTTYY ----
 
