@@ -161,25 +161,63 @@ export class AddExpense implements OnInit {
   }
 
   private extractData(text: string) {
+    // TULOSTETAAN RAAKATEKSTI KONSOLIIN (Auttaa debukkauksessa!)
+    console.log('--- OCR RAAKATEKSTI ---');
+    console.log(text);
+    console.log('-----------------------');
+
     const lowerText = text.toLowerCase();
 
-    // 1. Etsi summa
-    const sumRegex = /(?:YHTEENS[AÄ]|YHT|TOTAL|SUMMA)[\s:]*(\d+[\.\,]\d{2})/i;
-    const sumMatch = text.match(sumRegex);
-    if (sumMatch && sumMatch[1]) {
-      this.amount = parseFloat(sumMatch[1].replace(',', '.')); // Päivittää ngModelin!
+    // 1. LOPPUSUMMAN ETSINTÄ (Paranneltu versio)
+    let extractedAmount: number | null = null;
+
+    // Vaihtoehto A: Löysempi avainsanahaku.
+    // Sallii esim. "Yhteensä EUR 15,50" tai "Yht. 15.50" tai "Maksettavaa 15,50"
+    const keywordRegex = /(?:yhteens[aä]?|yht\.?|total|summa|maksettavaa).*?(\d{1,4}[\.\,]\d{2})/is;
+    const keywordMatch = text.match(keywordRegex);
+
+    if (keywordMatch && keywordMatch[1]) {
+      // Löydettiin avainsanalla!
+      extractedAmount = parseFloat(keywordMatch[1].replace(',', '.'));
+      console.log('Summa löydettiin avainsanalla:', extractedAmount);
+    } else {
+      // Vaihtoehto B: Fallback (Etsitään kuitin isoin luku muodossa x,xx)
+      // Kuitin loppusumma on yleensä suurin luku.
+      const allPricesRegex = /\b(\d{1,4})[\.\,](\d{2})\b/g;
+      let match;
+      let maxPrice = 0;
+
+      while ((match = allPricesRegex.exec(text)) !== null) {
+        // match[0] on esim "15,50" tai "15.50"
+        const price = parseFloat(match[0].replace(',', '.'));
+        if (price > maxPrice) {
+          maxPrice = price;
+        }
+      }
+
+      if (maxPrice > 0) {
+        extractedAmount = maxPrice;
+        console.log('Summa poimittiin kuitin suurimpana lukuna:', extractedAmount);
+      }
     }
 
-    // 2. Etsi kategoria
-    this.category = 'Muu'; // Oletuksena 'Muu'
+    // Asetetaan löydetty summa ngModeliin
+    if (extractedAmount) {
+      this.amount = extractedAmount;
+    } else {
+      console.warn('Summaa ei pystytty päättelemättään kuitista.');
+    }
+
+    // 2. KATEGORIAN ETSINTÄ (Pysyy samana)
+    this.category = 'Muu';
     for (const [catName, keywords] of Object.entries(this.categoryKeywords)) {
       if (keywords.some((keyword) => lowerText.includes(keyword))) {
-        this.category = catName; // Päivittää ngModelin!
+        this.category = catName;
         break;
       }
     }
 
-    // 3. Täytetään selite (optional)
+    // 3. Täytetään selite
     this.note = 'Lisätty kuitista automaattisesti.';
   }
   // ---- OCR LOGIIKKA PÄÄTTYY ----
