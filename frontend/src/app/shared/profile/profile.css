@@ -1,7 +1,7 @@
 .profile-page {
   padding: 20px;
   font-family: Arial, sans-serif;
-   margin: 2px 40px;
+   margin: 2px 100px;
 }
 
 .profile-card {
@@ -21,7 +21,6 @@
   font-size: 80px;
   margin-right: 65px;
 }
-
 
 
 .settings-card {

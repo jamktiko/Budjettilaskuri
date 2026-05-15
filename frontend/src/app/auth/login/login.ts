@@ -55,6 +55,56 @@ export class Login {
         'Incorrect username or password.': 'Virheellinen sähköposti tai salasana',
 
         'Incorrect username or password': 'Virheellinen sähköposti tai salasana',
+
+        'Password did not conform with policy: Password must have lowercase characters': 'Salasanassa täytyy olla vähintään yksi pieni kirjain',
+
+        'Password did not conform with policy: Password must have uppercase characters': 'Salasanassa täytyy olla vähintään yksi iso kirjain',
+
+        'Password did not conform with policy: Password must have numeric characters': 'Salasanassa täytyy olla vähintään yksi numero',
+
+        'Password did not conform with policy: Password must have symbol characters': 'Salasanassa täytyy olla vähintään yksi erikoismerkki',
+
+        'User already exists': 'Tällä sähköpostiosoitteella on jo tili. Kirjaudu sisään tai palauta salasana',
+
+        // --- SALASANAN PALAUTUS (Forgot Password) ---
+        'Reset your password': 'Palauta salasanasi',
+        'Send code': 'Lähetä vahvistuskoodi',
+        'Send Code': 'Lähetä vahvistuskoodi',
+        'Back to Sign In': 'Takaisin kirjautumiseen',
+        'Reset Password': 'Palauta salasana',
+        'Confirmation Code': 'Vahvistuskoodi',
+        'New password': 'Uusi salasana',
+        Submit: 'Vahvista',
+        'Enter your email': 'Syötä sähköpostiosoitteesi',
+        // Yleisimmät virheilmoitukset salasanan palautuksessa
+        'Code mismatch and limit exceeded':
+          'Koodi on virheellinen ja yritysten enimmäismäärä on ylitetty',
+        'Invalid verification code provided, please try again.':
+          'Vahvistuskoodi on virheellinen, yritä uudelleen.',
+        LimitExceededException: 'Liian monta yritystä, yritä myöhemmin uudelleen.',
+        UserNotFoundException: 'Käyttäjää ei löytynyt tällä sähköpostiosoitteella.',
+    
+        'Cannot reset password for the user as there is no registered/verified email or phone_number': 'Salasanaa ei voi palauttaa, koska sähköposti tai puhelinnumero ei ole vahvistettu',
+
+        
+  'We Emailed You': 'Tarkista sähköpostisi',
+
+'otp_message':
+    'Lähetimme sinulle vahvistuskoodin sähköpostiin. Syötä koodi kirjautuaksesi sisään. Koodin saapumisessa voi kestää hetki.',
+
+  'Enter your code': 'Syötä vahvistuskoodi',
+
+  'Confirm': 'Vahvista',
+
+  'Resend code': 'Lähetä koodi uudelleen',
+
+        
+ 
+       'Code': 'Vahvistuskoodi',
+       'Code *': 'Vahvistuskoodi',
+       'New Password': 'Uusi salasana',
+       'Resend Code': 'Lähetä koodi uudelleen',
+       'Attempt limit exceeded, please try after some time.': 'Yritysten enimmäismäärä ylitetty. Yritä myöhemmin uudelleen',
       },
     });
 
@@ -93,7 +143,7 @@ export class Login {
         order: 2,
       },
       password: {
-        label: 'Salasana',
+        label: 'Salasana (min. 8 merkkiä, iso ja pieni kirjain, numero ja erikoismerkki)',
         placeholder: 'Kirjoita salasana',
         order: 3,
       },
