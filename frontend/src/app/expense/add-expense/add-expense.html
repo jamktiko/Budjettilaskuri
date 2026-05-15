@@ -1,44 +1,87 @@
-<!--Tässä on if, jos ei ole budjetteja -->
 @if (isBudgetEmpty) {
   <h1>Lisää ensin budjetti</h1>
-
   <a href="/home">Takaisin kotivalikkoon</a>
-  <!-- Else jos on-->
 } @else {
   <h2>Lisää tapahtuma</h2>
   <p class="subtitle">Määritä uusi meno</p>
 
   <mat-card class="form">
+    <!-- OCR SKANNAUSOSIO -->
+    <div style="margin-bottom: 20px; text-align: center">
+      <!-- Skannausnappi (piilossa latauksen ajan) -->
+      <button
+        *ngIf="!isProcessing"
+        mat-stroked-button
+        color="accent"
+        type="button"
+        (click)="fileInput.click()"
+      >
+        <mat-icon>camera_alt</mat-icon>
+        Täytä tiedot kuitista (OCR)
+      </button>
+
+      <!-- Piilotettu tiedostokenttä kameralle -->
+      <input
+        type="file"
+        accept="image/*"
+        capture="environment"
+        #fileInput
+        style="display: none"
+        (change)="onFileSelected($event)"
+      />
+
+      <!-- Latausanimaatio (näkyy kun skannataan) -->
+      <div
+        *ngIf="isProcessing"
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 10px;
+        "
+      >
+        <mat-spinner diameter="40"></mat-spinner>
+        <p style="margin-top: 10px; color: #666">Luetaan kuittia... {{ ocrProgress }}%</p>
+      </div>
+    </div>
+    <!-- OCR SKANNAUSOSIO PÄÄTTYY -->
+
     <!-- CATEGORY (Lukittu pudotusvalikko) -->
     <mat-form-field appearance="outline">
       <mat-label>Kategoria</mat-label>
-      <mat-select [(ngModel)]="category">
+      <mat-select [(ngModel)]="category" [disabled]="isProcessing">
         <mat-option *ngFor="let cat of defaultCategories" [value]="cat">
           {{ cat }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
-    <!-- AMOUNT (Lisätty min="0") -->
+    <!-- AMOUNT -->
     <mat-form-field appearance="outline">
       <mat-label>Summa</mat-label>
-      <input matInput type="number" [(ngModel)]="amount" min="0" />
+      <input matInput type="number" [(ngModel)]="amount" min="0" [disabled]="isProcessing" />
     </mat-form-field>
 
     <!-- NOTE (optional) -->
     <mat-form-field appearance="outline" style="width: 100%">
       <mat-label>Muistiinpano</mat-label>
-      <textarea matInput [(ngModel)]="note" maxlength="250" rows="3"></textarea>
-
+      <textarea
+        matInput
+        [(ngModel)]="note"
+        maxlength="250"
+        rows="3"
+        [disabled]="isProcessing"
+      ></textarea>
       <mat-hint align="end">{{ note.length || 0 }} / 250</mat-hint>
     </mat-form-field>
 
-    <!-- SAVE (Nappi ei ole painettavissa, jos summa < 0 tai kategoria puuttuu) -->
+    <!-- SAVE (Nappi ei ole painettavissa, jos summa < 0, kategoria puuttuu, TAI OCR lataa) -->
     <button
       mat-raised-button
       color="primary"
       (click)="save()"
-      [disabled]="amount === null || amount < 0 || !category"
+      [disabled]="amount === null || amount < 0 || !category || isProcessing"
       class="lisaa_button"
     >
       Lisää
