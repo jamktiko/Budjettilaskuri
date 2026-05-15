@@ -26,9 +26,11 @@
     </mat-form-field>
 
     <!-- NOTE (optional) -->
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" style="width: 100%">
       <mat-label>Muistiinpano</mat-label>
-      <input matInput [(ngModel)]="note" />
+      <textarea matInput [(ngModel)]="note" maxlength="250" rows="3"></textarea>
+
+      <mat-hint align="end">{{ note.length || 0 }} / 250</mat-hint>
     </mat-form-field>
 
     <!-- SAVE (Nappi ei ole painettavissa, jos summa < 0 tai kategoria puuttuu) -->
