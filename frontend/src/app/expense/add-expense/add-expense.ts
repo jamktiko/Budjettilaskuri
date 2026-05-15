@@ -62,24 +62,61 @@ export class AddExpense implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   @ViewChild('fileInput') fileInput!: ElementRef;
 
-  // Kategorioiden hakusanat, jotka on linkitetty defaultCategories-listaan
+  // Laajennettu sanakirja: mukana kaupat, yleiset tuotteet ja kanta-asiakastermit
   private categoryKeywords: { [key: string]: string[] } = {
     Ruoka: [
+      // Kaupat
       'prisma',
       'citymarket',
       's-market',
       'k-supermarket',
+      'k-market',
       'alepa',
       'sale',
       'lidl',
+      'minimani',
+      // Ravintolat
       'ravintola',
       'mcdonalds',
       'hesburger',
+      'burger king',
+      'subway',
+      // Kanta-asiakkuudet
+      'plussa',
+      'plus säästösi',
+      's-etukortti',
+      'bonus',
+      'pantti',
+      'pullonpalautus',
+      // Yleisimmät elintarvikkeet (jos kaupan nimi ei luettavissa)
+      'maito',
+      'leipä',
+      'juusto',
+      'kurkku',
+      'tomaatti',
+      'omaatti',
+      'paprika',
+      'margariini',
+      'kana',
+      'jauheliha',
+      'peruna',
     ],
-    Auto: ['neste', 'abc', 'teboil', 'shell', 'st1', 'bensiini', 'diesel', 'motonet', 'biltema'],
-    Terveys: ['apteekki', 'yli-opiston', 'terveystalo', 'mehiläinen'],
-    Vaatteet: ['tokmanni', 'h&m', 'zara', 'halonen', 'kappahl'],
-    Asuminen: ['k-rauta', 'bauhaus', 'ikea', 'clas ohlson'],
+    Auto: [
+      'neste',
+      'abc',
+      'teboil',
+      'shell',
+      'st1',
+      'bensiini',
+      'diesel',
+      'polttoaine',
+      'motonet',
+      'biltema',
+      'tankkaus',
+    ],
+    Terveys: ['apteekki', 'yli-opiston', 'terveystalo', 'mehiläinen', 'lääke', 'resepti'],
+    Vaatteet: ['tokmanni', 'h&m', 'zara', 'halonen', 'kappahl', 'lindex', 'dressmann'],
+    Asuminen: ['k-rauta', 'bauhaus', 'ikea', 'clas ohlson', 'jysk', 'rusta'],
   };
 
   constructor(
@@ -162,9 +199,9 @@ export class AddExpense implements OnInit {
   }
 
   private extractData(text: string) {
-    console.log('--- OCR RAAKATEKSTI ---');
-    console.log(text);
-    console.log('-----------------------');
+    // console.log('--- OCR RAAKATEKSTI ---');
+    // console.log(text);
+    // console.log('-----------------------');
 
     const lowerText = text.toLowerCase();
     let extractedAmount: number | null = null;
