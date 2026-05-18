@@ -86,20 +86,17 @@ export class Login {
     
         'Cannot reset password for the user as there is no registered/verified email or phone_number': 'Salasanaa ei voi palauttaa, koska sähköposti tai puhelinnumero ei ole vahvistettu',
 
-        
-  'We Emailed You': 'Tarkista sähköpostisi',
 
-'otp_message':
-    'Lähetimme sinulle vahvistuskoodin sähköpostiin. Syötä koodi kirjautuaksesi sisään. Koodin saapumisessa voi kestää hetki.',
+  'We Emailed You': 'Tarkista sähköpostisi',
+  'Your code is on the way. To log in, enter the code we emailed to':
+    'Lähetimme sinulle vahvistuskoodin sähköpostiin.',
+  'It may take a minute to arrive.': 'Viestin saapumisessa voi kestää hetki.',
+'It may take a minute to arrive': 'Viestin saapuminen voi kestää hetken',
 
   'Enter your code': 'Syötä vahvistuskoodi',
 
   'Confirm': 'Vahvista',
 
-  'Resend code': 'Lähetä koodi uudelleen',
-
-        
- 
        'Code': 'Vahvistuskoodi',
        'Code *': 'Vahvistuskoodi',
        'New Password': 'Uusi salasana',
