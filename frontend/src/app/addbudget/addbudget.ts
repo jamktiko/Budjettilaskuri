@@ -8,10 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogModule, MatDialog } from '@angular/material/dialog';
 
 // TÄMÄ on sun ainoa backend service
 import { BudgetService } from '../budget.service';
+
+import { NotificationsDialogComponent } from '../app';
 
 @Component({
   selector: 'app-addbudget',
@@ -36,6 +38,7 @@ export class AddBudget implements OnInit {
   private snackBar = inject(MatSnackBar);
   private router = inject(Router);
   private dialogRef = inject(MatDialogRef<AddBudget>);
+  private dialog = inject(MatDialog);
 
   isSubmitted = false;
   createdBudget: any = null;
@@ -93,15 +96,38 @@ export class AddBudget implements OnInit {
     const budgetData = this.form.value;
 
     try {
+      // MUOKATAAN VANHAA
       if (this.isEditing && this.currentBudgetId) {
         await this.budgetService.updateBudget(this.currentBudgetId, budgetData);
         this.snackBar.open('Budjetti päivitetty!', 'OK', { duration: 2000 });
-      } else {
+        this.dialogRef.close(true); // Suljetaan AddBudget-ikkuna heti
+      }
+      // LUODAAN UUSI
+      else {
         await this.budgetService.addBudget(budgetData);
         this.snackBar.open('Budjetti tallennettu!', 'OK', { duration: 3000 });
-      }
 
-      this.dialogRef.close(true);
+        // Tarkistetaan, onko ilmoitusasetus jo tehty
+        const notifSetting = localStorage.getItem('notificationsEnabled');
+
+        if (notifSetting === null) {
+          // Avataan ilmoitusten kyselydialogi
+          const notifRef = this.dialog.open(NotificationsDialogComponent);
+
+          notifRef.afterClosed().subscribe((result) => {
+            if (typeof result === 'boolean') {
+              localStorage.setItem('notificationsEnabled', String(result));
+              // Laukaistaan storage-event manuaalisesti, jotta app.ts huomaa muutoksen heti
+              window.dispatchEvent(new Event('storage'));
+            }
+            // Suljetaan AddBudget-ikkuna vasta kun kysymykseen on vastattu
+            this.dialogRef.close(true);
+          });
+        } else {
+          // Jos asetus oli jo olemassa, suljetaan ikkuna normaalisti
+          this.dialogRef.close(true);
+        }
+      }
     } catch (err: any) {
       this.snackBar.open(err.error?.message || 'Virhe tallennuksessa', 'OK', { duration: 5000 });
     }
