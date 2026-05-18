@@ -20,8 +20,9 @@ import { NotificationService } from './shared/notification/notification.service'
   template: `
     <h2 mat-dialog-title>Ilmoitukset</h2>
 
-    <mat-dialog-content> Haluatko saada ilmoituksen, kun 80 % budjetista on käytetty tai budjetti ylittyy?
- </mat-dialog-content>
+    <mat-dialog-content>
+      Haluatko saada ilmoituksen, kun 80 % budjetista on käytetty tai budjetti ylittyy?
+    </mat-dialog-content>
 
     <mat-dialog-actions align="end">
       <button mat-button [mat-dialog-close]="false">Ei kiitos</button>
@@ -77,21 +78,6 @@ export class App implements OnInit, OnDestroy {
         const saved = localStorage.getItem('darkMode');
         this.isDark = saved === 'true';
         this.updateBodyTheme();
-
-        // 2. TARKISTETAAN, ETTEI OLLA JUUressa ('/') JA ETTÄ TARKISTUS TEHDÄÄN VAIN KERRAN
-        if (!this.initialCheckDone && e.urlAfterRedirects !== '/') {
-          this.initialCheckDone = true; // Merkitään tarkistetuksi
-
-          const notifSetting = localStorage.getItem('notificationsEnabled');
-          if (notifSetting === null) {
-            // Pieni viive varmistaa, että reititys on varmasti asettunut
-            setTimeout(() => {
-              if (this.dialog.openDialogs.length === 0) {
-                this.openNotificationsDialog();
-              }
-            }, 300);
-          }
-        }
       }
     });
   }
