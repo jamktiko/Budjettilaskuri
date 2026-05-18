@@ -189,7 +189,7 @@ export class AddExpense implements OnInit {
 
   private async runOCR(imageUrl: string) {
     const result = await Tesseract.recognize(imageUrl, 'fin', {
-      logger: (m) => {
+      logger: (m: any) => {
         if (m.status === 'recognizing text') {
           this.ocrProgress = Math.round(m.progress * 100);
         }
