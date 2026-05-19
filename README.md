@@ -1,51 +1,52 @@
---START
-This is a example template, which you can use. Version 1.0.
---END
-# Project Title
+# Budjettilaskuri
 
-Simple overview of use/purpose.
+A web application for tracking your monthly expenses and comparing them against your budget.
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+*Budjettilaskuri* is a modern personal finance tracker that simplifies how you manage your money. By combining intuitive manual expense entry with automated receipt scanning (via Tesseract OCR), the app makes it easy to log purchases and compare them against your monthly budget. Built on an AWS cloud infrastructure and utilizing modern web technologies, the project demonstrates user-friendly approach to expense management.
 
 ## Getting Started
 
-### Dependencies
+### Tech Stack
 
-- Describe any prerequisites, libraries, frameworks, etc., the sofware uses.
+- Frontend: Angular, Angular Material, Tesseract
+- Backend: Node.js 24, Express
+- Database: MongoDB Atlas
+- Infrastructure (AWS): Elastic Beanstalk, S3, CloudFront, AWS Cognito, Application Load Balancer, NAT Gateway
+- CI/CD: GitHub Actions
 
 ### Installing
 
-- How/where to download your program
-- Any modifications needed to be made to files/folders
-
+- You can download / clone the repository for local use.
+- Create own .env file in backend folder with own MongoDB URI and Cognito variables.
+- Change frontend environments to your own Cognito variables.
+- Congigure CORS port if needed.
+  
 ### Executing program
 
-- How to run the program
-- Step-by-step bullets
+```
+cd frontend
+npm i
+npm start
+```
 
 ```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-
-```
-command to run if program contains helper info
+cd backend
+npm i
+npm start
 ```
 
 ## Authors
 
-Contributors names
+- Aapo Hampaala
+- Sade Haarala
+- Teemu Jalava
+- Teemu Sairi
 
 ## Version History
 
-- 0.2
-  - Various bug fixes and optimizations
-- 0.1
+- 1.0
   - Initial Release
 
 ## License
