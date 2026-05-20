@@ -1,0 +1,1 @@
+Budjettilaskuri laskee puolestasi kuinka paljon sinulla on kyseisenä kuukautena rahaa käytettävissä ja mihin rahasi on kulunut. Sovellus helpottaa käyttäjää arjessa, se laskee käyttäjän puolesta budjetin ja käyttäjä näkee piirakkakaaviosta visuaalisesti mihin rahaa on kulunut.
