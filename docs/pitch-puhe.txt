@@ -1,0 +1,2 @@
+“Onko sinulla koskaan loppunut rahat?
+Budjettilaskuri auttaa sinua hallitsemaan rahankäyttöäsi helposti. Sovellus näyttää asetetun budjetin, menot ja jäljellä olevan budjetin selkeästi yhdessä näkymässä.”
