@@ -21,7 +21,7 @@ A web application for tracking your monthly expenses and comparing them against 
 - You can download / clone the repository for local use.
 - Create own .env file in backend folder with own MongoDB URI and Cognito variables.
 - Change frontend environments to your own Cognito variables.
-- Congigure CORS port if needed.
+- Configure CORS port if needed.
   
 ### Executing program
 
